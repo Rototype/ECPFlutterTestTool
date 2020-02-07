@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'ws.dart';
+import 'user_repository.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -14,7 +14,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<Ws>(context);
+    final user = Provider.of<UserRepository>(context);
     return Scaffold(
       key: _key,
       appBar: AppBar(

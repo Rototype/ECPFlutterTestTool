@@ -1,16 +1,20 @@
 import 'dart:async';
-import 'dart:html';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'login_page.dart';
-import 'ws.dart';
+import 'user_repository.dart';
+import 'call_page.dart';
 
 void main() => runApp(MyApp());
 TextEditingController controller = TextEditingController();
-String message;
-List<String> list;
+
+List<Color> color = [
+  Colors.lightBlue[200]
+];
 
 class MyApp extends StatelessWidget {
+  
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -18,24 +22,30 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.red,
       ),
       home: HomePage(),
-      routes: {'/second': (_) => SecondPage(), '/first': (_) => UserInfoPage()},
+      routes: {
+        '/call': (_) => CallPage(),
+        '/first': (_) => UserInfoPage()
+      },
     );
   }
 }
 
 class HomePage extends StatelessWidget {
+  
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => Ws.instance(),
+      builder: (_) => UserRepository(),
       child: Consumer(
-        builder: (context, Ws user, _) {
-          switch (user.status) {
+        builder: (context, UserRepository user, _) {
+          switch (user.status) {           
             case Status.Unauthenticated:
             case Status.Authenticating:
               return LoginPage();
             case Status.Authenticated:
               return UserInfoPage();
+            case Status.CallPage:
+              return CallPage();
           }
         },
       ),
@@ -43,82 +53,128 @@ class HomePage extends StatelessWidget {
   }
 }
 
-class UserInfoPage extends StatefulWidget {
-  UserInfoPage({Key key}) : super(key: key);
-
-  @override
-  _UserInfoPageState createState() => _UserInfoPageState();
-}
-
-class _UserInfoPageState extends State<UserInfoPage> {
+class UserInfoPage extends StatelessWidget {
+  
   @override
   Widget build(BuildContext context) {
-    list = new List<String>();
-    final user = Provider.of<Ws>(context);
+    final user = Provider.of<UserRepository>(context);
+    
+    List<FlatButton> funct = [
+      FlatButton(
+        onPressed: () async {
+          // await Future.delayed(Duration(seconds: 2));
+          user.openCall();
+        },    
+        color: Colors.indigo[50],
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[       
+            Padding(
+              padding: EdgeInsets.fromLTRB(0, 0, 80, 0),
+              child: Icon(
+              Icons.call
+              ),
+            ),     
+            Text('Chiama')
+          ],
+        ),
+      ),
+      FlatButton(
+        color: Colors.indigo[50],
+        onPressed: () {
+          
+          user.send('true@endCall');
+          },
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[       
+            Padding(
+              padding: EdgeInsets.fromLTRB(0, 0, 40, 0),
+              child: Icon(
+              Icons.call_end
+              ),
+            ),     
+            Text('Fine Chiamata')
+          ],
+        ),
+      ),
+      FlatButton(  
+        color: Colors.indigo[50],
+        onPressed: (){
+          user.send('true@brightness');
+        },
+        child: Row(     
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: <Widget>[    
+            Padding(       
+              padding: EdgeInsets.fromLTRB(0, 0, 60, 0),
+              child: Icon(
+              Icons.brightness_5
+              ),
+            ),     
+            Text('Luminosità')
+          ],
+        ),
+      ),
+      FlatButton(
+        color: Colors.indigo[50],
+        onPressed: (){
+          user.send('true@camera');
+          },
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: <Widget>[       
+            Padding(
+              
+              padding: EdgeInsets.fromLTRB(0, 0, 60, 0),
+              child: Icon(
+              Icons.camera_alt
+              ),
+            ),     
+            Text('Fotocamera')
+          ],
+        ),
+      ),
+    ];
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Prova WebSocket'),
+      appBar: AppBar(       
         actions: <Widget>[
-          IconButton(
+          IconButton(           
             icon: Icon(Icons.arrow_back),
-            tooltip: 'go Back',
+            tooltip: 'go Back', 
             onPressed: () {
-              user.disconnect();
+             user.disconnect();  
             },
           )
         ],
       ),
       body: Center(
-        child: Padding(
-          padding: EdgeInsets.fromLTRB(200, 100, 200, 0),
-          child: Column(
-            children: <Widget>[
-              Form(
-                child: TextFormField(
-                  controller: controller,
-                  textAlign: TextAlign.center,
-                  decoration: InputDecoration(
-                    alignLabelWithHint: true,
-                    labelText: 'Insert Message',
+        child: ListView.builder(
+          padding: EdgeInsets.fromLTRB(80, 100, 0, 0),
+          itemCount: funct.length,
+          itemBuilder: (BuildContext context, int index) {
+            return Container(
+              height: 50,
+              child: Row(
+                children: <Widget>[
+                  ButtonTheme(
+                    minWidth: 200,    
+                    padding: EdgeInsets.fromLTRB(30, 0, 0, 0),               
+                    child: funct[index]
                   ),
-                ),
-              ),
-              FlatButton(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: <Widget>[
-                    Icon(Icons.send),
-                    Text('Send Message'),
-                  ],
-                ),
-                onPressed: () {
-                  user.send(controller.text);
-                },
-              ),
-              SizedBox(
-                height: 350, // constrain height
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: user.list.length,
-                  itemBuilder: (context, i) {
-                    return Text(user.list[i]);
-                  },
-                )
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(100, 0 , 0, 0),
+                    child:Text('Bottoni prova')
+                  ,)
+                ], 
               )
-            ],
-          ),
+            );
+          },
         )
-      ),
+      ), 
     );
-  }
-}
-
-class SecondPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Second page')),
-    );
+    
   }
 }
