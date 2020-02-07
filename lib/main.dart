@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'login_page.dart';
+import 'mainCommand_page.dart';
 import 'user_repository.dart';
-import 'call_page.dart';
 
 void main() => runApp(MyApp());
 TextEditingController controller = TextEditingController();
@@ -35,7 +35,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      builder: (_) => UserRepository(),
+      create: (_) => UserRepository(),
       child: Consumer(
         builder: (context, UserRepository user, _) {
           switch (user.status) {           

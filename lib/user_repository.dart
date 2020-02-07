@@ -1,9 +1,9 @@
 import 'dart:async';
+import 'dart:html';
 
 import 'package:flutter/widgets.dart';
 import 'package:web_socket_channel/html.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
-import 'main.dart';
 
 enum Status { Authenticated, Authenticating, Unauthenticated, CallPage }
 
@@ -12,7 +12,7 @@ class UserRepository with ChangeNotifier {
   String _url = "wss://echo.websocket.org";
   Status status = Status.Unauthenticated;
   Timer timer;
-  String messageString = "";
+  List<String> messageString = new List<String>() ;
 
   UserRepository();
 
@@ -24,25 +24,35 @@ class UserRepository with ChangeNotifier {
         return false;
       } else {
         _channel.stream.listen((message) {
-          if (message == 'ping') print(message);
+        
+          messageString.add(message);
+          notifyListeners();
 
-          var split = message.split('@');
-          switch (split[1]) {
-            case 'call':
-              print('call: $message');
-              messageString = message;
-              openCall();
-              break;
-            case 'endCall':
-              print('endCall: $message');
-              break;
-            case 'brightness':
-              print('brightness: $message');
-              break;
-            case 'camera':
-              print('camera: $message');
-              break;
-          }
+          // if (message == 'ping') print(message);  
+          // var split = message.split('@');
+          // switch (split[1]) {
+          //   case 'call':
+          //     if(status == Status.CallPage)
+          //     {
+          //       print('call: $message');
+          //       messageString.add(message);
+          //       notifyListeners();
+          //     }
+          //     else{
+          //       print('call: $message');
+          //       messageString.add(message);
+          //     }
+          //     break;
+          //   case 'endCall':
+          //     print('endCall: $message');
+          //     break;
+          //   case 'brightness':
+          //     print('brightness: $message');
+          //     break;
+          //   case 'camera':
+          //     print('camera: $message');
+          //     break;
+          // }
         }, onDone: () {
           print('done');
           status = Status.Unauthenticated;
