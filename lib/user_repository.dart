@@ -5,11 +5,11 @@ import 'package:flutter/widgets.dart';
 import 'package:web_socket_channel/html.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
-enum Status { Authenticated, Authenticating, Unauthenticated, CallPage }
+enum Status { Authenticated, Authenticating, Unauthenticated, CallPage, EndCallPage }
 
 class UserRepository with ChangeNotifier {
   WebSocketChannel _channel;
-  String _url = "wss://echo.websocket.org";
+  String _url = "ws://192.168.1.127:8080";
   Status status = Status.Unauthenticated;
   Timer timer;
   List<String> messageString = new List<String>() ;
@@ -93,8 +93,17 @@ class UserRepository with ChangeNotifier {
     status = Status.CallPage;
     notifyListeners();
   }
+  void openEndCall() {
+    status = Status.EndCallPage;
+    notifyListeners();
+  }
     void openHome() {
     status = Status.Authenticated;
+    notifyListeners();
+  }
+
+    void clear() {
+    messageString = new List<String>();
     notifyListeners();
   }
 }

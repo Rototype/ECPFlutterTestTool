@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'hwcontrollerCommand_page.dart';
 import 'login_page.dart';
 import 'mainCommand_page.dart';
 import 'user_repository.dart';
@@ -46,6 +47,9 @@ class HomePage extends StatelessWidget {
               return UserInfoPage();
             case Status.CallPage:
               return CallPage();
+            case Status.EndCallPage:
+              return EndCallPage();
+
           }
         },
       ),
@@ -68,71 +72,22 @@ class UserInfoPage extends StatelessWidget {
         color: Colors.indigo[50],
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[       
-            Padding(
-              padding: EdgeInsets.fromLTRB(0, 0, 80, 0),
-              child: Icon(
-              Icons.call
-              ),
-            ),     
-            Text('Chiama')
+          children: <Widget>[           
+            Text('Main')
           ],
         ),
       ),
       FlatButton(
         color: Colors.indigo[50],
         onPressed: () {
-          
-          user.send('true@endCall');
+          user.openEndCall();
           },
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[       
-            Padding(
-              padding: EdgeInsets.fromLTRB(0, 0, 40, 0),
-              child: Icon(
-              Icons.call_end
-              ),
-            ),     
-            Text('Fine Chiamata')
-          ],
-        ),
-      ),
-      FlatButton(  
-        color: Colors.indigo[50],
-        onPressed: (){
-          user.send('true@brightness');
-        },
-        child: Row(     
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: <Widget>[    
-            Padding(       
-              padding: EdgeInsets.fromLTRB(0, 0, 60, 0),
-              child: Icon(
-              Icons.brightness_5
-              ),
-            ),     
-            Text('Luminosità')
-          ],
-        ),
-      ),
-      FlatButton(
-        color: Colors.indigo[50],
-        onPressed: (){
-          user.send('true@camera');
-          },
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: <Widget>[       
-            Padding(
-              
-              padding: EdgeInsets.fromLTRB(0, 0, 60, 0),
-              child: Icon(
-              Icons.camera_alt
-              ),
-            ),     
-            Text('Fotocamera')
+                
+            Text('HW Controller')
           ],
         ),
       ),
@@ -166,7 +121,7 @@ class UserInfoPage extends StatelessWidget {
                   ),
                   Padding(
                     padding: EdgeInsets.fromLTRB(100, 0 , 0, 0),
-                    child:Text('Bottoni prova')
+                    child:Text('Prova descrizione bottoni')
                   ,)
                 ], 
               )
@@ -174,7 +129,6 @@ class UserInfoPage extends StatelessWidget {
           },
         )
       ), 
-    );
-    
+    );   
   }
 }

@@ -24,44 +24,68 @@ class CallPage extends StatelessWidget {
         ],
       ),
         body: 
-           Column(
-            children: <Widget>[
-              RaisedButton(
-                child: Text('Restart'),
-                onPressed: () {
-                  user.send('CMD_Restart@Main#');
-                },
-              ),
-              RaisedButton(
-                child: Text('Status'),
-                onPressed: () {
-                  Future.delayed(const Duration(milliseconds: 2000), () {
-                  user.send('CMD_Status@Main#');
-                  });
-                },
-              ),
-              Padding(
-                padding: EdgeInsets.fromLTRB(60, 30, 60, 0),
-                child:SizedBox(
-                  height: 350,
-                  child:ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: user.messageString.length,
-                    itemBuilder: (BuildContext ctxt, int index) {
-                      return Text(                      
-                        user.messageString[index],
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 12,                        
-                        ),
-                      );
-                    }
+           Container(
+            child:  Column(
+              children: <Widget>[ 
+                
+                Row(
+                  children: <Widget>[
+                  
+                Padding(
+
+                  padding: EdgeInsets.fromLTRB(60, 30, 60, 0),
+                  child:SizedBox(
+                    
+                    height: 200,
+                    width: 200,
+                    child:ListView.builder(
+                      
+                      shrinkWrap: true,
+                      itemCount: user.messageString.length,
+                      itemBuilder: (BuildContext ctxt, int index) {
+                        return Text(                      
+                          user.messageString[index],
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 12,                        
+                          ),
+                        );
+                      }
+                    )
                   )
-                )
-              )
+                ),
+                IconButton(
+
+                  icon: Icon(Icons.clear_all),
+                  onPressed: () {
+                    user.clear();
+                  }
+                ),
+                ]
+              ),
+              Row(children: <Widget>[
+                      RaisedButton(
+                    
+                    child: Text('Restart'),
+                    onPressed: () {
+                      user.send('CMD_Restart@Main#');
+                    },
+                  ),
+                  RaisedButton(
+
+                    child: Text('Status'),
+                    onPressed: () {
+                      Future.delayed(const Duration(milliseconds: 1000), () {
+                      user.send('CMD_Status@Main#');
+                      });
+                    },
+                  ),
+                  ],
+                ),                            
             ]
           )   
-        );
+        )
+    );
       }
     );
   }
