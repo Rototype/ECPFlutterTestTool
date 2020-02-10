@@ -1,4 +1,3 @@
-import 'main.dart';
 import 'package:flutter/material.dart';
 import 'user_repository.dart';
 import 'package:provider/provider.dart';
@@ -12,6 +11,7 @@ class CallPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<UserRepository>(builder: (_, user, __) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
         title: Text('Command @Main'),
         actions: <Widget>[
@@ -24,68 +24,61 @@ class CallPage extends StatelessWidget {
         ],
       ),
         body: 
-           Container(
+           Container(           
             child:  Column(
-              children: <Widget>[ 
-                
+              children: <Widget>[  
                 Row(
-                  children: <Widget>[
-                  
-                Padding(
-
-                  padding: EdgeInsets.fromLTRB(60, 30, 60, 0),
-                  child:SizedBox(
-                    
-                    height: 200,
-                    width: 200,
-                    child:ListView.builder(
-                      
-                      shrinkWrap: true,
-                      itemCount: user.messageString.length,
-                      itemBuilder: (BuildContext ctxt, int index) {
-                        return Text(                      
-                          user.messageString[index],
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 12,                        
-                          ),
-                        );
-                      }
+                  children: <Widget>[               
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(30, 30, 30, 50),
+                    child:SizedBox(
+                      height: 300,
+                      width: 250,
+                      child:ListView.builder(                        
+                        shrinkWrap: true,
+                        itemCount: user.messageStringMain.length,
+                        itemBuilder: (BuildContext ctxt, int index) {
+                          return Text(                                                
+                            user.messageStringMain[index],
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 12,                        
+                            ),
+                          );
+                        }
+                      )
                     )
-                  )
-                ),
-                IconButton(
-
-                  icon: Icon(Icons.clear_all),
-                  onPressed: () {
-                    user.clear();
-                  }
-                ),
+                  ), 
+                  IconButton(                                     
+                    icon: Icon(Icons.clear_all),
+                    onPressed: () {
+                      user.clearMain();
+                    }
+                  ),
                 ]
               ),
-              Row(children: <Widget>[
-                      RaisedButton(
-                    
-                    child: Text('Restart'),
+              ButtonBar(
+                alignment: MainAxisAlignment.center,
+                buttonPadding: EdgeInsets.fromLTRB(30, 0, 30, 0),                
+                children: <Widget>[
+                  FloatingActionButton.extended(                
+                    label: Text('Restart'),
                     onPressed: () {
                       user.send('CMD_Restart@Main#');
                     },
                   ),
-                  RaisedButton(
-
-                    child: Text('Status'),
+                  FloatingActionButton.extended(
+                    label: Text('Status'),
                     onPressed: () {
-                      Future.delayed(const Duration(milliseconds: 1000), () {
                       user.send('CMD_Status@Main#');
-                      });
-                    },
-                  ),
+                      }
+                    ),
                   ],
                 ),                            
-            ]
-          )   
-        )
-    );
+              ]
+            )    
+          )
+        );
       }
     );
   }

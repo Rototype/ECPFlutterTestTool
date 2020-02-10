@@ -1,4 +1,3 @@
-import 'main.dart';
 import 'package:flutter/material.dart';
 import 'user_repository.dart';
 import 'package:provider/provider.dart';
@@ -6,7 +5,7 @@ import 'package:provider/provider.dart';
 class EndCallPage extends StatelessWidget {
    
   //TextEditingController controller = new TextEditingController();
-
+  
   @override
   Widget build(BuildContext context) {
     return Consumer<UserRepository>(builder: (_, user, __) {
@@ -28,16 +27,17 @@ class EndCallPage extends StatelessWidget {
                 Row(
                   children: <Widget>[
                     Padding(
-                      padding: EdgeInsets.fromLTRB(60, 30, 60, 0),
+                      padding: EdgeInsets.fromLTRB(30, 30, 30, 0),
                       child:SizedBox(                 
-                        height: 200,
-                        width: 200,
+                        height: 320,
+                        width: 250,
                         child:ListView.builder(
+                          
                           shrinkWrap: true,
-                          itemCount: user.messageString.length,
-                          itemBuilder: (BuildContext ctxt, int index) {
+                          itemCount: user.messageStringHWcontroller.length,
+                          itemBuilder: (_, int index) {
                             return Text(                      
-                              user.messageString[index],
+                              user.messageStringHWcontroller[index],
                               style: TextStyle(
                                 color: Colors.black,
                                 fontSize: 12,                        
@@ -50,21 +50,22 @@ class EndCallPage extends StatelessWidget {
                     IconButton(
                       icon: Icon(Icons.clear_all),
                       onPressed: () {
-                        user.clear();
+                        user.clearHW();
                       }
                     ),
                   ]
                 ),
-                Row(
+                ButtonBar(
+                  buttonPadding: EdgeInsets.fromLTRB(30, 0, 30, 0),
                   children: <Widget>[
-                    RaisedButton(
-                      child: Text('Status'),
+                    FloatingActionButton.extended(     
+                      label: Text('Status'),
                       onPressed: () {
                         user.send('CMD_Status@HWController#');
                       },
                     ),
-                    RaisedButton(
-                      child: Text('Update Firmware'),
+                    FloatingActionButton.extended(
+                      label: Text('Update Firmware'),
                       onPressed: () {
                         user.send('CMD_UpdateFirmware@HWController#');                   
                       },

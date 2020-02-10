@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'dart:html';
-
 import 'package:flutter/widgets.dart';
 import 'package:web_socket_channel/html.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
@@ -9,10 +7,12 @@ enum Status { Authenticated, Authenticating, Unauthenticated, CallPage, EndCallP
 
 class UserRepository with ChangeNotifier {
   WebSocketChannel _channel;
-  String _url = "ws://192.168.1.127:8080";
+  String _url = "wss://echo.websocket.org";
   Status status = Status.Unauthenticated;
   Timer timer;
-  List<String> messageString = new List<String>() ;
+  List<String> messageStringHWcontroller = new List<String>() ;
+  List<String> messageStringMain = new List<String>() ;
+  List<String> messageList = new List<String>();
 
   UserRepository();
 
@@ -24,35 +24,18 @@ class UserRepository with ChangeNotifier {
         return false;
       } else {
         _channel.stream.listen((message) {
-        
-          messageString.add(message);
+          String x = message;
+          messageList = x.split('@');
+          if(messageList[1].startsWith('Main'))
+          {                      
+            messageStringMain.add(message);
+          }
+          else
+          {
+            messageStringHWcontroller.add(message);    
+          }       
           notifyListeners();
 
-          // if (message == 'ping') print(message);  
-          // var split = message.split('@');
-          // switch (split[1]) {
-          //   case 'call':
-          //     if(status == Status.CallPage)
-          //     {
-          //       print('call: $message');
-          //       messageString.add(message);
-          //       notifyListeners();
-          //     }
-          //     else{
-          //       print('call: $message');
-          //       messageString.add(message);
-          //     }
-          //     break;
-          //   case 'endCall':
-          //     print('endCall: $message');
-          //     break;
-          //   case 'brightness':
-          //     print('brightness: $message');
-          //     break;
-          //   case 'camera':
-          //     print('camera: $message');
-          //     break;
-          // }
         }, onDone: () {
           print('done');
           status = Status.Unauthenticated;
@@ -76,6 +59,8 @@ class UserRepository with ChangeNotifier {
   Future<void> disconnect() async {
     try {
       _channel.sink.close(); // trigger listen onDone
+      messageStringHWcontroller = new List<String>();
+      messageStringMain = new List<String>();
     } catch (err) {
       print('sink.close error');
     }
@@ -101,9 +86,13 @@ class UserRepository with ChangeNotifier {
     status = Status.Authenticated;
     notifyListeners();
   }
-
-    void clear() {
-    messageString = new List<String>();
+    void clearHW() {
+    messageStringHWcontroller = new List<String>();
     notifyListeners();
   }
+    void clearMain() {
+    messageStringMain = new List<String>();
+    notifyListeners();
+  }
+
 }

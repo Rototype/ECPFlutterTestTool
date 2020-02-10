@@ -49,7 +49,8 @@ class HomePage extends StatelessWidget {
               return CallPage();
             case Status.EndCallPage:
               return EndCallPage();
-
+            default:
+              return LoginPage();
           }
         },
       ),
@@ -71,7 +72,7 @@ class UserInfoPage extends StatelessWidget {
         },    
         color: Colors.indigo[50],
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[           
             Text('Main')
           ],
@@ -83,8 +84,7 @@ class UserInfoPage extends StatelessWidget {
           user.openEndCall();
           },
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[       
                 
             Text('HW Controller')
@@ -94,7 +94,8 @@ class UserInfoPage extends StatelessWidget {
     ];
 
     return Scaffold(
-      appBar: AppBar(       
+      appBar: AppBar(     
+        title: Text('Titolo'),  
         actions: <Widget>[
           IconButton(           
             icon: Icon(Icons.arrow_back),
@@ -106,29 +107,11 @@ class UserInfoPage extends StatelessWidget {
         ],
       ),
       body: Center(
-        child: ListView.builder(
-          padding: EdgeInsets.fromLTRB(80, 100, 0, 0),
-          itemCount: funct.length,
-          itemBuilder: (BuildContext context, int index) {
-            return Container(
-              height: 50,
-              child: Row(
-                children: <Widget>[
-                  ButtonTheme(
-                    minWidth: 200,    
-                    padding: EdgeInsets.fromLTRB(30, 0, 0, 0),               
-                    child: funct[index]
-                  ),
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(100, 0 , 0, 0),
-                    child:Text('Prova descrizione bottoni')
-                  ,)
-                ], 
-              )
-            );
-          },
+        child: ListView(
+          padding: EdgeInsets.fromLTRB(80, 100, 80, 50),
+          children: funct                  
         )
-      ), 
+      )    
     );   
   }
 }
