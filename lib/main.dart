@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import 'hwcontrollerCommand_page.dart';
 import 'login_page.dart';
 import 'mainCommand_page.dart';
-import 'user_repository.dart';
+import 'ws_manage.dart';
 
 void main() => runApp(MyApp());
 TextEditingController controller = TextEditingController();
@@ -36,9 +36,9 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => UserRepository(),
+      create: (_) => WebSocketClass(),
       child: Consumer(
-        builder: (context, UserRepository user, _) {
+        builder: (context, WebSocketClass user, _) {
           switch (user.status) {           
             case Status.Unauthenticated:
             case Status.Authenticating:
@@ -62,7 +62,7 @@ class UserInfoPage extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<UserRepository>(context);
+    final user = Provider.of<WebSocketClass>(context);
     
     List<FlatButton> funct = [
       FlatButton(

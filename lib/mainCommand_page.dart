@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'user_repository.dart';
+import 'ws_manage.dart';
 import 'package:provider/provider.dart';
 
 class CallPage extends StatelessWidget {
@@ -9,7 +9,7 @@ class CallPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<UserRepository>(builder: (_, user, __) {
+    return Consumer<WebSocketClass>(builder: (_, user, __) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
