@@ -26,9 +26,7 @@ class _LoginPageState extends State<LoginPage> {
           child: ListView(
             shrinkWrap: true,
             children: <Widget>[            
-              user.status == Status.Authenticating
-                  ? Center(child: CircularProgressIndicator())
-                  : Padding(
+             Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 100.0),                   
                       child: Material(
                         elevation: 50.0,                     

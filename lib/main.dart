@@ -15,7 +15,6 @@ List<Color> color = [
 ];
 
 class MyApp extends StatelessWidget {
-  
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -41,7 +40,6 @@ class HomePage extends StatelessWidget {
         builder: (context, WebSocketClass user, _) {
           switch (user.status) {           
             case Status.Unauthenticated:
-            case Status.Authenticating:
               return LoginPage();
             case Status.Authenticated:
               return UserInfoPage();

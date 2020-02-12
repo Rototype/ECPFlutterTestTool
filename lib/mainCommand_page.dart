@@ -51,6 +51,7 @@ class CallPage extends StatelessWidget {
                   ), 
                   IconButton(                                     
                     icon: Icon(Icons.clear_all),
+                      tooltip: 'Clear List',                    
                     onPressed: () {
                       user.clearMain();
                     }
@@ -58,7 +59,7 @@ class CallPage extends StatelessWidget {
                 ]
               ),
               ButtonBar(
-                alignment: MainAxisAlignment.center,
+                alignment: MainAxisAlignment.start,
                 buttonPadding: EdgeInsets.fromLTRB(30, 0, 30, 0),                
                 children: <Widget>[
                   FloatingActionButton.extended(                
