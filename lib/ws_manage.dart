@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/widgets.dart';
-import 'package:web_socket_channel/html.dart';
+import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 enum Status {
@@ -12,31 +12,24 @@ enum Status {
 
 class WebSocketClass with ChangeNotifier {
 
- WebSocketChannel _channel;
+  WebSocketChannel _channel;
 
   //String _url = "ws://192.168.1.37:8080";
   String _url = "wss://echo.websocket.org";
 
   Status status = Status.Unauthenticated;
 
-   Timer timerPeriod = Timer(Duration(seconds: 2), () {         
-            
-        });
-  Timer timer = new Timer(Duration(seconds: 0), () {});
+  Timer timerPeriod = Timer(Duration(seconds: 2), () {});
+  Timer timerTimeout = new Timer(Duration(seconds: 0), () {});
 
   List<String> messageStringHWcontroller = new List<String>();
   List<String> messageStringMain = new List<String>();
-  List<String> messageList = new List<String>();
-
-  String finished ="";
-  double percent =0;
-  String percent2;
 
   WebSocketClass();
 
   Future<bool> wsconnect() async {
-      
-      _channel = HtmlWebSocketChannel.connect(_url);
+    try{
+      _channel = IOWebSocketChannel.connect(_url);
       if (_channel == null) {  
 
         timerPeriod.cancel();
@@ -44,44 +37,32 @@ class WebSocketClass with ChangeNotifier {
         return false;
       } else {
         _channel.stream.listen((message) {
+          // onMessage:
+
           try{
-            timer.cancel();     
-            timer = Timer(Duration(seconds: 4), () {
+            //
+            // Gestione Timer timeout
+            //
+            timerTimeout.cancel();     
+            timerTimeout = Timer(Duration(seconds: 4), () {
               disconnect();
             });
           }catch(e){print(e);}
-            String x = message;
 
-            if(x=='ping')           
-              return;
+          if(message =='ping')           
+            return;
 
-            messageList = x.split('@');
-            if (message == 'EVT_Garbage@Main#') 
-              return;
-            if (messageList[1].startsWith('Main')) {
-              messageStringMain.add(message);
-            } 
-            else 
-            {
-              if(messageList[0].split('_')[1].startsWith('UpdateFirmware'))
-              {
-                if(messageList[1].endsWith('("FAILED")'))
-                {
-                  percent = 0;
-                  finished = 'Update Error';
-                  notifyListeners();         
-                  return;
-                }
-                else if(!messageList[1].endsWith('#') || !messageList[1].endsWith('("GONE")'))
-                  percent = (double.parse(((messageList[1].split('('))[1].split(',')[0]).trim()))/100;                
-                
-                if(percent==1)
-                {
-                  finished='Update completed successfully';
-                }
-              }             
-            }
-            notifyListeners();         
+          //
+          // Controlli eseguiti tramite la logica dei comandi del WebServer di Prova
+          //
+
+          if((message as String).split('@')[1].startsWith('Main'))
+            messageStringMain.add(message);
+          
+          else if((message as String).split('@')[1].startsWith('HWController'))
+            messageStringHWcontroller.add(message);
+
+          notifyListeners();
         }, onDone: () {
           print('ws closed');
           timerPeriod.cancel();
@@ -94,13 +75,20 @@ class WebSocketClass with ChangeNotifier {
           notifyListeners();
         });
       }      
+
+      //
+      // Timer utilizzato per il poll del WebServer
+      //
       timerPeriod = Timer.periodic(Duration(seconds: 2), (timer) {
         send('ping');
       });
+
       status = Status.Authenticated;
-        notifyListeners();
+      notifyListeners();
       return true;
-      
+      }catch(e){
+        print('erro $e');
+      }
   }
 
   Future<void> disconnect() async {
@@ -116,13 +104,13 @@ class WebSocketClass with ChangeNotifier {
 
   void send(String data) {
     try {
-      if(!timer.isActive)
+      if(!timerTimeout.isActive)
       {
-         timer = Timer(Duration(seconds: 4), () {
+         timerTimeout = Timer(Duration(seconds: 4), () {
               disconnect();
         });
       }
-      _channel.sink.add(data); // trigger listen onMessage
+      _channel.sink.add(data);
     } catch (err) {
       print(err);
     }
@@ -151,23 +139,5 @@ class WebSocketClass with ChangeNotifier {
   void clearMain() {
     messageStringMain = new List<String>();
     notifyListeners();
-  }
-
-  void starTimer(String data){
-    // timerPeriod = Timer(Duration(seconds: 2), () {         
-    //   send('ping');
-    //   print('ping');
-    // });
-    try {
-      if(!timer.isActive)
-      {
-         timer = Timer(Duration(seconds: 4), () {
-              disconnect();
-        });
-      }
-      _channel.sink.add(data); // trigger listen onMessage
-    } catch (err) {
-      print(err);
-    }
   }
 }

@@ -33,7 +33,7 @@ class CallPage extends StatelessWidget {
                     padding: EdgeInsets.fromLTRB(30, 30, 30, 50),
                     child:SizedBox(
                       height: 300,
-                      width: 250,
+                      width: 200,
                       child:ListView.builder(                        
                         shrinkWrap: true,
                         itemCount: user.messageStringMain.length,

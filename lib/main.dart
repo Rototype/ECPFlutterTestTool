@@ -37,7 +37,7 @@ class HomePage extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (_) => WebSocketClass(),
       child: Consumer(
-        builder: (context, WebSocketClass user, _) {
+        builder: (__, WebSocketClass user, _) {
           switch (user.status) {           
             case Status.Unauthenticated:
               return LoginPage();
