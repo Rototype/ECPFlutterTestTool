@@ -56,9 +56,9 @@ class WebSocketClass with ChangeNotifier {
 
   WebSocketChannel _channel;
 
-  //String _url = "ws://192.168.1.101:5001";
+  String _url = "ws://192.168.1.101:5001";
   //String _url = "ws://192.168.1.37:8080";
-  String _url = "wss://echo.websocket.org";
+  //String _url = "wss://echo.websocket.org";
 
   Status status = Status.Unauthenticated;
 
@@ -68,7 +68,7 @@ class WebSocketClass with ChangeNotifier {
   List<String> messageStringHWcontroller = new List<String>();
   List<String> messageStringMain = new List<String>();
 
-  int index=0;
+  int index=-1;
   List<PhotocellsClass> photocellButtons = new List<PhotocellsClass>();
   List<InputClass> inputButtons = new List<InputClass>();
   List<DcMotorClass> dcMotorButtons = new List<DcMotorClass>();
@@ -99,18 +99,77 @@ class WebSocketClass with ChangeNotifier {
             });
           }catch(e){print(e);}
 
-          if(message =='ping')           
-            return;
-
+          String message2 = message;
           //
           // Controlli eseguiti tramite la logica dei comandi del WebServer di Prova
           //
 
-          if((message as String).split('@')[1].startsWith('Main'))
-            messageStringMain.add(message);
+
+          List<String> split = message2.split(RegExp("[\s_@)(]+"));
+
           
-          else if((message as String).split('@')[1].startsWith('HWController'))
-            messageStringHWcontroller.add(message);
+          if(split[1] == 'ReadDigitalInput')
+          {
+            if(split[0] == 'END')
+            {
+              print(split[3]);
+            }
+          }
+
+          if(split[1] == 'SetDigitalOutput')
+          {
+            if(split[0] == 'END')
+            {
+              print(message);
+            }
+          }
+
+          if(split[1] == 'ReadAnalogInput')
+          {
+            if(split[0] == 'END')
+            {
+              print(split[3]);
+            }
+          }
+
+          if(split[1] == 'SetAnalogOutput')
+          {
+            if(split[0] == 'END')
+            {
+              print(message);
+            }
+          }
+
+          if(split[1] == 'SetStepperMotorSpeed')
+          {
+            if(split[0] == 'END')
+            {
+              print(message);
+            }
+          }
+
+          if(split[1] == 'SetStepperMotorCountStep')
+          {
+            print(message);
+          }
+
+          if(split[1] == 'SetDCMotor')
+          {
+            print(message);
+          }
+          if(split[1] == 'SetDCMotorPWM')
+          {
+            print(message);
+          }
+
+          if(split[1] == 'SetDCSolenoid')
+          {
+            print(message);
+          }
+          if(split[1] == 'SetDCSolenoidPWM')
+          {
+            print(message);
+          }
 
           notifyListeners();
         }, onDone: () {
@@ -130,7 +189,7 @@ class WebSocketClass with ChangeNotifier {
       // Timer utilizzato per il poll del WebServer
       //
       timerPeriod = Timer.periodic(Duration(seconds: 2), (timer) {
-        send('ping');
+        send('CMD_ReadDigitalInput@Main#');
       });
     }catch(e){
       print('erro $e');
@@ -182,14 +241,15 @@ class WebSocketClass with ChangeNotifier {
 
   void generateButtonsList(BuildContext context){
     photocellButtons = new List<PhotocellsClass>();
+    photocellButtons = new List<PhotocellsClass>();
     for(int i=0; i<50 ;i++){
       photocellButtons.add(
         new PhotocellsClass(
           i+1, 
           new FlatButton(
-            onPressed: (){
-              index=i+1;            
-               Navigator.pushNamed(context,'/PhotocellPage' );
+            onPressed: (){          
+              index = i+1;
+              Navigator.pushNamed(context,'/PhotocellPage' );
             }, 
             child: Text('Photocell ${i+1}')
           )    
@@ -201,7 +261,10 @@ class WebSocketClass with ChangeNotifier {
         new InputClass(
           i+1,
           new FlatButton(
-            onPressed:() { print('esisto pur io');}, 
+            onPressed:() {              
+              index = i+1;
+              Navigator.pushNamed(context,'/inputAnalogicPage' );
+            }, 
             child: Text('Analogic Input ${i+1}')
           )
         )
@@ -212,7 +275,10 @@ class WebSocketClass with ChangeNotifier {
         new StepperMotorClass(
           i+1,
           new FlatButton(
-            onPressed: (){print('Io non esisto, o forse si?');}, 
+            onPressed: (){              
+              index = i+1;
+              Navigator.pushNamed(context,'/StepperMotorPage' );
+            }, 
             child: Text('Stepper motor ${i+1}')
           )
         )
@@ -223,7 +289,10 @@ class WebSocketClass with ChangeNotifier {
         new DcMotorClass(
           i+1,
           new FlatButton(
-            onPressed: (){print('esistiamo tutti');}, 
+            onPressed: (){              
+              index = i+1;
+              Navigator.pushNamed(context,'/DCMotorPage' );
+            }, 
             child: Text('DC Motor ${i+1}')
           )
         )
@@ -232,11 +301,15 @@ class WebSocketClass with ChangeNotifier {
         new SolenoidClass(
           i+1, 
           new FlatButton(
-            onPressed: (){print('siamo solenoidi');}, 
+            onPressed: (){              
+              index = i+1;
+              Navigator.pushNamed(context,'/SolenoidPage' );
+            }, 
             child: Text('Solenoids ${i+1}')
           )
-        )      
+        )
       );
     }
+    index=0;
   }
 }

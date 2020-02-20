@@ -35,3 +35,36 @@ class Solenoid extends StatelessWidget {
     );
   }
 }
+
+class SolenoidPage extends StatelessWidget {
+  const SolenoidPage({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<WebSocketClass>(
+      builder: (_, user, __) {
+        return Scaffold(
+          appBar: AppBar(
+            title: Text(' Solenoid ${user.index}'),
+          ),
+          body: Container(
+            child: Column(children: <Widget>[
+                RaisedButton(
+                  onPressed: (){
+                    user.send('CMD_SetDCSolenoid@Main(${user.index-1},on)');                
+                  },
+                  child: Text('Set Motor'),
+                ),
+                RaisedButton(
+                  onPressed: (){
+                    user.send('CMD_SetDCSolenoidPWM@Main(${user.index-1}, on, 100, 100)');                
+                  },
+                  child: Text('Set Motor PWM'),
+                )
+            ],),
+          ),
+        );
+      }
+    );
+  }
+}

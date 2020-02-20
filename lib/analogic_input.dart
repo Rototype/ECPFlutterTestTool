@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'ws_manage.dart';
 import 'package:provider/provider.dart';
 
-class AnalogicInput extends StatelessWidget {
+class AnalogicInputs extends StatelessWidget {
    
   //TextEditingController controller = new TextEditingController();
   
@@ -31,6 +31,39 @@ class AnalogicInput extends StatelessWidget {
               ]
             )    
           )
+        );
+      }
+    );
+  }
+}
+
+class AnalogicInputPage extends StatelessWidget {
+  const AnalogicInputPage({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<WebSocketClass>(
+      builder: (_, user, __) {
+        return Scaffold(
+          appBar: AppBar(
+            title: Text(' Analogic Input ${user.index}'),
+          ),
+          body: Container(
+            child: Column(children: <Widget>[
+                RaisedButton(
+                  onPressed: (){
+                    user.send('CMD_ReadAnalogInput@Main(${user.index-1})');                
+                  },
+                  child: Text('Read'),
+                ),
+                RaisedButton(
+                  onPressed: (){
+                    user.send('CMD_SetAnalogOutput@Main(${user.index-1}, 300');                
+                  },
+                  child: Text('Set'),
+                )
+            ],)
+          ),
         );
       }
     );

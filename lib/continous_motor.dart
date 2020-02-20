@@ -35,3 +35,35 @@ class DCMotor extends StatelessWidget {
     );
   }
 }
+class DCMotorPage extends StatelessWidget {
+  const DCMotorPage({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+   return Consumer<WebSocketClass>(
+      builder: (_, user, __) {
+        return Scaffold(
+          appBar: AppBar(
+            title: Text(' DCMotor ${user.index}'),
+          ),
+          body: Container(
+            child: Column(children: <Widget>[
+                RaisedButton(
+                  onPressed: (){
+                    user.send('CMD_SetDCMotor@Main(${user.index-1},on)');                
+                  },
+                  child: Text('Set Motor'),
+                ),
+                RaisedButton(
+                  onPressed: (){
+                    user.send('CMD_SetStepperMotorCountSteps@Main(${user.index-1},1,100)');                
+                  },
+                  child: Text('Set Motor PWM'),
+                )
+            ],),
+          ),
+        );
+      }
+    );
+  }
+}

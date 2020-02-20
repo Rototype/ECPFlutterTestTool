@@ -30,17 +30,27 @@ class MyApp extends StatelessWidget {
       routes: {
         '/Photocells': (_) => Photocells(),
         '/PhotocellPage': (_) => PhotocellPage(),   
-        '/inputA': (_) => AnalogicInput(),
+
+        '/inputA': (_) => AnalogicInputs(),
+        '/inputAnalogicPage': (_) => AnalogicInputPage(),
+
         '/StepperMotor': (_) => MotorST(),
+        '/StepperMotorPage': (_) => MotorStPage(),
+
         '/DCMotor': (_) => DCMotor(),
-        '/Solenoids': (_) => Solenoid()
+        '/DCMotorPage': (_) => DCMotorPage(),
+        
+        '/Solenoids': (_) => Solenoid(),
+        '/SolenoidPage': (_) => SolenoidPage(),
+
       },
     );
   }
 }
 
 class HomePage extends StatelessWidget {
-  
+
+
   @override
   Widget build(BuildContext context) {
     return Consumer(
@@ -63,7 +73,11 @@ class UserInfoPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<WebSocketClass>(context);
-    user.generateButtonsList(context);
+    if(user.index==-1)
+    {
+      user.generateButtonsList(context);
+    }
+    
     List<FlatButton> funct = [
       FlatButton(
         onPressed: () {
@@ -133,7 +147,6 @@ class UserInfoPage extends StatelessWidget {
         ),
       ),
     ];
-
     return Scaffold(
       appBar: AppBar(     
         title: Text('Titolo'),  

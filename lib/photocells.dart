@@ -48,7 +48,22 @@ class PhotocellPage extends StatelessWidget {
             title: Text(' Photocell ${user.photocellButtons[user.index-1].id}'),
           ),
           body: Container(
-            child: Text('Poi Farò qualcosa'),
+            child: Column(
+              children: <Widget>[
+                RaisedButton(
+                  onPressed: (){
+                    user.send('CMD_ReadDigitalInput@Main#');                
+                  },
+                  child: Text('Read'),
+                ),
+                RaisedButton(
+                  onPressed: (){
+                    user.send('CMD_SetStepperMotorCountSteps@Main(${user.index},on,20,5,100,500)');                
+                  },
+                  child: Text('Set'),
+                )
+              ],
+            )
           ),
         );
       }
