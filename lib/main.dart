@@ -1,13 +1,18 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'hwcontrollerCommand_page.dart';
+import 'analogic_input.dart';
 import 'login_page.dart';
-import 'mainCommand_page.dart';
+import 'photocells.dart';
 import 'ws_manage.dart';
+import 'continous_motor.dart';
+import 'solenoid.dart';
+import 'stepper_motor.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(ChangeNotifierProvider(
+      create: (_) => WebSocketClass(),
+      child: MyApp()
+    )
+  );
 TextEditingController controller = TextEditingController();
 
 List<Color> color = [
@@ -23,8 +28,12 @@ class MyApp extends StatelessWidget {
       ),
       home: HomePage(),
       routes: {
-        '/call': (_) => CallPage(),
-        '/first': (_) => UserInfoPage()
+        '/Photocells': (_) => Photocells(),
+        '/PhotocellPage': (_) => PhotocellPage(),   
+        '/inputA': (_) => AnalogicInput(),
+        '/StepperMotor': (_) => MotorST(),
+        '/DCMotor': (_) => DCMotor(),
+        '/Solenoids': (_) => Solenoid()
       },
     );
   }
@@ -34,25 +43,18 @@ class HomePage extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => WebSocketClass(),
-      child: Consumer(
+    return Consumer(
         builder: (__, WebSocketClass user, _) {
           switch (user.status) {           
             case Status.Unauthenticated:
               return LoginPage();
             case Status.Authenticated:
-              return UserInfoPage();
-            case Status.CallPage:
-              return CallPage();
-            case Status.EndCallPage:
-              return EndCallPage();
+              return UserInfoPage();   
             default:
               return LoginPage();
           }
-        },
-      ),
-    );
+        }
+      );
   }
 }
 
@@ -61,31 +63,72 @@ class UserInfoPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<WebSocketClass>(context);
-    
+    user.generateButtonsList(context);
     List<FlatButton> funct = [
       FlatButton(
-        onPressed: () async {
-          // await Future.delayed(Duration(seconds: 2));
-          user.openCall();
-        },    
+        onPressed: () {
+          Navigator.pushNamed(context,'/Photocells' );
+        },
         color: Colors.indigo[50],
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[           
-            Text('Main')
+            Text('Photocells')
           ],
         ),
       ),
+
       FlatButton(
         color: Colors.indigo[50],
         onPressed: () {
-          user.openEndCall();
+          Navigator.pushNamed(context,'/inputA' );
+          },
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[                 
+            Text('Ingressi Analogici')
+          ],
+        ),
+      ),
+
+      FlatButton(
+        color: Colors.indigo[50],
+        onPressed: () {
+          Navigator.pushNamed(context,'/StepperMotor' );
           },
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[       
                 
-            Text('HW Controller')
+            Text('Motori Stepper')
+          ],
+        ),
+      ),
+
+      FlatButton(
+        color: Colors.indigo[50],
+        onPressed: () {
+          Navigator.pushNamed(context,'/DCMotor' );
+          },
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[       
+                
+            Text('Motori in continua')
+          ],
+        ),
+      ),
+
+      FlatButton(
+        color: Colors.indigo[50],
+        onPressed: () {
+          Navigator.pushNamed(context,'/Solenoids' );
+          },
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[       
+                
+            Text('Solenoidi')
           ],
         ),
       ),
