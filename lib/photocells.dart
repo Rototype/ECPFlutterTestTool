@@ -14,15 +14,15 @@ class Photocells extends StatelessWidget {
       ),
         body: 
           Container(           
-            child:  Column(
+            child:  Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 SizedBox(
-                  height: 300,
-                  width: 200,
-                  child: ListView.builder(
+                  width: 500,
+                  child: ListView.builder(                  
                     shrinkWrap: true,
                     itemCount: user.photocellButtons.length,
-                    itemBuilder: (_, int index) {
+                    itemBuilder: (_, int index) {                     
                       return user.photocellButtons[index].button;
                     }
                   )
@@ -58,9 +58,15 @@ class PhotocellPage extends StatelessWidget {
                 ),
                 RaisedButton(
                   onPressed: (){
-                    user.send('CMD_SetStepperMotorCountSteps@Main(${user.index},on,20,5,100,500)');                
+                    user.send('CMD_SetDigitalOutput@Main(${user.index},off)');                
                   },
-                  child: Text('Set'),
+                  child: Text('Set OFF'),
+                ),
+                RaisedButton(
+                  onPressed: (){
+                    user.send('CMD_SetDigitalOutput@Main(${user.index},on)');                
+                  },
+                  child: Text('Set ON'),
                 )
               ],
             )

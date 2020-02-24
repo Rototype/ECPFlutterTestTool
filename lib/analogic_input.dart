@@ -38,7 +38,6 @@ class AnalogicInputs extends StatelessWidget {
 }
 
 class AnalogicInputPage extends StatelessWidget {
-  const AnalogicInputPage({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -49,19 +48,19 @@ class AnalogicInputPage extends StatelessWidget {
             title: Text(' Analogic Input ${user.index}'),
           ),
           body: Container(
-            child: Column(children: <Widget>[
+            child: Row(children: <Widget>[
                 RaisedButton(
                   onPressed: (){
                     user.send('CMD_ReadAnalogInput@Main(${user.index-1})');                
                   },
                   child: Text('Read'),
                 ),
-                RaisedButton(
-                  onPressed: (){
-                    user.send('CMD_SetAnalogOutput@Main(${user.index-1}, 300');                
-                  },
-                  child: Text('Set'),
-                )
+                  RaisedButton(
+                    onPressed: (){
+                      user.send('CMD_SetAnalogOutput@Main(${user.index-1}, 0)');
+                    },
+                    child: Text('Set'),
+                  ),                 
             ],)
           ),
         );

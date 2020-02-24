@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:js';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:web_socket_channel/html.dart';
@@ -16,7 +17,6 @@ class PhotocellsClass{
     this.id=id;
     this.button=button;
   }
-
 }
 class InputClass{
   int id;
@@ -69,6 +69,8 @@ class WebSocketClass with ChangeNotifier {
   List<String> messageStringMain = new List<String>();
 
   int index=-1;
+  int result = 0;
+
   List<PhotocellsClass> photocellButtons = new List<PhotocellsClass>();
   List<InputClass> inputButtons = new List<InputClass>();
   List<DcMotorClass> dcMotorButtons = new List<DcMotorClass>();
@@ -94,92 +96,43 @@ class WebSocketClass with ChangeNotifier {
             // Gestione Timer timeout
             //
             timerTimeout.cancel();
+
             timerTimeout = Timer(Duration(seconds: 4), () {
               disconnect();
             });
           }catch(e){print(e);}
 
           String message2 = message;
+
           //
           // Controlli eseguiti tramite la logica dei comandi del WebServer di Prova
           //
 
 
           List<String> split = message2.split(RegExp("[\s_@)(]+"));
-
           
+
           if(split[1] == 'ReadDigitalInput')
           {
-            if(split[0] == 'END')
-            {
-              print(split[3]);
-            }
-          }
+            //print(split[3].split('x')[1]);   
+            result = int.parse( split[3].split('x')[1], radix: 16);
 
-          if(split[1] == 'SetDigitalOutput')
-          {
-            if(split[0] == 'END')
-            {
-              print(message);
-            }
           }
-
-          if(split[1] == 'ReadAnalogInput')
-          {
-            if(split[0] == 'END')
-            {
-              print(split[3]);
-            }
-          }
-
-          if(split[1] == 'SetAnalogOutput')
-          {
-            if(split[0] == 'END')
-            {
-              print(message);
-            }
-          }
-
-          if(split[1] == 'SetStepperMotorSpeed')
-          {
-            if(split[0] == 'END')
-            {
-              print(message);
-            }
-          }
-
-          if(split[1] == 'SetStepperMotorCountStep')
-          {
-            print(message);
-          }
-
-          if(split[1] == 'SetDCMotor')
-          {
-            print(message);
-          }
-          if(split[1] == 'SetDCMotorPWM')
-          {
-            print(message);
-          }
-
-          if(split[1] == 'SetDCSolenoid')
-          {
-            print(message);
-          }
-          if(split[1] == 'SetDCSolenoidPWM')
-          {
-            print(message);
+          else{
+          print(message);
           }
 
           notifyListeners();
         }, onDone: () {
           print('ws closed');
           timerPeriod.cancel();
+          timerTimeout.cancel();
           status = Status.Unauthenticated;
           notifyListeners();
         }, onError: (error) {
           print('error $error');
           timerPeriod.cancel();
+          timerTimeout.cancel();
           status = Status.Unauthenticated;
           notifyListeners();
         });
@@ -197,15 +150,12 @@ class WebSocketClass with ChangeNotifier {
     status = Status.Authenticated;
     notifyListeners();
     return true;
-      
   }
 
   Future<void> disconnect() async {
     try {
       timerPeriod.cancel();
       _channel.sink.close(); // trigger listen onDone
-      messageStringHWcontroller = new List<String>();
-      messageStringMain = new List<String>();
     } catch (err) {
       print('sink.close error');
     }
@@ -224,35 +174,47 @@ class WebSocketClass with ChangeNotifier {
       print(err);
     }
   }
-  void openHome() {
-    status = Status.Authenticated;
-    notifyListeners();
-  }
-
-  void clearHW() {
-    messageStringHWcontroller = new List<String>();
-    notifyListeners();
-  }
-
-  void clearMain() {
-    messageStringMain = new List<String>();
-    notifyListeners();
-  }
 
   void generateButtonsList(BuildContext context){
     photocellButtons = new List<PhotocellsClass>();
-    photocellButtons = new List<PhotocellsClass>();
+    inputButtons = new List<InputClass>();
+    stepperMotorButtons = new List<StepperMotorClass>();
+    dcMotorButtons = new List<DcMotorClass>();
+    solenoidButtons = new List<SolenoidClass>();
+
+
     for(int i=0; i<50 ;i++){
       photocellButtons.add(
         new PhotocellsClass(
           i+1, 
-          new FlatButton(
+          result&1<<(i) == 0 ?
+          new FlatButton( 
+            
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text('F ${i+1}'),
+                  Icon(Icons.lightbulb_outline, color: Colors.greenAccent,)
+                ],
+              ),             
+            onPressed: (){
+              index = i+1;
+              Navigator.pushNamed(context,'/PhotocellPage' );
+            }, 
+          ) :
+          new FlatButton( 
+            child: Row(                
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text('F ${i+1}'),
+                Icon(Icons.lightbulb_outline, color: Colors.red,)
+              ],
+            ),
             onPressed: (){          
               index = i+1;
               Navigator.pushNamed(context,'/PhotocellPage' );
             }, 
-            child: Text('Photocell ${i+1}')
-          )    
+          ) 
         )
       );
     }
@@ -310,6 +272,6 @@ class WebSocketClass with ChangeNotifier {
         )
       );
     }
-    index=0;
   }
+
 }

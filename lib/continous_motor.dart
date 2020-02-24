@@ -56,7 +56,7 @@ class DCMotorPage extends StatelessWidget {
                 ),
                 RaisedButton(
                   onPressed: (){
-                    user.send('CMD_SetStepperMotorCountSteps@Main(${user.index-1},1,100)');                
+                    user.send('CMD_SetDCMotorPWM@Main(${user.index-1},1,50)');                
                   },
                   child: Text('Set Motor PWM'),
                 )

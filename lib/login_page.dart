@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 import 'ws_manage.dart';
 
@@ -14,6 +15,11 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    SchedulerBinding.instance.addPostFrameCallback((_) => setState(() {
+          if (Navigator.canPop(context)) {
+            Navigator.pop(context);
+          }
+        }));
     final user = Provider.of<WebSocketClass>(context);
     return Scaffold(
       key: _key,
@@ -25,32 +31,30 @@ class _LoginPageState extends State<LoginPage> {
         child: Center(
           child: ListView(
             shrinkWrap: true,
-            children: <Widget>[            
-             Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 100.0),                   
-                      child: Material(
-                        elevation: 50.0,                     
-                        borderRadius: BorderRadius.circular(100.0),
-                        color: Colors.red,
-                        child: MaterialButton(
-                          onPressed: () async {
-                            
-                            if (_formKey.currentState.validate()) {
-                              if (!await user.wsconnect())
-                              _key.currentState.showSnackBar(SnackBar(
-                                content: Text("Something is wrong"),
-                               ));
-                            }
-                          },
-                          child: Text(
-                            "Connect",
-                            style: style.copyWith(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ),
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 100.0),
+                child: Material(
+                  elevation: 50.0,
+                  borderRadius: BorderRadius.circular(100.0),
+                  color: Colors.red,
+                  child: MaterialButton(
+                    onPressed: () async {
+                      if (_formKey.currentState.validate()) {
+                        if (!await user.wsconnect())
+                          _key.currentState.showSnackBar(SnackBar(
+                            content: Text("Something is wrong"),
+                          ));
+                      }
+                    },
+                    child: Text(
+                      "Connect",
+                      style: style.copyWith(
+                          color: Colors.white, fontWeight: FontWeight.bold),
                     ),
+                  ),
+                ),
+              ),
             ],
           ),
         ),

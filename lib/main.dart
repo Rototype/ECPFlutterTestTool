@@ -53,6 +53,7 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    
     return Consumer(
         builder: (__, WebSocketClass user, _) {
           switch (user.status) {           
@@ -64,7 +65,7 @@ class HomePage extends StatelessWidget {
               return LoginPage();
           }
         }
-      );
+    );
   }
 }
 
@@ -72,13 +73,12 @@ class UserInfoPage extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
+    
     final user = Provider.of<WebSocketClass>(context);
-    if(user.index==-1)
-    {
-      user.generateButtonsList(context);
-    }
+    user.generateButtonsList(context);
     
     List<FlatButton> funct = [
+      
       FlatButton(
         onPressed: () {
           Navigator.pushNamed(context,'/Photocells' );
@@ -146,6 +146,7 @@ class UserInfoPage extends StatelessWidget {
           ],
         ),
       ),
+    
     ];
     return Scaffold(
       appBar: AppBar(     
@@ -165,7 +166,7 @@ class UserInfoPage extends StatelessWidget {
           padding: EdgeInsets.fromLTRB(80, 100, 80, 50),
           children: funct                  
         )
-      )    
+      ) 
     );   
   }
 }
