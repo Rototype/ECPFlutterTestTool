@@ -86,7 +86,7 @@ class _SolenoidPageState extends State<SolenoidPage> {
                 padding: EdgeInsets.fromLTRB(0, 35, 0, 0),
                 child: RaisedButton(                 
                   onPressed: () {
-                    // DO SOMETHING
+                    user.send('CMD_SetDCSolenoidPWM@Main(${user.index-1},on,$pwm,$inittime)');
                   },
                   child: Text(
                       '     Set Solenoid\nPWM: ${pwm.round()}  InitTime: ${inittime.round()}',
@@ -118,7 +118,7 @@ class _SolenoidPageState extends State<SolenoidPage> {
                         },
                         min: 0,
                         max: 2000,
-                        divisions: 2000,
+                        divisions: 200,
                         label: "InitTime: ${inittime.round()}",
                       )
                     ],

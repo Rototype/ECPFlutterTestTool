@@ -44,7 +44,8 @@ class _LoginPageState extends State<LoginPage> {
                         if (!await user.wsconnect())
                           _key.currentState.showSnackBar(SnackBar(
                             content: Text("Something is wrong"),
-                          ));
+                          )
+                        );
                       }
                     },
                     child: Text(

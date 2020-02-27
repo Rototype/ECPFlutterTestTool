@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'dart:js';
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:web_socket_channel/html.dart';
@@ -69,7 +69,7 @@ class WebSocketClass with ChangeNotifier {
   List<String> messageStringMain = new List<String>();
 
   int index=-1;
-  int result = 0;
+  BigInt result = BigInt.from(0);
 
   List<PhotocellsClass> photocellButtons = new List<PhotocellsClass>();
   List<InputClass> inputButtons = new List<InputClass>();
@@ -107,16 +107,11 @@ class WebSocketClass with ChangeNotifier {
           //
           // Controlli eseguiti tramite la logica dei comandi del WebServer di Prova
           //
-
-
           List<String> split = message2.split(RegExp("[\s_@)(]+"));
           
-
           if(split[1] == 'ReadDigitalInput')
           {
-            //print(split[3].split('x')[1]);   
-            result = int.parse( split[3].split('x')[1], radix: 16);
-
+            result = BigInt.parse( split[3].split('x')[1], radix: 16);
           }
           else{
           print(message);
@@ -182,39 +177,34 @@ class WebSocketClass with ChangeNotifier {
     dcMotorButtons = new List<DcMotorClass>();
     solenoidButtons = new List<SolenoidClass>();
 
-
+    
     for(int i=0; i<50 ;i++){
       photocellButtons.add(
         new PhotocellsClass(
           i+1, 
-          result&1<<(i) == 0 ?
-          new FlatButton( 
-            
+          new FlatButton(       
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
+                  result & BigInt.from(pow(2,i)) == BigInt.from(0) ?
+                  Hero(
+                    tag: 'hero $i',
+                    child: Icon(Icons.lightbulb_outline, color: Colors.greenAccent,)
+                  ) :
+                  Hero(                  
+                    tag: 'hero $i',
+                    child: Icon(Icons.lightbulb_outline, color: Colors.red,)
+
+                  ),
                   Text('F ${i+1}'),
-                  Icon(Icons.lightbulb_outline, color: Colors.greenAccent,)
+
                 ],
-              ),             
+              ),  
             onPressed: (){
               index = i+1;
               Navigator.pushNamed(context,'/PhotocellPage' );
             }, 
-          ) :
-          new FlatButton( 
-            child: Row(                
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Text('F ${i+1}'),
-                Icon(Icons.lightbulb_outline, color: Colors.red,)
-              ],
-            ),
-            onPressed: (){          
-              index = i+1;
-              Navigator.pushNamed(context,'/PhotocellPage' );
-            }, 
-          ) 
+          )
         )
       );
     }

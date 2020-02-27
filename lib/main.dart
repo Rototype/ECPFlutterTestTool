@@ -149,7 +149,7 @@ class UserInfoPage extends StatelessWidget {
     
     ];
     return Scaffold(
-      appBar: AppBar(     
+      appBar: AppBar(
         title: Text('Titolo'),  
         actions: <Widget>[
           IconButton(           
