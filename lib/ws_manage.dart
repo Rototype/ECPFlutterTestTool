@@ -10,50 +10,61 @@ enum Status {
   Unauthenticated,
 }
 
-class PhotocellsClass{
+class PhotocellsClass {
   int id;
   FlatButton button;
-  PhotocellsClass(int id, FlatButton button){
-    this.id=id;
-    this.button=button;
-  }
-}
-class InputClass{
-  int id;
-  FlatButton button;
-  InputClass(id, button){
-    this.id=id;
-    this.button=button;
-  }
-}
-class StepperMotorClass{
-  int id;
-  FlatButton button;
-  StepperMotorClass(id, button){
-    this.id=id;
-    this.button=button;
-  }
-}
-class DcMotorClass{
-  int id;
-  FlatButton button;
-  DcMotorClass(id, button){
-    this.id=id;
-    this.button=button;
-  }
-}
-class SolenoidClass{
-  int id;
-  FlatButton button;
-  SolenoidClass(id, button){
-    this.id=id;
-    this.button=button;
+  PhotocellsClass(int id, FlatButton button) {
+    this.id = id;
+    this.button = button;
   }
 }
 
+class InputClass {
+  int id;
+  FlatButton button;
+  InputClass(id, button) {
+    this.id = id;
+    this.button = button;
+  }
+}
+
+class StepperMotorClass {
+  int id;
+  FlatButton button;
+  StepperMotorClass(id, button) {
+    this.id = id;
+    this.button = button;
+  }
+}
+
+class DcMotorClass {
+  int id;
+  FlatButton button;
+  DcMotorClass(id, button) {
+    this.id = id;
+    this.button = button;
+  }
+}
+
+class SolenoidClass {
+  int id;
+  FlatButton button;
+  SolenoidClass(id, button) {
+    this.id = id;
+    this.button = button;
+  }
+}
+
+class OutputClass {
+  int id;
+  Row row;
+  OutputClass(id, row) {
+    this.id = id;
+    this.row = row;
+  }
+}
 
 class WebSocketClass with ChangeNotifier {
-
   WebSocketChannel _channel;
 
   String _url = "ws://192.168.1.101:5001";
@@ -62,28 +73,37 @@ class WebSocketClass with ChangeNotifier {
 
   Status status = Status.Unauthenticated;
 
-  Timer timerPeriod = Timer(Duration(seconds: 2), () {});
+  Timer timerPeriod = Timer(Duration(seconds: 1), () {});
+  Timer timerInputAnalog = Timer(Duration(seconds: 1), () {});
+
   Timer timerTimeout = new Timer(Duration(seconds: 0), () {});
 
   List<String> messageStringHWcontroller = new List<String>();
   List<String> messageStringMain = new List<String>();
 
-  int index=-1;
+  List<int> outputList = new List<int>();
+  List<int> inputList = new List<int>();
+
+  int counter = 0;
+  int indice = 0;
+  int index = -1;
   BigInt result = BigInt.from(0);
+  int analogInput =0;
+
 
   List<PhotocellsClass> photocellButtons = new List<PhotocellsClass>();
   List<InputClass> inputButtons = new List<InputClass>();
   List<DcMotorClass> dcMotorButtons = new List<DcMotorClass>();
   List<StepperMotorClass> stepperMotorButtons = new List<StepperMotorClass>();
   List<SolenoidClass> solenoidButtons = new List<SolenoidClass>();
+  List<OutputClass> outputButtons = new List<OutputClass>();
 
   WebSocketClass();
 
   Future<bool> wsconnect() async {
-    try{
+    try {
       _channel = HtmlWebSocketChannel.connect(_url);
-      if (_channel == null) {  
-
+      if (_channel == null) {
         timerPeriod.cancel();
         status = Status.Unauthenticated;
         return false;
@@ -91,7 +111,7 @@ class WebSocketClass with ChangeNotifier {
         _channel.stream.listen((message) {
           // onMessage:
 
-          try{
+          try {
             //
             // Gestione Timer timeout
             //
@@ -100,7 +120,11 @@ class WebSocketClass with ChangeNotifier {
             timerTimeout = Timer(Duration(seconds: 4), () {
               disconnect();
             });
-          }catch(e){print(e);}
+          } catch (e) {
+            print(e);
+          }
+
+          
 
           String message2 = message;
 
@@ -108,13 +132,34 @@ class WebSocketClass with ChangeNotifier {
           // Controlli eseguiti tramite la logica dei comandi del WebServer di Prova
           //
           List<String> split = message2.split(RegExp("[\s_@)(]+"));
-          
-          if(split[1] == 'ReadDigitalInput')
-          {
-            result = BigInt.parse( split[3].split('x')[1], radix: 16);
+
+          if(split[1] == 'ReadAnalogInput'){
+            if(indice==5)
+            {
+              indice=0;
+            }
+            if(indice==0){
+              inputList[0]=int.parse(split[3]);
+            }
+            if(indice==1){
+              inputList[1]=int.parse(split[3]);
+            }
+            if(indice==2){
+              inputList[2]=int.parse(split[3]);
+            }
+            if(indice==3){
+              inputList[3]=int.parse(split[3]);
+            }
+            if(indice==4){
+              inputList[4]=int.parse(split[3]);
+            }
+            indice++;
           }
-          else{
-          print(message);
+          else if (split[1] == 'ReadDigitalInput') {
+            result = BigInt.parse(split[3].split('x')[1], radix: 16);
+          } 
+          else {
+            print(message);
           }
 
           notifyListeners();
@@ -122,24 +167,40 @@ class WebSocketClass with ChangeNotifier {
           print('ws closed');
           timerPeriod.cancel();
           timerTimeout.cancel();
+          timerInputAnalog.cancel();
           status = Status.Unauthenticated;
           notifyListeners();
         }, onError: (error) {
           print('error $error');
           timerPeriod.cancel();
           timerTimeout.cancel();
+          timerInputAnalog.cancel();
           status = Status.Unauthenticated;
           notifyListeners();
         });
-      }      
+      }
 
-      //
+      
       // Timer utilizzato per il poll del WebServer
-      //
-      timerPeriod = Timer.periodic(Duration(seconds: 2), (timer) {
-        send('CMD_ReadDigitalInput@Main#');
-      });
-    }catch(e){
+    for(int i=0;i<5;i++)
+    {
+      inputList.add(0);
+    }
+    for(int i=0;i<10;i++)
+    {
+      outputList.add(0);
+    }
+
+    timerPeriod = Timer.periodic(Duration(seconds: 2), (timer2) {
+      send('CMD_ReadDigitalInput@Main#');
+    });
+
+    timerInputAnalog = Timer.periodic(Duration(milliseconds: 800), (timer) {
+      send('CMD_ReadAnalogInput@Main($indice)');
+    });
+
+
+    } catch (e) {
       print('erro $e');
     }
     status = Status.Authenticated;
@@ -158,10 +219,9 @@ class WebSocketClass with ChangeNotifier {
 
   void send(String data) {
     try {
-      if(!timerTimeout.isActive)
-      {
-         timerTimeout = Timer(Duration(seconds: 4), () {
-              disconnect();
+      if (!timerTimeout.isActive) {
+        timerTimeout = Timer(Duration(seconds: 4), () {
+          disconnect();
         });
       }
       _channel.sink.add(data);
@@ -170,98 +230,121 @@ class WebSocketClass with ChangeNotifier {
     }
   }
 
-  void generateButtonsList(BuildContext context){
+  void generateButtonsList(BuildContext context) {
     photocellButtons = new List<PhotocellsClass>();
     inputButtons = new List<InputClass>();
     stepperMotorButtons = new List<StepperMotorClass>();
     dcMotorButtons = new List<DcMotorClass>();
     solenoidButtons = new List<SolenoidClass>();
+    outputButtons = new List<OutputClass>();
 
-    
-    for(int i=0; i<50 ;i++){
-      photocellButtons.add(
-        new PhotocellsClass(
-          i+1, 
-          new FlatButton(       
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  result & BigInt.from(pow(2,i)) == BigInt.from(0) ?
-                  Hero(
-                    tag: 'hero $i',
-                    child: Icon(Icons.lightbulb_outline, color: Colors.greenAccent,)
-                  ) :
-                  Hero(                  
-                    tag: 'hero $i',
-                    child: Icon(Icons.lightbulb_outline, color: Colors.red,)
+    for (int i = 0; i < 50; i++) {
+      photocellButtons.add(new PhotocellsClass(
+          i + 1,
+          new FlatButton(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                result & BigInt.from(pow(2, i)) == BigInt.from(0)
+                    ? Hero(
+                        tag: 'hero $i',
+                        child: Icon(
+                          Icons.lightbulb_outline,
+                          color: Colors.greenAccent,
+                        ))
+                    : Hero(
+                        tag: 'hero $i',
+                        child: Icon(
+                          Icons.lightbulb_outline,
+                          color: Colors.red,
+                        )),
+                Text('F ${i + 1}'),
+              ],
+            ),
+            onPressed: () {
+              index = i + 1;
+              Navigator.pushNamed(context, '/PhotocellPage');
+            },
+          )));
+    }
+    for (int i = 0; i < 5; i++) {
+      inputButtons.add(new InputClass(
+          i + 1,
+          new FlatButton(
+              onPressed: () {
+                index = i + 1;
+                Navigator.pushNamed(context, '/inputAnalogicPage');
+              },
+              child:
+              inputList.isNotEmpty ?
+               Text('Analog Input ${i + 1}:  ${inputList[i]}',
+                  style:
+                      TextStyle(fontSize: 15, fontWeight: FontWeight.bold)
+                ) : Text('Analog Input ${i + 1}'),
+                
+              )
+            )
+          );
+    }
+    for (int i = 0; i < 20; i++) {
+      stepperMotorButtons.add(new StepperMotorClass(
+          i + 1,
+          new FlatButton(
+              onPressed: () {
+                index = i + 1;
+                Navigator.pushNamed(context, '/StepperMotorPage');
+              },
+              child: Text('Stepper motor ${i + 1}',
+                  style:
+                      TextStyle(fontSize: 15, fontWeight: FontWeight.bold)))));
+    }
+    for (int i = 0; i < 10; i++) {
 
-                  ),
-                  Text('F ${i+1}'),
+      
 
-                ],
-              ),  
-            onPressed: (){
-              index = i+1;
-              Navigator.pushNamed(context,'/PhotocellPage' );
-            }, 
-          )
-        )
-      );
-    }
-    for(int i=0;i<5;i++){
-      inputButtons.add(
-        new InputClass(
-          i+1,
+      dcMotorButtons.add(new DcMotorClass(
+          i + 1,
           new FlatButton(
-            onPressed:() {              
-              index = i+1;
-              Navigator.pushNamed(context,'/inputAnalogicPage' );
-            }, 
-            child: Text('Analogic Input ${i+1}')
-          )
-        )
-      );
-    }
-    for(int i=0;i<20;i++){
-      stepperMotorButtons.add(
-        new StepperMotorClass(
-          i+1,
+              onPressed: () {
+                index = i + 1;
+                Navigator.pushNamed(context, '/DCMotorPage');
+              },
+              child: Text('DC Motor ${i + 1}',
+                  style:
+                      TextStyle(fontSize: 15, fontWeight: FontWeight.bold)))));
+      solenoidButtons.add(new SolenoidClass(
+          i + 1,
           new FlatButton(
-            onPressed: (){              
-              index = i+1;
-              Navigator.pushNamed(context,'/StepperMotorPage' );
-            }, 
-            child: Text('Stepper motor ${i+1}')
+              onPressed: () {
+                index = i + 1;
+                Navigator.pushNamed(context, '/SolenoidPage');
+              },
+              child: Text('Solenoid ${i + 1}',
+                  style:
+                      TextStyle(fontSize: 15, fontWeight: FontWeight.bold)))));
+      outputButtons.add(new OutputClass(
+          i + 1,
+          new Row(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Text('Digital Output ${i + 1}',
+                    style:
+                        TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+                ),
+                outputList[i] == 0 ?
+                Icon(
+                  Icons.block,
+                  color: Colors.red
+                )
+                : Icon(
+                  Icons.check,
+                  color: Colors.green
+                )
+                
+              ] 
           )
-        )
-      );
-    }
-    for(int i=0; i<10;i++){
-      dcMotorButtons.add(
-        new DcMotorClass(
-          i+1,
-          new FlatButton(
-            onPressed: (){              
-              index = i+1;
-              Navigator.pushNamed(context,'/DCMotorPage' );
-            }, 
-            child: Text('DC Motor ${i+1}')
-          )
-        )
-      );
-      solenoidButtons.add(
-        new SolenoidClass(
-          i+1, 
-          new FlatButton(
-            onPressed: (){              
-              index = i+1;
-              Navigator.pushNamed(context,'/SolenoidPage' );
-            }, 
-            child: Text('Solenoids ${i+1}')
-          )
-        )
-      );
+      ));
     }
   }
-
 }

@@ -10,14 +10,14 @@ class DCMotor extends StatelessWidget {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
-        title: Text('DCMotor'),       
+        title: Text('DC Motor'),       
       ),
         body: 
            Container(           
-            child:  Column(
+            child:  Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 SizedBox(
-                  height: 300,
                   width: 200,
                   child: ListView.builder(
                     shrinkWrap: true,
@@ -52,7 +52,7 @@ class _DCMotorPageState extends State<DCMotorPage> {
     return Consumer<WebSocketClass>(builder: (_, user, __) {
     return Scaffold(
         appBar: AppBar(
-          title: Text(' DC Motor x'),
+          title: Text(' DC Motor ${user.index}'),
         ),
         body: Container(
           child: Row(
@@ -74,7 +74,9 @@ class _DCMotorPageState extends State<DCMotorPage> {
                                 fontWeight: FontWeight.bold
                               )
                             ),
-                            onPressed: () {},
+                            onPressed: () {
+                              user.send('CMD_SetDCMotor@Main(${user.index-1},0)');
+                            },
                           ),
                         ),
                       ),
@@ -83,7 +85,9 @@ class _DCMotorPageState extends State<DCMotorPage> {
                         child: Container(
                           width: 150,
                           child: RaisedButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              user.send('CMD_SetDCMotor@Main(${user.index-1},brake)');
+                            },
                             child: Text('Brake',
                               style: TextStyle(
                                 fontSize: 15,
@@ -102,13 +106,20 @@ class _DCMotorPageState extends State<DCMotorPage> {
                         child: Container(
                           width: 150,
                           child: RaisedButton(
-                            child: Text('Clock',
+                            child: Text('Run Clockwise',
                               style: TextStyle(
                                 fontSize: 15,
                                 fontWeight: FontWeight.bold
                               )
                             ),
-                            onPressed: () {},
+                            onPressed: () {
+                              if(!isChecked){
+                                user.send('CMD_SetDCMotor@Main(${user.index-1},1)');
+                              }
+                              else{
+                                user.send('CMD_SetDCMotorPWM@Main(${user.index-1},1,$value)');
+                              }
+                            },
                           ),
                         ),
                       ),
@@ -117,8 +128,15 @@ class _DCMotorPageState extends State<DCMotorPage> {
                         child: Container(
                           width: 150,
                           child: RaisedButton(
-                            onPressed: () {},
-                            child: Text('CounterClock',
+                            onPressed: () {
+                              if(!isChecked){
+                                user.send('CMD_SetDCMotor@Main(${user.index-1},-1)');
+                              }
+                              else{
+                                user.send('CMD_SetDCMotorPWM@Main(${user.index-1},-1,$value)');
+                              }
+                            },
+                            child: Text('Run CClockwise',
                               style: TextStyle(
                                 fontSize: 15,
                                 fontWeight: FontWeight.bold
