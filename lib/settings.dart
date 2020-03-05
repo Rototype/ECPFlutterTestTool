@@ -80,6 +80,12 @@ class NwOptions extends StatelessWidget {
   TextEditingController controller23 =  new TextEditingController(); 
   TextEditingController controller24 =  new TextEditingController(); 
 
+  TextEditingController controller31 =  new TextEditingController(); 
+  TextEditingController controller32 =  new TextEditingController(); 
+  TextEditingController controller33 =  new TextEditingController(); 
+  TextEditingController controller34 =  new TextEditingController(); 
+
+
   bool value = false;
 
   FocusNode textSecondFocusNode = new FocusNode();
@@ -90,6 +96,10 @@ class NwOptions extends StatelessWidget {
   FocusNode textThirdFocusNode2 = new FocusNode();
   FocusNode textFourthFocusNode2 = new FocusNode();
   
+  FocusNode textSecondFocusNode3 = new FocusNode();
+  FocusNode textThirdFocusNode3 = new FocusNode();
+  FocusNode textFourthFocusNode3 = new FocusNode();
+
   @override
 
   
@@ -106,7 +116,7 @@ class NwOptions extends StatelessWidget {
             Row(
               children: <Widget>[
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 0, 0, 20),
+                  padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
                   child: Text(
                     'IP Address: ',
                     style: TextStyle(
@@ -259,7 +269,165 @@ class NwOptions extends StatelessWidget {
                   ),
                 ),             
               ],
-            ),      
+            ),
+                  
+            Row(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(15, 0, 0, 15),
+                  child: Text(
+                    'Subnet Mask: ',
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 0, 0, 20),
+                  child: Container(
+                    width: 300,
+                    child: Row(
+                      children: <Widget>[
+                        Container(
+                          width: 50,
+                          child: TextFormField(
+                             onChanged: (String value) {
+                               if(value.length==3){
+                              FocusScope.of(context).requestFocus(textSecondFocusNode3);}
+                            },
+                            onFieldSubmitted: (String value) {
+                              FocusScope.of(context).requestFocus(textSecondFocusNode3);
+                            },
+                            maxLength: 3,
+                            controller: controller31,
+                            decoration: InputDecoration(
+                              filled: true,
+                              fillColor: Colors.red[100],
+                              counterText: "",
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  width: 1,
+                                  color: Colors.red
+                                )
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  width: 1,
+                                  color: Colors.red
+                                )
+                              )
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text('.'),
+                        ),
+                        Container(
+                          width: 50,
+                          child: TextFormField(
+                            
+                            focusNode: textSecondFocusNode3,
+                             onChanged: (String value) {
+                               if(value.length==3){
+                              FocusScope.of(context).requestFocus(textThirdFocusNode3);}
+                            },
+                            onFieldSubmitted: (String value) {
+                              FocusScope.of(context).requestFocus(textThirdFocusNode3);
+                            },
+                            maxLength: 3,
+                            controller: controller32,
+                            decoration: InputDecoration(
+                              filled: true,
+                              fillColor: Colors.red[100],
+                              counterText: "",
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  width: 1,
+                                  color: Colors.red
+                                )
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  width: 1,
+                                  color: Colors.red
+                                )
+                              )
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text('.'),
+                        ),
+                        Container(
+                          width: 50,
+                          child: TextFormField(
+                            focusNode: textThirdFocusNode3,
+                             onChanged: (String value) {
+                               if(value.length==3){
+                              FocusScope.of(context).requestFocus(textFourthFocusNode3);}
+                            },
+                            onFieldSubmitted: (String value) {
+                              FocusScope.of(context).requestFocus(textFourthFocusNode3);
+                            },
+                            maxLength: 3,
+                            controller: controller33,
+                            decoration: InputDecoration(
+                              filled: true,
+                              fillColor: Colors.red[100],
+                              counterText: "",
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  width: 1,
+                                  color: Colors.red
+                                )
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  width: 1,
+                                  color: Colors.red
+                                )
+                              )
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text('.'),
+                        ),
+                        Container(
+                          width: 50,
+                          child: TextFormField(
+                            focusNode: textFourthFocusNode3,
+                            maxLength: 3,
+                            controller: controller34,
+                            decoration: InputDecoration(
+                              filled: true,
+                              fillColor: Colors.red[100],
+                              counterText: "",
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  width: 1,
+                                  color: Colors.red
+                                )
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  width: 1,
+                                  color: Colors.red
+                                )
+                              )
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),   
+              ],
+            ),
             Row(
               children: <Widget>[
                 Padding(

@@ -10,7 +10,7 @@ class AnalogicInputs extends StatelessWidget {
     return Consumer<WebSocketClass>(builder: (_, user, __) {
       return Scaffold(
           appBar: AppBar(
-            title: Text('Command @HwController'),
+            title: Text('Analog Inputs'),
           ),
           body: Container(
               child: Row(

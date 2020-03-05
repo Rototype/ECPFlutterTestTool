@@ -101,7 +101,7 @@ class UserInfoPage extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text('Stepper Motor',
+            Text('Stepper Motors',
                 style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold))
           ],
         ),

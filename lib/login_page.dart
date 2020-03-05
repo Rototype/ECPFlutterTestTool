@@ -24,7 +24,7 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       key: _key,
       appBar: AppBar(
-        title: Text("Demo WebSocket"),
+        title: Text("Demo Flutter Client"),
       ),
       body: Form(
         key: _formKey,

@@ -10,15 +10,6 @@ enum Status {
   Unauthenticated,
 }
 
-class PhotocellsClass {
-  int id;
-  FlatButton button;
-  PhotocellsClass(int id, FlatButton button) {
-    this.id = id;
-    this.button = button;
-  }
-}
-
 class InputClass {
   int id;
   FlatButton button;
@@ -84,6 +75,8 @@ class WebSocketClass with ChangeNotifier {
   List<int> outputList = new List<int>();
   List<int> inputList = new List<int>();
 
+
+  int photocellsIndex = -1;
   int counter = 0;
   int indice = 0;
   int index = -1;
@@ -91,7 +84,7 @@ class WebSocketClass with ChangeNotifier {
   int analogInput =0;
 
 
-  List<PhotocellsClass> photocellButtons = new List<PhotocellsClass>();
+  List<List<FlatButton>> photocellButtons = new List<List<FlatButton>>();
   List<InputClass> inputButtons = new List<InputClass>();
   List<DcMotorClass> dcMotorButtons = new List<DcMotorClass>();
   List<StepperMotorClass> stepperMotorButtons = new List<StepperMotorClass>();
@@ -231,17 +224,23 @@ class WebSocketClass with ChangeNotifier {
   }
 
   void generateButtonsList(BuildContext context) {
-    photocellButtons = new List<PhotocellsClass>();
+    photocellButtons = new List<List<FlatButton>>();
     inputButtons = new List<InputClass>();
     stepperMotorButtons = new List<StepperMotorClass>();
     dcMotorButtons = new List<DcMotorClass>();
     solenoidButtons = new List<SolenoidClass>();
     outputButtons = new List<OutputClass>();
+    photocellsIndex = 0;
+    
+    for(int i=0; i<5;i++)
+    {
+      photocellButtons.add(new List<FlatButton>());
+    }
 
-    for (int i = 0; i < 50; i++) {
-      photocellButtons.add(new PhotocellsClass(
-          i + 1,
-          new FlatButton(
+    for (int i = 0, i2 = 1; i < 50; i++, i2++) {
+
+      
+      photocellButtons[photocellsIndex].add(new FlatButton(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -265,7 +264,11 @@ class WebSocketClass with ChangeNotifier {
               index = i + 1;
               Navigator.pushNamed(context, '/PhotocellPage');
             },
-          )));
+          ));
+      if(i2%10 == 0)
+      {
+        photocellsIndex ++;
+      }
     }
     for (int i = 0; i < 5; i++) {
       inputButtons.add(new InputClass(
@@ -346,5 +349,6 @@ class WebSocketClass with ChangeNotifier {
           )
       ));
     }
+    photocellsIndex = 0;
   }
 }

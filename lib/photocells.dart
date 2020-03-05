@@ -14,18 +14,55 @@ class Photocells extends StatelessWidget {
             title: Text('Photocells'),
           ),
           body: Container(
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+            
+              child:
+              user.photocellsIndex != -1 ?
+                ListView(
+                  
                   children: <Widget>[
-                SizedBox(
-                    width: 300,
-                    child: ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: user.photocellButtons.length,
-                        itemBuilder: (_, int index) {
-                          return user.photocellButtons[index].button;
-                        }))
-              ])));
+                     Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                  SizedBox(
+                      width: 100,
+                      child: Column(
+                          children: 
+                            user.photocellButtons[0]
+                          
+                          )
+                        ),
+                  SizedBox(
+                      width: 100,
+                      child: Column(
+                          children:
+                            user.photocellButtons[1]
+                          
+                          )),
+                  SizedBox(
+                      width: 100,
+                      child: Column(
+                          children: 
+                            user.photocellButtons[2]
+                          
+                          )),
+                  SizedBox(
+                      width: 100,
+                      child: Column(
+                          children: 
+                            user.photocellButtons[3]
+                          
+                          )),
+                  SizedBox(
+                    
+                      width: 100,
+                      child: Column(
+                          
+                          children: 
+                            user.photocellButtons[4]                         
+                          )),        
+              ]),
+                  ]): Container()
+              ));
     });
   }
 }
@@ -52,15 +89,15 @@ class _PhotocellPageState extends State<PhotocellPage> {
               user.index != -1
                   ? Column(
                       children: <Widget>[
-                        user.result & BigInt.from(pow(2, user.index-1)) == BigInt.from(0)
+                        user.result & BigInt.from(pow(2, user.index - 1)) ==
+                                BigInt.from(0)
                             ? Hero(
                                 tag: 'hero ${user.index - 1}',
                                 child: Icon(
                                   Icons.lightbulb_outline,
                                   color: Colors.greenAccent,
                                   size: 200,
-                                )
-                              )
+                                ))
                             : Hero(
                                 tag: 'hero ${user.index - 1}',
                                 child: Icon(
@@ -72,10 +109,11 @@ class _PhotocellPageState extends State<PhotocellPage> {
                           children: <Widget>[
                             RaisedButton(
                               onPressed: () {
+                                print(user.index-1);
                                 user.send(
                                     'CMD_SetAnalogOutput@Main(${user.index - 1},off)');
                               },
-                              child: Text('Set Diod PWM',
+                              child: Text('Set Diode PWM',
                                   style: TextStyle(
                                       fontSize: 15,
                                       fontWeight: FontWeight.bold)),

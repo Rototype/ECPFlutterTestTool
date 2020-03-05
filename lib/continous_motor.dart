@@ -104,7 +104,7 @@ class _DCMotorPageState extends State<DCMotorPage> {
                       Padding(
                         padding: const EdgeInsets.all(10.0),
                         child: Container(
-                          width: 150,
+                          width: 210,
                           child: RaisedButton(
                             child: Text('Run Clockwise',
                               style: TextStyle(
@@ -126,7 +126,7 @@ class _DCMotorPageState extends State<DCMotorPage> {
                       Padding(
                         padding: const EdgeInsets.all(10.0),
                         child: Container(
-                          width: 150,
+                          width: 210,
                           child: RaisedButton(
                             onPressed: () {
                               if(!isChecked){
@@ -136,7 +136,7 @@ class _DCMotorPageState extends State<DCMotorPage> {
                                 user.send('CMD_SetDCMotorPWM@Main(${user.index-1},-1,$value)');
                               }
                             },
-                            child: Text('Run CClockwise',
+                            child: Text('Run Counter Clockwise',
                               style: TextStyle(
                                 fontSize: 15,
                                 fontWeight: FontWeight.bold
@@ -178,7 +178,7 @@ class _DCMotorPageState extends State<DCMotorPage> {
                                 max: 100,
                                 divisions: 100,
                               ),
-                              Text('PWM: ${value.round()}',
+                              Text('PWM: ${value.round()}%',
                                 style: TextStyle(
                                   fontSize: 15,
                                   fontWeight: FontWeight.bold

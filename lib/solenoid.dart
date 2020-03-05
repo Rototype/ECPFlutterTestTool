@@ -101,43 +101,49 @@ class _SolenoidPageState extends State<SolenoidPage> {
                       isChecked
                           ? Column(
                             children: <Widget>[
-                              Row(
-                                  children: <Widget>[
-                                    Slider(
-                                      value: pwm,
-                                      onChanged: (newValue) {
-                                        setState(() {
-                                          pwm = newValue;
-                                        });
-                                      },
-                                      min: 0,
-                                      max: 100,
-                                      divisions: 100,
-                                    ),
-                                    Text('PWM: ${pwm.round()}',
-                                        style: TextStyle(
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.bold)),
-                                  ],
-                                ),
-                                Row(
-                                  children: <Widget>[
-                                    Slider(
-                                      value: inittime,
-                                      onChanged: (newValue) {
-                                        setState(() {
-                                          inittime = newValue;
-                                        });
-                                      },
-                                      min: 0,
-                                      max: 100,
-                                      divisions: 100,
-                                    ),
-                                    Text('Inittime: ${inittime.round()}',
-                                        style: TextStyle(
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.bold)),
-                                  ],
+                              Container(
+                                width: 300,
+                                child: Row(
+                                    children: <Widget>[
+                                      Slider(
+                                        value: pwm,
+                                        onChanged: (newValue) {
+                                          setState(() {
+                                            pwm = newValue;
+                                          });
+                                        },
+                                        min: 0,
+                                        max: 100,
+                                        divisions: 100,
+                                      ),
+                                      Text('PWM: ${pwm.round()}%',
+                                          style: TextStyle(
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.bold)),
+                                    ],
+                                  ),
+                              ),
+                                Container(
+                                  width: 300,
+                                  child: Row(
+                                    children: <Widget>[
+                                      Slider(
+                                        value: inittime,
+                                        onChanged: (newValue) {
+                                          setState(() {
+                                            inittime = newValue;
+                                          });
+                                        },
+                                        min: 0,
+                                        max: 100,
+                                        divisions: 100,
+                                      ),
+                                      Text('Init Time: ${inittime.round()}',
+                                          style: TextStyle(
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.bold)),
+                                    ],
+                                  ),
                                 ),
                             ],
                           )
