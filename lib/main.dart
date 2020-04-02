@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provaProvider/settings.dart';
 import 'package:provider/provider.dart';
 import 'analogic_input.dart';
+import 'image.dart';
 import 'login_page.dart';
 import 'photocells.dart';
 import 'ws_manage.dart';
@@ -12,7 +13,7 @@ import 'digital_output.dart';
 
 void main() => runApp(
     ChangeNotifierProvider(create: (_) => WebSocketClass(), child: MyApp()));
-TextEditingController controller = TextEditingController();
+  TextEditingController controller = TextEditingController();
 
 List<Color> color = [Colors.lightBlue[200]];
 
@@ -36,10 +37,12 @@ class MyApp extends StatelessWidget {
         '/Solenoids': (_) => Solenoid(),
         '/SolenoidPage': (_) => SolenoidPage(),
         '/DigitalOutputs': (_) => Output(),
+        '/Image': (_) => ImagePickerPage(),
         '/Settings': (_) => Setting(),
         '/Network': (_) => NwOptions(),
         '/Restart': (_) => RestartOptions(),
-        '/HWController': (_) => HwcOptions(),
+        '/ParameterOption': (_) => HwcOptions(),
+        '/IpConfig': (_) => IpConfig(),
       },
     );
   }
@@ -141,6 +144,19 @@ class UserInfoPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text('Digital output',
+                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold))
+          ],
+        ),
+      ),
+      FlatButton(
+        color: Colors.indigo[50],
+        onPressed: () {
+          Navigator.pushNamed(context, '/Image');
+        },
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text('Imagine Processing',
                 style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold))
           ],
         ),

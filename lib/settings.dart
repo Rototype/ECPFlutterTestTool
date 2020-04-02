@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provaProvider/ws_manage.dart';
 import 'package:provider/provider.dart';
 
@@ -10,9 +11,10 @@ class Setting extends StatelessWidget {
         appBar: AppBar(
           title: Text('Settings'),
         ),
-        body: Row(
-          children: <Widget>[
-            Column(
+        body: Center(
+          child: 
+            ListView(
+              padding: EdgeInsets.all(150),
               children: <Widget>[
                 FlatButton(
                   onPressed: () {
@@ -45,7 +47,7 @@ class Setting extends StatelessWidget {
                 FlatButton(
                   color: Colors.indigo[50],
                   onPressed: () {
-                    Navigator.pushNamed(context, '/HWController');
+                    Navigator.pushNamed(context, '/ParameterOption');
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -58,7 +60,6 @@ class Setting extends StatelessWidget {
                 ),
               ],
             )
-          ],
         ),
       );
     });
@@ -66,38 +67,64 @@ class Setting extends StatelessWidget {
 }
 
 
-class NwOptions extends StatelessWidget {
+class NwOptions extends StatefulWidget {
 
+  @override
+  _NwOptionsState createState() => _NwOptionsState();
+}
+
+class _NwOptionsState extends State<NwOptions> {
   int counter = 0;
+
   int counter2 = 0;
+
   TextEditingController controller11 =  new TextEditingController(); 
+
   TextEditingController controller12 =  new TextEditingController(); 
+
   TextEditingController controller13 =  new TextEditingController(); 
+
   TextEditingController controller14 =  new TextEditingController(); 
 
   TextEditingController controller21 =  new TextEditingController(); 
+
   TextEditingController controller22 =  new TextEditingController(); 
+
   TextEditingController controller23 =  new TextEditingController(); 
+
   TextEditingController controller24 =  new TextEditingController(); 
 
   TextEditingController controller31 =  new TextEditingController(); 
-  TextEditingController controller32 =  new TextEditingController(); 
-  TextEditingController controller33 =  new TextEditingController(); 
-  TextEditingController controller34 =  new TextEditingController(); 
 
+  TextEditingController controller32 =  new TextEditingController(); 
+
+  TextEditingController controller33 =  new TextEditingController(); 
+
+  TextEditingController controller34 =  new TextEditingController(); 
 
   bool value = false;
 
+
   FocusNode textSecondFocusNode = new FocusNode();
+
   FocusNode textThirdFocusNode = new FocusNode();
+
   FocusNode textFourthFocusNode = new FocusNode();
-  
+
+  FocusNode textFirstFocusNode2 = new FocusNode();
+
   FocusNode textSecondFocusNode2 = new FocusNode();
+
   FocusNode textThirdFocusNode2 = new FocusNode();
+
   FocusNode textFourthFocusNode2 = new FocusNode();
-  
+
+  FocusNode textFirstFocusNode3 = new FocusNode();
+
   FocusNode textSecondFocusNode3 = new FocusNode();
+
   FocusNode textThirdFocusNode3 = new FocusNode();
+
   FocusNode textFourthFocusNode3 = new FocusNode();
 
   @override
@@ -116,31 +143,41 @@ class NwOptions extends StatelessWidget {
             Row(
               children: <Widget>[
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
-                  child: Text(
-                    'IP Address: ',
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold
+                  padding: const EdgeInsets.fromLTRB(15, 0, 0, 0),
+                  child: Container(
+                    width: 150,
+                    child: Text(
+                      'IP Address: ',
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold
+                      ),
                     ),
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(30.0),
+                  padding: const EdgeInsets.fromLTRB(20, 20, 0, 20),
                   child: Container(
                     width: 300,
                     child: Row(
                       children: <Widget>[
                         Container(
-                          width: 50,
-                          child: TextFormField(
+                          width: 60,
+                          child: TextFormField(     
+                            keyboardType: TextInputType.numberWithOptions(decimal: true),
+                            inputFormatters: <TextInputFormatter>[
+                                WhitelistingTextInputFormatter.digitsOnly
+                            ], // Only numbers can be entered                            
+                            textAlign: TextAlign.center, 
                              onChanged: (String value) {
-                               if(value.length==3){
-                              FocusScope.of(context).requestFocus(textSecondFocusNode);}
-                            },
-                            onFieldSubmitted: (String value) {
-                              FocusScope.of(context).requestFocus(textSecondFocusNode);
-                            },
+                              if(value.length==3){
+                                if(int.parse(value)>255)
+                                {
+                                  controller11.text = "255";
+                                }
+                                FocusScope.of(context).requestFocus(textSecondFocusNode);
+                              }
+                            },                      
                             maxLength: 3,
                             controller: controller11,
                             decoration: InputDecoration(
@@ -167,17 +204,24 @@ class NwOptions extends StatelessWidget {
                           child: Text('.'),
                         ),
                         Container(
-                          width: 50,
+                          width: 60,
                           child: TextFormField(
+                            inputFormatters: <TextInputFormatter>[
+                                WhitelistingTextInputFormatter.digitsOnly
+                            ],      
+                            keyboardType: TextInputType.number,     
+                            textAlign: TextAlign.center, 
                             
                             focusNode: textSecondFocusNode,
                              onChanged: (String value) {
                                if(value.length==3){
+                                if(int.parse(value)>255)
+                                {
+                                  controller12.text = "255";
+                                }
                               FocusScope.of(context).requestFocus(textThirdFocusNode);}
                             },
-                            onFieldSubmitted: (String value) {
-                              FocusScope.of(context).requestFocus(textThirdFocusNode);
-                            },
+                            
                             maxLength: 3,
                             controller: controller12,
                             decoration: InputDecoration(
@@ -204,16 +248,20 @@ class NwOptions extends StatelessWidget {
                           child: Text('.'),
                         ),
                         Container(
-                          width: 50,
-                          child: TextFormField(
+                          width: 60,
+                          child: TextFormField(     
+                            keyboardType: TextInputType.number,     
+                            textAlign: TextAlign.center, 
                             focusNode: textThirdFocusNode,
                              onChanged: (String value) {
                                if(value.length==3){
+                                if(int.parse(value)>255)
+                                {
+                                  controller13.text = "255";
+                                }
                               FocusScope.of(context).requestFocus(textFourthFocusNode);}
                             },
-                            onFieldSubmitted: (String value) {
-                              FocusScope.of(context).requestFocus(textFourthFocusNode);
-                            },
+                            
                             maxLength: 3,
                             controller: controller13,
                             decoration: InputDecoration(
@@ -240,8 +288,21 @@ class NwOptions extends StatelessWidget {
                           child: Text('.'),
                         ),
                         Container(
-                          width: 50,
-                          child: TextFormField(
+                          width: 60,
+                          child: TextFormField(   
+                            inputFormatters: <TextInputFormatter>[
+                                WhitelistingTextInputFormatter.digitsOnly
+                            ],   
+                            keyboardType: TextInputType.number,     
+                            textAlign: TextAlign.center, 
+                            onChanged: (String value) {
+                               if(value.length==3){
+                                if(int.parse(value)>255)
+                                {
+                                  controller14.text = "255";
+                                }
+                              FocusScope.of(context).requestFocus(textFirstFocusNode2);}
+                            },
                             focusNode: textFourthFocusNode,
                             maxLength: 3,
                             controller: controller14,
@@ -275,11 +336,14 @@ class NwOptions extends StatelessWidget {
               children: <Widget>[
                 Padding(
                   padding: const EdgeInsets.fromLTRB(15, 0, 0, 15),
-                  child: Text(
-                    'Subnet Mask: ',
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold
+                  child: Container(
+                    width: 150,
+                    child: Text(
+                      'Subnet Mask: ',
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold
+                      ),
                     ),
                   ),
                 ),
@@ -290,15 +354,23 @@ class NwOptions extends StatelessWidget {
                     child: Row(
                       children: <Widget>[
                         Container(
-                          width: 50,
-                          child: TextFormField(
+                          width: 60,
+                          child: TextFormField(  
+                            inputFormatters: <TextInputFormatter>[
+                                WhitelistingTextInputFormatter.digitsOnly
+                            ],   
+                            keyboardType: TextInputType.number,     
+                            textAlign: TextAlign.center, 
                              onChanged: (String value) {
-                               if(value.length==3){
-                              FocusScope.of(context).requestFocus(textSecondFocusNode3);}
+                              if(value.length==3){
+                                if(int.parse(value)>255)
+                                {
+                                  controller31.text = "255";
+                                }
+                                FocusScope.of(context).requestFocus(textSecondFocusNode3);
+                              }
                             },
-                            onFieldSubmitted: (String value) {
-                              FocusScope.of(context).requestFocus(textSecondFocusNode3);
-                            },
+                            focusNode: textFirstFocusNode2,
                             maxLength: 3,
                             controller: controller31,
                             decoration: InputDecoration(
@@ -325,17 +397,24 @@ class NwOptions extends StatelessWidget {
                           child: Text('.'),
                         ),
                         Container(
-                          width: 50,
-                          child: TextFormField(
+                          width: 60,
+                          child: TextFormField(  
+                            inputFormatters: <TextInputFormatter>[
+                                WhitelistingTextInputFormatter.digitsOnly
+                            ],   
+                            keyboardType: TextInputType.number,     
+                            textAlign: TextAlign.center, 
                             
                             focusNode: textSecondFocusNode3,
                              onChanged: (String value) {
                                if(value.length==3){
+                                if(int.parse(value)>255)
+                                {
+                                  controller32.text = "255";
+                                }
                               FocusScope.of(context).requestFocus(textThirdFocusNode3);}
                             },
-                            onFieldSubmitted: (String value) {
-                              FocusScope.of(context).requestFocus(textThirdFocusNode3);
-                            },
+                            
                             maxLength: 3,
                             controller: controller32,
                             decoration: InputDecoration(
@@ -362,16 +441,22 @@ class NwOptions extends StatelessWidget {
                           child: Text('.'),
                         ),
                         Container(
-                          width: 50,
-                          child: TextFormField(
+                          width: 60,
+                          child: TextFormField(       
+                            inputFormatters: <TextInputFormatter>[
+                                WhitelistingTextInputFormatter.digitsOnly
+                            ],   
+                            keyboardType: TextInputType.number,     
+                            textAlign: TextAlign.center, 
                             focusNode: textThirdFocusNode3,
                              onChanged: (String value) {
                                if(value.length==3){
+                                if(int.parse(value)>255)
+                                {
+                                  controller33.text = "255";
+                                }
                               FocusScope.of(context).requestFocus(textFourthFocusNode3);}
-                            },
-                            onFieldSubmitted: (String value) {
-                              FocusScope.of(context).requestFocus(textFourthFocusNode3);
-                            },
+                            },                          
                             maxLength: 3,
                             controller: controller33,
                             decoration: InputDecoration(
@@ -398,8 +483,21 @@ class NwOptions extends StatelessWidget {
                           child: Text('.'),
                         ),
                         Container(
-                          width: 50,
-                          child: TextFormField(
+                          width: 60,
+                          child: TextField(  
+                            inputFormatters: <TextInputFormatter>[
+                                WhitelistingTextInputFormatter.digitsOnly
+                            ],   
+                            keyboardType: TextInputType.numberWithOptions(decimal: true),
+                            textAlign: TextAlign.center, 
+                            onChanged: (String value) {
+                               if(value.length==3){
+                                if(int.parse(value)>255)
+                                {
+                                  controller34.text = "255";
+                                }
+                              FocusScope.of(context).requestFocus(textFirstFocusNode3);}
+                            },
                             focusNode: textFourthFocusNode3,
                             maxLength: 3,
                             controller: controller34,
@@ -432,11 +530,14 @@ class NwOptions extends StatelessWidget {
               children: <Widget>[
                 Padding(
                   padding: const EdgeInsets.fromLTRB(15, 0, 0, 15),
-                  child: Text(
-                    'Def Gateway: ',
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold
+                  child: Container(
+                    width: 150,
+                    child: Text(
+                      'Default Gateway: ',
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold
+                      ),
                     ),
                   ),
                 ),
@@ -447,15 +548,21 @@ class NwOptions extends StatelessWidget {
                     child: Row(
                       children: <Widget>[
                         Container(
-                          width: 50,
-                          child: TextFormField(
+                          width: 60,
+                          child: TextFormField(       
+                            inputFormatters: <TextInputFormatter>[
+                                WhitelistingTextInputFormatter.digitsOnly
+                            ],   
+                            textAlign: TextAlign.center, 
                              onChanged: (String value) {
                                if(value.length==3){
+                                if(int.parse(value)>255)
+                                {
+                                  controller21.text = "255";
+                                }
                               FocusScope.of(context).requestFocus(textSecondFocusNode2);}
                             },
-                            onFieldSubmitted: (String value) {
-                              FocusScope.of(context).requestFocus(textSecondFocusNode2);
-                            },
+                            focusNode: textFirstFocusNode3,
                             maxLength: 3,
                             controller: controller21,
                             decoration: InputDecoration(
@@ -482,17 +589,23 @@ class NwOptions extends StatelessWidget {
                           child: Text('.'),
                         ),
                         Container(
-                          width: 50,
-                          child: TextFormField(
-                            
+                          width: 60,
+                          
+                          child: TextFormField(      
+                            inputFormatters: <TextInputFormatter>[
+                                WhitelistingTextInputFormatter.digitsOnly
+                            ],    
+                            textAlign: TextAlign.center,                        
                             focusNode: textSecondFocusNode2,
                              onChanged: (String value) {
                                if(value.length==3){
+                                if(int.parse(value)>255)
+                                {
+                                  controller22.text = "255";
+                                }
                               FocusScope.of(context).requestFocus(textThirdFocusNode2);}
                             },
-                            onFieldSubmitted: (String value) {
-                              FocusScope.of(context).requestFocus(textThirdFocusNode2);
-                            },
+                            
                             maxLength: 3,
                             controller: controller22,
                             decoration: InputDecoration(
@@ -519,15 +632,20 @@ class NwOptions extends StatelessWidget {
                           child: Text('.'),
                         ),
                         Container(
-                          width: 50,
-                          child: TextFormField(
+                          width: 60,
+                          child: TextFormField(      
+                            inputFormatters: <TextInputFormatter>[
+                                WhitelistingTextInputFormatter.digitsOnly
+                            ],    
+                            textAlign: TextAlign.center, 
                             focusNode: textThirdFocusNode2,
                              onChanged: (String value) {
                                if(value.length==3){
+                                if(int.parse(value)>255)
+                                {
+                                  controller23.text = "255";
+                                }
                               FocusScope.of(context).requestFocus(textFourthFocusNode2);}
-                            },
-                            onFieldSubmitted: (String value) {
-                              FocusScope.of(context).requestFocus(textFourthFocusNode2);
                             },
                             maxLength: 3,
                             controller: controller23,
@@ -555,11 +673,23 @@ class NwOptions extends StatelessWidget {
                           child: Text('.'),
                         ),
                         Container(
-                          width: 50,
-                          child: TextFormField(
+                          width: 60,
+                          child: TextFormField(       
+                            inputFormatters: <TextInputFormatter>[
+                                WhitelistingTextInputFormatter.digitsOnly
+                            ],   
+                            textAlign: TextAlign.center, 
                             focusNode: textFourthFocusNode2,
                             maxLength: 3,
                             controller: controller24,
+                            onChanged: (String value) {
+                              if(value.length==3){
+                                if(int.parse(value)>255)
+                                {
+                                  controller24.text = "255";
+                                }
+                              }
+                            },
                             decoration: InputDecoration(
                               filled: true,
                               fillColor: Colors.red[100],
@@ -599,7 +729,9 @@ class NwOptions extends StatelessWidget {
                 Checkbox(
                   value: value,
                   onChanged: (newValue) {
-                    value = newValue;
+                    setState(() {
+                            value = newValue;
+                    });
                   },
                 )
               ],
@@ -646,29 +778,61 @@ class RestartOptions extends StatelessWidget {
     return Consumer<WebSocketClass>(builder: (_, user, __) {
       return Scaffold(
       appBar: AppBar(
-        title: Text('Restart Options')
+        title: Text('Restart Options',
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold
+                      ),
+                    )
       ),
-      body: Column(
-        children: <Widget>[
-          RaisedButton(
-            child: Text('Restart MC'),
-            onPressed: (){
-              user.send('CMD_Restart@HWController#');
-            },
-          ),
-          RaisedButton(
-            child: Text('Restart FPGA'),
-            onPressed: (){
-              user.send('CMD_Restart@FPGA#');
-            },
-          ),
-          RaisedButton(
-            child: Text('Restart HWController'),
-            onPressed: (){
-              user.send('CMD_Restart@HWController#');
-            },
-          ),
-        ],
+      body: Center(
+        child: ListView(
+          padding: EdgeInsets.all(100),
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0,20,0,0),
+              child: RaisedButton(
+                color: Colors.indigo[50],
+                child: Text('Restart MC',
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold
+                        ),),
+                onPressed: (){
+                  user.send('CMD_Restart@HWController#');
+                },
+              ),
+            ),           
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0,20,0,0),
+              child: RaisedButton(
+                color: Colors.indigo[50],
+                child: Text('Restart HWController',
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold
+                        ),),
+                onPressed: (){
+                  user.send('CMD_Restart@HWController#');
+                },
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0,20,0,0),
+              child: RaisedButton(
+                color: Colors.indigo[50],
+                child: Text('Restart FPGA',
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold
+                        ),),
+                onPressed: (){
+                  user.send('CMD_Restart@FPGA#');
+                },
+              ),
+            ),
+          ],
+        ),
       )
     );
     });
@@ -682,7 +846,7 @@ class HwcOptions extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Hardware Controller'),
+        title: Text('Parameter Option'),
       ),
     );
   }

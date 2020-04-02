@@ -13,56 +13,42 @@ class Photocells extends StatelessWidget {
           appBar: AppBar(
             title: Text('Photocells'),
           ),
-          body: Container(
-            
-              child:
-              user.photocellsIndex != -1 ?
-                ListView(
-                  
-                  children: <Widget>[
-                     Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+          body: Center(
+            child: Container(
+                width: 600,
+                child:
+                user.photocellsIndex != -1 ?
+                  ListView(
+                    scrollDirection: Axis.vertical,
                     children: <Widget>[
-                  SizedBox(
-                      width: 100,
-                      child: Column(
-                          children: 
-                            user.photocellButtons[0]
-                          
-                          )
+                       Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                    Column(
+                        children: 
+                          user.photocellButtons[0]    
                         ),
-                  SizedBox(
-                      width: 100,
-                      child: Column(
-                          children:
-                            user.photocellButtons[1]
-                          
-                          )),
-                  SizedBox(
-                      width: 100,
-                      child: Column(
-                          children: 
-                            user.photocellButtons[2]
-                          
-                          )),
-                  SizedBox(
-                      width: 100,
-                      child: Column(
-                          children: 
-                            user.photocellButtons[3]
-                          
-                          )),
-                  SizedBox(
-                    
-                      width: 100,
-                      child: Column(
-                          
-                          children: 
-                            user.photocellButtons[4]                         
-                          )),        
-              ]),
-                  ]): Container()
-              ));
+                    Column(
+                        children:
+                          user.photocellButtons[1]                       
+                        ),
+                    Column(
+                        children: 
+                          user.photocellButtons[2]                        
+                        ),
+                    Column(
+                        children: 
+                          user.photocellButtons[3]                      
+                        ),
+                    Column(
+                        
+                        children: 
+                          user.photocellButtons[4]                         
+                        ),        
+                ]),
+                    ]): Container()
+                ),
+          ));
     });
   }
 }
@@ -111,7 +97,7 @@ class _PhotocellPageState extends State<PhotocellPage> {
                               onPressed: () {
                                 print(user.index-1);
                                 user.send(
-                                    'CMD_SetAnalogOutput@Main(${user.index - 1},off)');
+                                    'CMD_SetAnalogOutput@Main(${user.index - 1},$value)');
                               },
                               child: Text('Set Diode PWM',
                                   style: TextStyle(
@@ -131,8 +117,8 @@ class _PhotocellPageState extends State<PhotocellPage> {
                                   },
                                   label: '${value.round()}',
                                   min: 0,
-                                  max: 4096,
-                                  divisions: 64,
+                                  max: 1000,
+                                  divisions: 100,
                                 ),
                               ],
                             )

@@ -19,7 +19,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
+  universal_html: ^1.1.16
   provider:
   web_socket_channel: 1.1.0
   percent_indicator:

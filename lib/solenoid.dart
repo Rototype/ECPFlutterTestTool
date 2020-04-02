@@ -53,6 +53,7 @@ class _SolenoidPageState extends State<SolenoidPage> {
                 Padding(
                   padding: EdgeInsets.fromLTRB(0, 50, 0, 0),
                   child: RaisedButton(
+                    color: Colors.indigo[50],
                     onPressed: () {
                       if(isChecked)
                       {
@@ -73,6 +74,7 @@ class _SolenoidPageState extends State<SolenoidPage> {
                 Padding(
                   padding: EdgeInsets.fromLTRB(0, 35, 0, 0),
                   child: RaisedButton(
+                    color: Colors.indigo[50],
                     onPressed: () {
                       user.send('CMD_SetDCSolenoid@Main(${user.index - 1},0)');
                     },
@@ -102,7 +104,7 @@ class _SolenoidPageState extends State<SolenoidPage> {
                           ? Column(
                             children: <Widget>[
                               Container(
-                                width: 300,
+                                width: 350,
                                 child: Row(
                                     children: <Widget>[
                                       Slider(
@@ -124,7 +126,7 @@ class _SolenoidPageState extends State<SolenoidPage> {
                                   ),
                               ),
                                 Container(
-                                  width: 300,
+                                  width: 350,
                                   child: Row(
                                     children: <Widget>[
                                       Slider(
@@ -135,10 +137,10 @@ class _SolenoidPageState extends State<SolenoidPage> {
                                           });
                                         },
                                         min: 0,
-                                        max: 100,
+                                        max: 2000,
                                         divisions: 100,
                                       ),
-                                      Text('Init Time: ${inittime.round()}',
+                                      Text('Init Time: ${inittime.round()} ms',
                                           style: TextStyle(
                                               fontSize: 15,
                                               fontWeight: FontWeight.bold)),
