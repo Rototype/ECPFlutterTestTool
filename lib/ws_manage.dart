@@ -116,7 +116,7 @@ class WebSocketClass with ChangeNotifier {
                   //
                   timerTimeout.cancel();
       
-                  timerTimeout = Timer(Duration(seconds: 3), () {
+                  timerTimeout = Timer(Duration(seconds: 60), () {
                     disconnect();
                   });
                 } catch (e) {
@@ -231,7 +231,7 @@ class WebSocketClass with ChangeNotifier {
         void send(String data) {
           try {
             if (!timerTimeout.isActive) {
-              timerTimeout = Timer(Duration(seconds: 3), () {
+              timerTimeout = Timer(Duration(seconds: 60), () {
                 disconnect();
               });
             }
