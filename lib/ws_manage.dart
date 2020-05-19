@@ -4,7 +4,7 @@ import 'dart:math';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:web_socket_channel/html.dart';
+import 'package:web_socket_channel/IO.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 enum Status {
@@ -101,7 +101,7 @@ class WebSocketClass with ChangeNotifier {
 
   Future<bool> wsconnect() async {
     try {
-      _channel = HtmlWebSocketChannel.connect(ipurl.text);
+      _channel = IOWebSocketChannel.connect(ipurl.text);
             if (_channel == null) {
               timerPeriod.cancel();
               status = Status.Unauthenticated;
