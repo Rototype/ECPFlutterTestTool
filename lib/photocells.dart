@@ -19,7 +19,7 @@ class Photocells extends StatelessWidget {
                 child:
                 user.photocellsIndex != -1 ?
                   ListView(
-                    scrollDirection: Axis.vertical,
+                    scrollDirection: Axis.horizontal,
                     children: <Widget>[
                        Row(
                       mainAxisAlignment: MainAxisAlignment.center,

@@ -56,192 +56,197 @@ class _DCMotorPageState extends State<DCMotorPage> {
           title: Text(' DC Motor ${user.index}'),
         ),
         body: Container(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+          child: ListView(
+            scrollDirection: Axis.horizontal,
             children: <Widget>[
-              Column(
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Row(                
+                  Column(
                     children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Container(
-                          width: 150,
-                          child: RaisedButton(
-                            color: Colors.indigo[50],
-                            child: Text(
-                              'Off',
-                              style: TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold
-                              )
-                            ),
-                            onPressed: () {
-                              user.send('CMD_SetDCMotor@Main(${user.index-1},0)');
-                            },
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Container(
-                          width: 150,
-                          child: RaisedButton(
-                            color: Colors.indigo[50],
-                            onPressed: () {
-                              user.send('CMD_SetDCMotor@Main(${user.index-1},brake)');
-                            },
-                            child: Text('Brake',
-                              style: TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold
-                              )
-                            ),
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                  Row(
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Container(
-                          width: 210,
-                          child: RaisedButton(
-                            color: Colors.indigo[50],
-                            child: Text('Run Clockwise',
-                              style: TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold
-                              )
-                            ),
-                            onPressed: () {
-                              if(!isChecked){
-                                user.send('CMD_SetDCMotor@Main(${user.index-1},1)');
-                              }
-                              else{
-                                user.send('CMD_SetDCMotorPWM@Main(${user.index-1},1,$pwm,$value)');
-                              }
-                            },
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Container(
-                          width: 210,
-                          child: RaisedButton(
-                            color: Colors.indigo[50],
-                            onPressed: () {
-                              if(!isChecked){
-                                user.send('CMD_SetDCMotor@Main(${user.index-1},-1)');
-                              }
-                              else{
-                                user.send('CMD_SetDCMotorPWM@Main(${user.index-1},-1,$pwm,$value)');
-                              }
-                            },
-                            child: Text('Run Counter Clockwise',
-                              style: TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold
-                              )
-                            ),
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                  Row(
-                    children: <Widget>[
-                      Text(
-                        'Enable PWM: ',
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold
-                        )
-                      ),
-                      Checkbox(
-                        value: isChecked,
-                        onChanged: (bool newValue) {
-                          setState(() {
-                            isChecked = newValue;
-                          });
-                        },
-                      ),
-                      isChecked
-                          ? Container(
-                            child: Column(
-                              children: <Widget>[
-                                Container(
-                                width: 350,
-                                child: Row(
-                                    children: <Widget>[
-                                      Slider(
-                                        value: pwm,
-                                        onChanged: (newValue) {
-                                          setState(() {
-                                            pwm = newValue;
-                                          });
-                                        },
-                                        min: 0,
-                                        max: 100,
-                                        divisions: 100,
-                                      ),
-                                      Text('PWM: ${pwm.round()}%',
-                                          style: TextStyle(
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.bold)),
-                                    ],
-                                  ),
+                      Row(                
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Container(
+                              width: 150,
+                              child: RaisedButton(
+                                color: Colors.indigo[50],
+                                child: Text(
+                                  'Off',
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold
+                                  )
+                                ),
+                                onPressed: () {
+                                  user.send('CMD_SetDCMotor@Main(${user.index-1},0)');
+                                },
                               ),
-                                Container(
-                                width: 350,
-                                  child: Row(
-                                    children: <Widget>[
-                                      Slider(
-                                        value: value,
-                                        onChanged: (newValue) {
-                                          setState(() {
-                                            value = newValue;
-                                           });
-                                        },
-                                        min: 20000,
-                                        max: 100000,
-                                        divisions: 16,
-                                      ),
-                                      Text('PWM: ${value.round()} Hz',
-                                        style: TextStyle(
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.bold
-                                        )
-                                      ),
-                                    ],
-                                  ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Container(
+                              width: 150,
+                              child: RaisedButton(
+                                color: Colors.indigo[50],
+                                onPressed: () {
+                                  user.send('CMD_SetDCMotor@Main(${user.index-1},brake)');
+                                },
+                                child: Text('Brake',
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold
+                                  )
                                 ),
-                              ],
+                              ),
                             ),
                           )
-                          : Column(
-                            children: <Widget>[
-                              
-                                      Slider(
-                                        value: pwm,
-                                        onChanged: null,
-                                        min: 0,
-                                        max: 100,
-                                        divisions: 100,
-                                      ),
-                              
-                              Slider(
-                                  value: value,
-                                  onChanged: null,
-                                  min: 20000,
-                                  max: 100000,
-                                  divisions: 16,
+                        ],
+                      ),
+                      Row(
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Container(
+                              width: 210,
+                              child: RaisedButton(
+                                color: Colors.indigo[50],
+                                child: Text('Run Clockwise',
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold
+                                  )
                                 ),
-                            ],
+                                onPressed: () {
+                                  if(!isChecked){
+                                    user.send('CMD_SetDCMotor@Main(${user.index-1},1)');
+                                  }
+                                  else{
+                                    user.send('CMD_SetDCMotorPWM@Main(${user.index-1},1,$pwm,$value)');
+                                  }
+                                },
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Container(
+                              width: 210,
+                              child: RaisedButton(
+                                color: Colors.indigo[50],
+                                onPressed: () {
+                                  if(!isChecked){
+                                    user.send('CMD_SetDCMotor@Main(${user.index-1},-1)');
+                                  }
+                                  else{
+                                    user.send('CMD_SetDCMotorPWM@Main(${user.index-1},-1,$pwm,$value)');
+                                  }
+                                },
+                                child: Text('Run Counter Clockwise',
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold
+                                  )
+                                ),
+                              ),
+                            ),
                           )
+                        ],
+                      ),
+                      Row(
+                        children: <Widget>[
+                          Text(
+                            'Enable PWM: ',
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold
+                            )
+                          ),
+                          Checkbox(
+                            value: isChecked,
+                            onChanged: (bool newValue) {
+                              setState(() {
+                                isChecked = newValue;
+                              });
+                            },
+                          ),
+                          isChecked
+                              ? Container(
+                                child: Column(
+                                  children: <Widget>[
+                                    Container(
+                                    width: 350,
+                                    child: Row(
+                                        children: <Widget>[
+                                          Slider(
+                                            value: pwm,
+                                            onChanged: (newValue) {
+                                              setState(() {
+                                                pwm = newValue;
+                                              });
+                                            },
+                                            min: 0,
+                                            max: 100,
+                                            divisions: 100,
+                                          ),
+                                          Text('PWM: ${pwm.round()}%',
+                                              style: TextStyle(
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.bold)),
+                                        ],
+                                      ),
+                                  ),
+                                    Container(
+                                    width: 350,
+                                      child: Row(
+                                        children: <Widget>[
+                                          Slider(
+                                            value: value,
+                                            onChanged: (newValue) {
+                                              setState(() {
+                                                value = newValue;
+                                               });
+                                            },
+                                            min: 20000,
+                                            max: 100000,
+                                            divisions: 16,
+                                          ),
+                                          Text('PWM: ${value.round()} Hz',
+                                            style: TextStyle(
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.bold
+                                            )
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              )
+                              : Column(
+                                children: <Widget>[
+                                  
+                                          Slider(
+                                            value: pwm,
+                                            onChanged: null,
+                                            min: 0,
+                                            max: 100,
+                                            divisions: 100,
+                                          ),
+                                  
+                                  Slider(
+                                      value: value,
+                                      onChanged: null,
+                                      min: 20000,
+                                      max: 100000,
+                                      divisions: 16,
+                                    ),
+                                ],
+                              )
+                        ],
+                      ),
                     ],
                   ),
                 ],

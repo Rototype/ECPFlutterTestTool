@@ -94,7 +94,7 @@ class IpConfig extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.fromLTRB(15, 5, 0, 0),
                   child: Container(
-                    width: 150,
+                    width: 100,
                     child: Text(
                       'Full URL: ',
                       style: TextStyle(
@@ -107,10 +107,9 @@ class IpConfig extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.fromLTRB(15, 5, 0, 0),
                   child: Container(
-                    width: 300,
+                    width: 200,
                     child: TextField(
                       controller: user.ipurl,
-                      
                     ),
                   )
                 )       
