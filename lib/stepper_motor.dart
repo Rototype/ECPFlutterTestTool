@@ -947,185 +947,189 @@ class _MotorStPageState extends State<MotorStPage> {
                       ),
                     )
                     : Container(
-                        padding: EdgeInsets.all(30),
-                        child: Column(
-                          children: <Widget>[
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(40, 0, 0, 0),
-                              child: Row(
-                                children: <Widget>[
-                                  Container(
-                                      width: 250,
-                                      child: Row(
-                                        children: <Widget>[
-                                          Text(" Max Acceleration: ",
+                        child: ListView(
+                          scrollDirection: Axis.horizontal,
+                          children: [
+                            Column(
+                              children: <Widget>[
+                                Padding(
+                                  padding: const EdgeInsets.fromLTRB(40, 0, 0, 0),
+                                  child: Row(
+                                    children: <Widget>[
+                                      Container(
+                                          width: 250,
+                                          child: Row(
+                                            children: <Widget>[
+                                              Text(" Max Acceleration: ",
+                                                  style: TextStyle(
+                                                      fontSize: 15,
+                                                      fontWeight: FontWeight.bold)),
+                                              Container(
+                                                width: 100,
+                                                child: TextField(
+                                                    onChanged: (newString) {
+                                                      if (double.parse(newString) >
+                                                              2097151 ||
+                                                          double.parse(newString) <
+                                                              0) {
+                                                        controllerMaxAcc.text = "1";
+                                                        acc = 1;
+                                                      }
+                                                    },
+                                                    onEditingComplete: () {
+                                                      try {
+                                                        acc = double.parse(
+                                                            controllerMaxAcc.text);
+                                                      } catch (e) {
+                                                        acc = 1;
+                                                      }
+                                                    },
+                                                    maxLength: 10,
+                                                    decoration: InputDecoration(
+                                                      counterText: "",
+                                                      border: InputBorder.none,
+                                                    ),
+                                                    controller: controllerMaxAcc,
+                                                    style: TextStyle(
+                                                        fontSize: 15,
+                                                        fontWeight:
+                                                            FontWeight.bold)),
+                                              ),
+                                            ],
+                                          )),
+                                      Slider(
+                                        value: acc,
+                                        onChanged: (controllerMaxAcc1) {
+                                          controllerMaxAcc.text =
+                                              controllerMaxAcc1.toString();
+                                          setState(() => acc = controllerMaxAcc1);
+                                        },
+                                        min: 0,
+                                        max: 2097151,
+                                        divisions: 2097151,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.fromLTRB(40, 0, 0, 0),
+                                  child: Row(
+                                    children: <Widget>[
+                                      Container(
+                                          width: 250,
+                                          child: Row(
+                                            children: <Widget>[
+                                              Text("Initial Speed: ",
+                                                  style: TextStyle(
+                                                      fontSize: 15,
+                                                      fontWeight: FontWeight.bold)),
+                                              Container(
+                                                width: 100,
+                                                child: TextField(
+                                                    onChanged: (newString) {
+                                                      if (double.parse(newString) >
+                                                              80000 ||
+                                                          double.parse(newString) <
+                                                              80) {
+                                                        controllerInit.text = "80";
+                                                        initSpd = 80;
+                                                      }
+                                                    },
+                                                    onEditingComplete: () {
+                                                      try {
+                                                        initSpd = double.parse(
+                                                            controllerInit.text);
+                                                      } catch (e) {
+                                                        initSpd = 1;
+                                                      }
+                                                    },
+                                                    maxLength: 10,
+                                                    decoration: InputDecoration(
+                                                      counterText: "",
+                                                      border: InputBorder.none,
+                                                    ),
+                                                    controller: controllerInit,
+                                                    style: TextStyle(
+                                                        fontSize: 15,
+                                                        fontWeight:
+                                                            FontWeight.bold)),
+                                              ),
+                                            ],
+                                          )),
+                                      Slider(
+                                        value: initSpd,
+                                        onChanged: (controllerInit1) {
+                                          controllerInit.text = controllerInit1
+                                              .roundToDouble()
+                                              .toString();
+                                          setState(() => initSpd =
+                                              controllerInit1.roundToDouble());
+                                        },
+                                        min: 80,
+                                        max: 80000,
+                                        divisions: 80000 - 80,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.fromLTRB(40, 0, 0, 0),
+                                  child: Row(
+                                    children: <Widget>[
+                                      Container(
+                                          width: 250,
+                                          child: Text("Resolution: $resolution2",
                                               style: TextStyle(
                                                   fontSize: 15,
-                                                  fontWeight: FontWeight.bold)),
-                                          Container(
-                                            width: 100,
-                                            child: TextField(
-                                                onChanged: (newString) {
-                                                  if (double.parse(newString) >
-                                                          2097151 ||
-                                                      double.parse(newString) <
-                                                          0) {
-                                                    controllerMaxAcc.text = "1";
-                                                    acc = 1;
-                                                  }
-                                                },
-                                                onEditingComplete: () {
-                                                  try {
-                                                    acc = double.parse(
-                                                        controllerMaxAcc.text);
-                                                  } catch (e) {
-                                                    acc = 1;
-                                                  }
-                                                },
-                                                maxLength: 10,
-                                                decoration: InputDecoration(
-                                                  counterText: "",
-                                                  border: InputBorder.none,
-                                                ),
-                                                controller: controllerMaxAcc,
-                                                style: TextStyle(
-                                                    fontSize: 15,
-                                                    fontWeight:
-                                                        FontWeight.bold)),
-                                          ),
-                                        ],
-                                      )),
-                                  Slider(
-                                    value: acc,
-                                    onChanged: (controllerMaxAcc1) {
-                                      controllerMaxAcc.text =
-                                          controllerMaxAcc1.toString();
-                                      setState(() => acc = controllerMaxAcc1);
-                                    },
-                                    min: 0,
-                                    max: 2097151,
-                                    divisions: 2097151,
+                                                  fontWeight: FontWeight.bold))),
+                                      Slider(
+                                        value: resolution,
+                                        onChanged: (newResolution) {
+                                          if (newResolution.roundToDouble() == 1) {
+                                            resolution2 = "1";
+                                          }
+                                          if (newResolution.roundToDouble() == 6) {
+                                            resolution2 = "2";
+                                          }
+                                          if (newResolution.roundToDouble() == 11) {
+                                            resolution2 = "8";
+                                          }
+                                          if (newResolution.roundToDouble() == 16) {
+                                            resolution2 = "16";
+                                          }
+                                          setState(() => resolution =
+                                              newResolution.roundToDouble());
+                                        },
+                                        min: 1,
+                                        max: 16,
+                                        divisions: 3,
+                                      ),
+                                    ],
                                   ),
-                                ],
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(40, 0, 0, 0),
-                              child: Row(
-                                children: <Widget>[
-                                  Container(
-                                      width: 250,
-                                      child: Row(
-                                        children: <Widget>[
-                                          Text("Initial Speed: ",
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.fromLTRB(40, 0, 0, 0),
+                                  child: Row(
+                                    children: <Widget>[
+                                      Container(
+                                          width: 250,
+                                          child: Text("Load: $load%",
                                               style: TextStyle(
                                                   fontSize: 15,
-                                                  fontWeight: FontWeight.bold)),
-                                          Container(
-                                            width: 100,
-                                            child: TextField(
-                                                onChanged: (newString) {
-                                                  if (double.parse(newString) >
-                                                          80000 ||
-                                                      double.parse(newString) <
-                                                          80) {
-                                                    controllerInit.text = "80";
-                                                    initSpd = 80;
-                                                  }
-                                                },
-                                                onEditingComplete: () {
-                                                  try {
-                                                    initSpd = double.parse(
-                                                        controllerInit.text);
-                                                  } catch (e) {
-                                                    initSpd = 1;
-                                                  }
-                                                },
-                                                maxLength: 10,
-                                                decoration: InputDecoration(
-                                                  counterText: "",
-                                                  border: InputBorder.none,
-                                                ),
-                                                controller: controllerInit,
-                                                style: TextStyle(
-                                                    fontSize: 15,
-                                                    fontWeight:
-                                                        FontWeight.bold)),
-                                          ),
-                                        ],
-                                      )),
-                                  Slider(
-                                    value: initSpd,
-                                    onChanged: (controllerInit1) {
-                                      controllerInit.text = controllerInit1
-                                          .roundToDouble()
-                                          .toString();
-                                      setState(() => initSpd =
-                                          controllerInit1.roundToDouble());
-                                    },
-                                    min: 80,
-                                    max: 80000,
-                                    divisions: 80000 - 80,
+                                                  fontWeight: FontWeight.bold))),
+                                      Slider(
+                                        value: load,
+                                        onChanged: (load1) {
+                                          setState(() => load = load1);
+                                        },
+                                        min: 50,
+                                        max: 100,
+                                        divisions: 1,
+                                      ),
+                                    ],
                                   ),
-                                ],
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(40, 0, 0, 0),
-                              child: Row(
-                                children: <Widget>[
-                                  Container(
-                                      width: 250,
-                                      child: Text("Resolution: $resolution2",
-                                          style: TextStyle(
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.bold))),
-                                  Slider(
-                                    value: resolution,
-                                    onChanged: (newResolution) {
-                                      if (newResolution.roundToDouble() == 1) {
-                                        resolution2 = "1";
-                                      }
-                                      if (newResolution.roundToDouble() == 6) {
-                                        resolution2 = "2";
-                                      }
-                                      if (newResolution.roundToDouble() == 11) {
-                                        resolution2 = "8";
-                                      }
-                                      if (newResolution.roundToDouble() == 16) {
-                                        resolution2 = "16";
-                                      }
-                                      setState(() => resolution =
-                                          newResolution.roundToDouble());
-                                    },
-                                    min: 1,
-                                    max: 16,
-                                    divisions: 3,
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(40, 0, 0, 0),
-                              child: Row(
-                                children: <Widget>[
-                                  Container(
-                                      width: 250,
-                                      child: Text("Load: $load%",
-                                          style: TextStyle(
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.bold))),
-                                  Slider(
-                                    value: load,
-                                    onChanged: (load1) {
-                                      setState(() => load = load1);
-                                    },
-                                    min: 50,
-                                    max: 100,
-                                    divisions: 1,
-                                  ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
                           ],
                         ))),

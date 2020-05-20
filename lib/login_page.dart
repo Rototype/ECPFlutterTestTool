@@ -69,11 +69,11 @@ class _LoginPageState extends State<LoginPage> {
         onPressed: () {
           ipConfig=true;
           Navigator.pushNamed(context, '/IpConfig');
-        },
-      ),
-    );
-  }
-}
+        }, 
+      ), 
+    ); 
+  }  
+}  
 
 class IpConfig extends StatelessWidget {
   

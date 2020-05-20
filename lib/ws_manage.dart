@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
@@ -116,7 +117,7 @@ class WebSocketClass with ChangeNotifier {
                   //
                   timerTimeout.cancel();
       
-                  timerTimeout = Timer(Duration(seconds: 60), () {
+                  timerTimeout = Timer(Duration(seconds: 5), () {
                     disconnect();
                   });
                 } catch (e) {
@@ -199,13 +200,13 @@ class WebSocketClass with ChangeNotifier {
             outputList.add(0);
           }
       
-          // timerPeriod = Timer.periodic(Duration(seconds: 2), (timer2) {
-          //   send('CMD_ReadDigitalInput@Main#');
-          // });
+          timerPeriod = Timer.periodic(Duration(seconds: 2), (timer2) {
+            send('CMD_ReadDigitalInput@Main#');
+          });
       
-          // timerInputAnalog = Timer.periodic(Duration(milliseconds: 800), (timer) {
-          //   send('CMD_ReadAnalogInput@Main($indice)');
-          // });
+          timerInputAnalog = Timer.periodic(Duration(milliseconds: 800), (timer) {
+            send('CMD_ReadAnalogInput@Main($indice)');
+          });
       
       
          
@@ -230,11 +231,11 @@ class WebSocketClass with ChangeNotifier {
       
         void send(String data) {
           try {
-            // if (!timerTimeout.isActive) {
-            //   timerTimeout = Timer(Duration(seconds: 60), () {
-            //     disconnect();
-            //   });
-            // }
+            if (!timerTimeout.isActive) {
+              timerTimeout = Timer(Duration(seconds: 4), () {
+                disconnect();
+              });
+            }
             List<String> split = data.split(RegExp("[\s_@)(!]+"));
       
             if(split[1] != 'ReadAnalogInput' && split[1] != 'ReadDigitalInput' && split[1] !=  'InvertImage'){

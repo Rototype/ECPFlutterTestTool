@@ -21,6 +21,7 @@ dependencies:
     sdk: flutter
   universal_html: ^1.1.16
   provider:
+  image_picker: 
   web_socket_channel: 1.1.0
   percent_indicator:
   # The following adds the Cupertino Icons font to your application.
