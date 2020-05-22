@@ -818,7 +818,7 @@ class RestartOptions extends StatelessWidget {
               padding: const EdgeInsets.fromLTRB(0,20,0,0),
               child: RaisedButton(
                 color: Colors.indigo[50],
-                child: Text('Restart HWController',
+                child: Text('Restart     HWController',
                       style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.bold

@@ -45,134 +45,135 @@ class _SolenoidPageState extends State<SolenoidPage> {
         appBar: AppBar(
           title: Text(' Solenoid ${user.index}'),
         ),
-        body: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Column(
-              children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.fromLTRB(0, 50, 0, 0),
-                  child: RaisedButton(
-                    color: Colors.indigo[50],
-                    onPressed: () {
-                      if(isChecked)
-                      {
-                        user.send('CMD_SetDCSolenoidPWM@Main(${user.index - 1},1,$pwm,$inittime)');
-                      }
-                      else{
-                        user.send('CMD_SetDCSolenoid@Main(${user.index - 1},1)');
-                      }
-
-                    },
-                    child: Text('Set Solenoid ON',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        )),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(0, 35, 0, 0),
-                  child: RaisedButton(
-                    color: Colors.indigo[50],
-                    onPressed: () {
-                      user.send('CMD_SetDCSolenoid@Main(${user.index - 1},0)');
-                    },
-                    child: Text('Set Solenoid OFF',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        )),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Row(
-                    children: <Widget>[
-                      Text('Enable PWM: ',
+        body: Center(
+          child: ListView(
+            scrollDirection: Axis.horizontal,
+            children: <Widget>[
+              Column(
+                children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(0, 50, 0, 0),
+                    child: RaisedButton(
+                      color: Colors.indigo[50],
+                      onPressed: () {
+                        if(isChecked)
+                        {
+                          user.send('CMD_SetDCSolenoidPWM@Main(${user.index - 1},1,$pwm,$inittime)');
+                        }
+                        else{
+                          user.send('CMD_SetDCSolenoid@Main(${user.index - 1},1)');
+                        }
+                      },
+                      child: Text('Set Solenoid ON',
                           style: TextStyle(
-                              fontSize: 15, fontWeight: FontWeight.bold)),
-                      Checkbox(
-                        value: isChecked,
-                        onChanged: (bool newValue) {
-                          setState(() {
-                            isChecked = newValue;
-                          });
-                        },
-                      ),
-                      isChecked
-                          ? Column(
-                            children: <Widget>[
-                              Container(
-                                width: 350,
-                                child: Row(
-                                    children: <Widget>[
-                                      Slider(
-                                        value: pwm,
-                                        onChanged: (newValue) {
-                                          setState(() {
-                                            pwm = newValue;
-                                          });
-                                        },
-                                        min: 0,
-                                        max: 100,
-                                        divisions: 100,
-                                      ),
-                                      Text('PWM: ${pwm.round()}%',
-                                          style: TextStyle(
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.bold)),
-                                    ],
-                                  ),
-                              ),
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          )),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(0, 35, 0, 0),
+                    child: RaisedButton(
+                      color: Colors.indigo[50],
+                      onPressed: () {
+                        user.send('CMD_SetDCSolenoid@Main(${user.index - 1},0)');
+                      },
+                      child: Text('Set Solenoid OFF',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          )),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Row(
+                      children: <Widget>[
+                        Text('Enable PWM: ',
+                            style: TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.bold)),
+                        Checkbox(
+                          value: isChecked,
+                          onChanged: (bool newValue) {
+                            setState(() {
+                              isChecked = newValue;
+                            });
+                          },
+                        ),
+                        isChecked
+                            ? Column(
+                              children: <Widget>[
                                 Container(
                                   width: 350,
                                   child: Row(
-                                    children: <Widget>[
-                                      Slider(
-                                        value: inittime,
-                                        onChanged: (newValue) {
-                                          setState(() {
-                                            inittime = newValue;
-                                          });
-                                        },
-                                        min: 0,
-                                        max: 2000,
-                                        divisions: 100,
-                                      ),
-                                      Text('Init Time: ${inittime.round()} ms',
-                                          style: TextStyle(
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.bold)),
-                                    ],
+                                      children: <Widget>[
+                                        Slider(
+                                          value: pwm,
+                                          onChanged: (newValue) {
+                                            setState(() {
+                                              pwm = newValue;
+                                            });
+                                          },
+                                          min: 0,
+                                          max: 100,
+                                          divisions: 100,
+                                        ),
+                                        Text('PWM: ${pwm.round()}%',
+                                            style: TextStyle(
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.bold)),
+                                      ],
+                                    ),
+                                ),
+                                  Container(
+                                    width: 350,
+                                    child: Row(
+                                      children: <Widget>[
+                                        Slider(
+                                          value: inittime,
+                                          onChanged: (newValue) {
+                                            setState(() {
+                                              inittime = newValue;
+                                            });
+                                          },
+                                          min: 0,
+                                          max: 2000,
+                                          divisions: 100,
+                                        ),
+                                        Text('Init Time: ${inittime.round()} ms',
+                                            style: TextStyle(
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.bold)),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                            ],
-                          )
-                          : Column(
-                            children: <Widget>[
-                              Slider(
-                                  value: pwm,
-                                  onChanged: null,
-                                  min: 0,
-                                  max: 100,
-                                  divisions: 100,
-                                ),
+                              ],
+                            )
+                            : Column(
+                              children: <Widget>[
                                 Slider(
-                                  value: inittime,
-                                  onChanged: null,
-                                  min: 0,
-                                  max: 100,
-                                  divisions: 100,
-                                ),
-                            ],
-                          )
-                    ],
+                                    value: pwm,
+                                    onChanged: null,
+                                    min: 0,
+                                    max: 100,
+                                    divisions: 100,
+                                  ),
+                                  Slider(
+                                    value: inittime,
+                                    onChanged: null,
+                                    min: 0,
+                                    max: 100,
+                                    divisions: 100,
+                                  ),
+                              ],
+                            )
+                      ],
+                    ),
                   ),
-                ),
-              ],
-            )
-          ],
+                ],
+              ),
+            ],
+          ),
         ),
       );
     });
