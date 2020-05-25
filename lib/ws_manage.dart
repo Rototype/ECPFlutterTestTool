@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
@@ -117,7 +116,7 @@ class WebSocketClass with ChangeNotifier {
                   //
                   timerTimeout.cancel();
       
-                  timerTimeout = Timer(Duration(seconds: 5), () {
+                  timerTimeout = Timer(Duration(seconds: 60), () {
                     disconnect();
                   });
                 } catch (e) {
@@ -232,7 +231,7 @@ class WebSocketClass with ChangeNotifier {
         void send(String data) {
           try {
             if (!timerTimeout.isActive) {
-              timerTimeout = Timer(Duration(seconds: 4), () {
+              timerTimeout = Timer(Duration(seconds: 60), () {
                 disconnect();
               });
             }
