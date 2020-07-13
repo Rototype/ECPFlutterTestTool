@@ -8,6 +8,7 @@ class AnalogicInputs extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<WebSocketClass>(builder: (_, user, __) {
+      var screen = MediaQuery.of(context);
       return Scaffold(
           appBar: AppBar(
             title: Text('Analog Inputs'),
@@ -17,7 +18,7 @@ class AnalogicInputs extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
             SizedBox(
-                width: 200,
+                width: screen.size.width,
                 child: ListView.builder(
                     shrinkWrap: true,
                     itemCount: user.inputButtons.length,

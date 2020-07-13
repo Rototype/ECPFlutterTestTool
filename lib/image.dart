@@ -30,10 +30,11 @@ class _ImagePickerPageState extends State<ImagePickerPage> {
   }
   @override
   Widget build(BuildContext context) {
-    return Consumer<WebSocketClass>(builder: (_, user, __) {
+    var screen = MediaQuery.of(context);
+    return Consumer<WebSocketClass>(builder: (_, user, __) {    
       return Scaffold(
         appBar: AppBar(
-          title: Text('Imagine Processing'),
+          title: Text('Imagine Processing '),
         ),
         floatingActionButton: FloatingActionButton(
           child: Icon(Icons.open_in_browser),
@@ -44,15 +45,14 @@ class _ImagePickerPageState extends State<ImagePickerPage> {
         body: Center(
           child: _image != null ? 
                     ListView( 
-                      scrollDirection: Axis.horizontal,                    
+                      scrollDirection: Axis.vertical,                    
                       children: <Widget>[
                         Padding(
                           padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
                           child: Column(
                             children: <Widget>[
                               Container(
-                                  width: 500,
-                                  height: 300,
+                                  width: screen.size.width,
                                   decoration: BoxDecoration(
                                       border:
                                           Border.all(color: Colors.red, width: 5)),
@@ -77,13 +77,12 @@ class _ImagePickerPageState extends State<ImagePickerPage> {
                         ),
                     user.image != null ? 
                       Padding(
-                        padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                        padding: EdgeInsets.fromLTRB(10, 50, 10, 30),
                         child: 
                           Column(
                             children: [
                               Container(
-                                  width: 500,
-                                  height: 300,
+                                  width: screen.size.width,
                                     decoration: BoxDecoration(
                                       border:
                                         Border.all(color: Colors.red, width: 5)

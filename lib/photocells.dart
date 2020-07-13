@@ -1,12 +1,18 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'ws_manage.dart';
 import 'package:provider/provider.dart';
+
+import 'ws_manage.dart';
 
 class Photocells extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    double columnWidth = 100;
+    var screen = MediaQuery.of(context);
+    if(screen.size.width > 550){
+      columnWidth = screen.size.width/5;
+    }
     return Consumer<WebSocketClass>(builder: (_, user, __) {
       return Scaffold(
           resizeToAvoidBottomInset: true,
@@ -14,40 +20,49 @@ class Photocells extends StatelessWidget {
             title: Text('Photocells'),
           ),
           body: Center(
-            child: Container(
-                width: 600,
-                child:
-                user.photocellsIndex != -1 ?
-                  ListView(
-                    scrollDirection: Axis.horizontal,
-                    children: <Widget>[
-                       Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                    Column(
-                        children: 
-                          user.photocellButtons[0]    
-                        ),
-                    Column(
-                        children:
-                          user.photocellButtons[1]                       
-                        ),
-                    Column(
-                        children: 
-                          user.photocellButtons[2]                        
-                        ),
-                    Column(
-                        children: 
-                          user.photocellButtons[3]                      
-                        ),
-                    Column(
-                        
-                        children: 
-                          user.photocellButtons[4]                         
-                        ),        
-                ]),
-                    ]): Container()
+            child: user.photocellsIndex != -1 ?
+              ListView(
+                scrollDirection: Axis.horizontal,             
+                children: <Widget>[
+                Row(                    
+                  children: <Widget>[
+                Container(
+                  width: columnWidth,
+                  child: Column(            
+                      children: 
+                        user.photocellButtons[0]  
+                      ),
                 ),
+                Container(
+                  width: columnWidth,
+                  child: Column(            
+                      children:
+                        user.photocellButtons[1]                       
+                      ),
+                ),
+                Container(
+                  width: columnWidth,
+                  child: Column(            
+                      children: 
+                        user.photocellButtons[2]                        
+                      ),
+                ),
+                Container(
+                  width: columnWidth,
+                  child: Column(            
+                      children: 
+                        user.photocellButtons[3]                      
+                      ),
+                ),
+                Container(
+                  width: columnWidth,
+                  child: Column(             
+                      children: 
+                        user.photocellButtons[4]                         
+                      ),
+                ),        
+            ]),
+                ]): Container(),
           ));
     });
   }
