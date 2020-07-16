@@ -1,12 +1,22 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:provaProvider/ws_manage.dart';
 import 'package:provider/provider.dart';
-import 'package:image_picker/image_picker.dart';
 import 'dart:typed_data';
+import 'websocket.dart';
 
+class ImageData{
+  Uint8List data;
+  String message;
+  String error;
+  ImageData(String message, Uint8List data, String error)
+  {
+    this.data = data;
+    this.message = message;
+    this.error = error;
+  }
+}
 
 class ImagePickerPage extends StatefulWidget {
   @override
@@ -14,22 +24,18 @@ class ImagePickerPage extends StatefulWidget {
 }
 
 class _ImagePickerPageState extends State<ImagePickerPage> {
-  String name = '';
-  String error;
   Uint8List data;
+  String error;
+  ImageData imageData;
   String message;
-  File _image;
+  String name = '';
+  SocketFinder wSocket;
 
-  Future getImage() async {
-    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
-    data = image.readAsBytesSync();
+  var _image;
 
-    setState(() {
-      _image = image;
-    });
-  }
   @override
   Widget build(BuildContext context) {
+    wSocket = new SocketFinder();
     var screen = MediaQuery.of(context);
     return Consumer<WebSocketClass>(builder: (_, user, __) {    
       return Scaffold(
@@ -38,12 +44,29 @@ class _ImagePickerPageState extends State<ImagePickerPage> {
         ),
         floatingActionButton: FloatingActionButton(
           child: Icon(Icons.open_in_browser),
-          onPressed: () {
-            getImage();
+          onPressed: () async {
+            if(wSocket.isWeb()) {              
+              await wSocket.pickImage();
+              if(wSocket.getImage()!=null)
+              {
+                setState(() {
+                  data = wSocket.getImage();
+                });
+              }
+            } 
+            else{
+              await wSocket.pickImage();
+               if(wSocket.getImage()!=null)
+              {
+                setState(() async {
+                  data = await wSocket.getImage();
+                });
+              }
+            }           
           },
         ),
         body: Center(
-          child: _image != null ? 
+          child: _image != null || data != null ? 
                     ListView( 
                       scrollDirection: Axis.vertical,                    
                       children: <Widget>[
@@ -56,7 +79,7 @@ class _ImagePickerPageState extends State<ImagePickerPage> {
                                   decoration: BoxDecoration(
                                       border:
                                           Border.all(color: Colors.red, width: 5)),
-                                  child: Image.file(_image)),
+                                   child:  Image.memory(data)),
                               FlatButton(
                                         color: Colors.indigo[50],
                                 child: Text("Send Image",
@@ -67,7 +90,7 @@ class _ImagePickerPageState extends State<ImagePickerPage> {
                                 onPressed: () {
                                   try{
                                   user.send("CMD_InvertImage@Main[${base64.encode(data)}]");
-                                  }catch(e){ 
+                                  }catch(e){
                                     print(e);
                                   }
                                 },

@@ -4,8 +4,8 @@ import 'dart:math';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:web_socket_channel/IO.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
+import 'websocket.dart';
 
 enum Status {
   Authenticated,
@@ -59,6 +59,7 @@ class OutputClass {
 
 class WebSocketClass with ChangeNotifier {
   WebSocketChannel _channel;
+  SocketFinder wSocket;
 
   //String _url = "ws://127.0.0.1:5001";
   //String _url = "ws://192.168.1.101:5001";
@@ -80,7 +81,7 @@ class WebSocketClass with ChangeNotifier {
   Uint8List image;
   int photocellsIndex = -1;
   int counter = 0;
-  int indice = 0;
+  int indexReadAnalog = 0;
   int index = -1;
   BigInt result = BigInt.from(0);
   int analogInput =0;
@@ -88,7 +89,6 @@ class WebSocketClass with ChangeNotifier {
   String url;
   
   TextEditingController ipurl = new TextEditingController();
-
 
   List<List<FlatButton>> photocellButtons = new List<List<FlatButton>>();
   List<InputClass> inputButtons = new List<InputClass>();
@@ -100,8 +100,11 @@ class WebSocketClass with ChangeNotifier {
   WebSocketClass();
 
   Future<bool> wsconnect() async {
+
     try {
-      _channel = IOWebSocketChannel.connect(ipurl.text);
+      wSocket = new SocketFinder();
+            _channel = wSocket.getSocketValue(ipurl.text);
+
             if (_channel == null) {
               timerPeriod.cancel();
               status = Status.Unauthenticated;
@@ -134,26 +137,26 @@ class WebSocketClass with ChangeNotifier {
                 
                 if(split[1] == 'ReadAnalogInput'){
                   split = message2.split(RegExp("[\s_@)(!]+"));
-                  if(indice==5)
+                  if(indexReadAnalog==5)
                   {
-                    indice=0;
+                    indexReadAnalog=0;
                   }
-                  if(indice==0){
+                  if(indexReadAnalog==0){
                     inputList[0]=int.parse(split[3]);
                   }
-                  if(indice==1){
+                  if(indexReadAnalog==1){
                     inputList[1]=int.parse(split[3]);
                   }
-                  if(indice==2){
+                  if(indexReadAnalog==2){
                     inputList[2]=int.parse(split[3]);
                   }
-                  if(indice==3){
+                  if(indexReadAnalog==3){
                     inputList[3]=int.parse(split[3]);
                   }
-                  if(indice==4){
+                  if(indexReadAnalog==4){
                     inputList[4]=int.parse(split[3]);
                   }
-                  indice++;
+                  indexReadAnalog++;
                 }
                 else if (split[1] == 'ReadDigitalInput') {
                   split = message2.split(RegExp("[_@)(!]+"));
@@ -204,7 +207,7 @@ class WebSocketClass with ChangeNotifier {
           });
       
           timerInputAnalog = Timer.periodic(Duration(milliseconds: 800), (timer) {
-            send('CMD_ReadAnalogInput@Main($indice)');
+            send('CMD_ReadAnalogInput@Main($indexReadAnalog)');
           });
       
       
