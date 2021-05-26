@@ -6,12 +6,12 @@ import 'package:provider/provider.dart';
 import 'dart:typed_data';
 import 'websocket.dart';
 
-class ImageData{
+class ImageData {
   Uint8List data;
   String message;
   String error;
-  ImageData(String message, Uint8List data, String error)
-  {
+
+  ImageData(String message, Uint8List data, String error) {
     this.data = data;
     this.message = message;
     this.error = error;
@@ -37,7 +37,7 @@ class _ImagePickerPageState extends State<ImagePickerPage> {
   Widget build(BuildContext context) {
     wSocket = new SocketFinder();
     var screen = MediaQuery.of(context);
-    return Consumer<WebSocketClass>(builder: (_, user, __) {    
+    return Consumer<WebSocketClass>(builder: (_, user, __) {
       return Scaffold(
         appBar: AppBar(
           title: Text('Imagine Processing '),
@@ -45,99 +45,90 @@ class _ImagePickerPageState extends State<ImagePickerPage> {
         floatingActionButton: FloatingActionButton(
           child: Icon(Icons.open_in_browser),
           onPressed: () async {
-            if(wSocket.isWeb()) {              
+            if (wSocket.isWeb()) {
               await wSocket.pickImage();
-              if(wSocket.getImage()!=null)
-              {
+              if (wSocket.getImage() != null) {
                 setState(() {
                   data = wSocket.getImage();
                 });
               }
-            } 
-            else{
+            } else {
               await wSocket.pickImage();
-               if(wSocket.getImage()!=null)
-              {
+              if (wSocket.getImage() != null) {
                 setState(() async {
                   data = await wSocket.getImage();
                 });
               }
-            }           
+            }
           },
         ),
         body: Center(
-          child: _image != null || data != null ? 
-                    ListView( 
-                      scrollDirection: Axis.vertical,                    
-                      children: <Widget>[
-                        Padding(
-                          padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
-                          child: Column(
-                            children: <Widget>[
-                              Container(
-                                  width: screen.size.width,
-                                  decoration: BoxDecoration(
-                                      border:
-                                          Border.all(color: Colors.red, width: 5)),
-                                   child:  Image.memory(data)),
-                              FlatButton(
-                                        color: Colors.indigo[50],
-                                child: Text("Send Image",
+          child: _image != null || data != null
+              ? ListView(
+                  scrollDirection: Axis.vertical,
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                      child: Column(
+                        children: <Widget>[
+                          Container(
+                              width: screen.size.width,
+                              decoration: BoxDecoration(
+                                  border:
+                                      Border.all(color: Colors.red, width: 5)),
+                              child: Image.memory(data)),
+                          FlatButton(
+                            color: Colors.indigo[50],
+                            child: Text("Send Image",
                                 style: TextStyle(
-                                    fontSize: 15,
-                                    fontWeight:
-                                    FontWeight.bold)),
-                                onPressed: () {
-                                  try{
-                                  user.send("CMD_InvertImage@Main[${base64.encode(data)}]");
-                                  }catch(e){
-                                    print(e);
-                                  }
-                                },
-                              )
-                            ],
-                          ),
-                        ),
-                    user.image != null ? 
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(10, 50, 10, 30),
-                        child: 
-                          Column(
-                            children: [
-                              Container(
-                                  width: screen.size.width,
-                                    decoration: BoxDecoration(
-                                      border:
-                                        Border.all(color: Colors.red, width: 5)
-                                    ),
-                                    child: Image.memory(user.image)
-                                  ),
-                                  FlatButton(
-                                        color: Colors.indigo[50],
-                                child: Text("Delete Image",
-                                style: TextStyle(
-                                    fontSize: 15,
-                                    fontWeight:
-                                    FontWeight.bold)),
-                                onPressed: () {
-                                  try{
-                                    user.image = null;
-                                  }catch(e){ 
-                                    print(e);
-                                  }
-                                },
-                              )
-                            ],
-                          ),                
-                      )
-                      : Container()
-                      ],
-                    )
-                    
-                  : Container(
-                      decoration: BoxDecoration(
-                          border: Border.all(color: Colors.red, width: 5)),
+                                    fontSize: 15, fontWeight: FontWeight.bold)),
+                            onPressed: () {
+                              try {
+                                user.send(
+                                    "CMD_InvertImage@Main[${base64.encode(data)}]");
+                              } catch (e) {
+                                print(e);
+                              }
+                            },
+                          )
+                        ],
+                      ),
                     ),
+                    user.image != null
+                        ? Padding(
+                            padding: EdgeInsets.fromLTRB(10, 50, 10, 30),
+                            child: Column(
+                              children: [
+                                Container(
+                                    width: screen.size.width,
+                                    decoration: BoxDecoration(
+                                        border: Border.all(
+                                            color: Colors.red, width: 5)),
+                                    child: Image.memory(user.image)),
+                                FlatButton(
+                                  color: Colors.indigo[50],
+                                  child: Text("Delete Image",
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold)),
+                                  onPressed: () {
+                                    try {
+                                      user.image = null;
+                                    } catch (e) {
+                                      print(e);
+                                    }
+                                  },
+                                )
+                              ],
+                            ),
+                          )
+                        : Container()
+                  ],
+                )
+              : Container(
+                  decoration: BoxDecoration(
+                      border: Border.all(color: Colors.red, width: 5)),
+                ),
         ),
       );
     });

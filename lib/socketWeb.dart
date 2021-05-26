@@ -3,8 +3,8 @@ import 'package:web_socket_channel/html.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:image_picker_web/image_picker_web.dart';
 import 'image.dart';
+
 class WebKeyFinder implements SocketFinder {
-    
   var imageWeb;
   HtmlWebSocketChannel channel;
 
@@ -14,25 +14,23 @@ class WebKeyFinder implements SocketFinder {
   }
 
   WebSocketChannel getSocketValue(String url) {
-        return channel = HtmlWebSocketChannel.connect(url);
+    return channel = HtmlWebSocketChannel.connect(url);
   }
 
-  bool isWeb() {return true;}
+  bool isWeb() {
+    return true;
+  }
 
-   Future<void> pickImage() async {  
+  Future<void> pickImage() async {
     var image = await ImagePickerWeb.getImage(outputType: ImageType.bytes);
     imageWeb = image;
-
   }
-  
-  getImage(){
+
+  getImage() {
     return imageWeb;
   }
 
-  
-  void setSocketValue(String key, String value) {
-  }  
-
+  void setSocketValue(String key, String value) {}
 }
 
 SocketFinder getSocketFinder() => WebKeyFinder();

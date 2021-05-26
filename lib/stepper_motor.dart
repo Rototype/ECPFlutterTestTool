@@ -103,7 +103,6 @@ class _MotorStPageState extends State<MotorStPage> {
     controllerExMax2.text = steps2.toString();
 
     return Consumer<WebSocketClass>(builder: (_, user, __) {
-
       var childrenConstSpeedWeb = <Widget>[
         Row(
           children: <Widget>[
@@ -140,13 +139,15 @@ class _MotorStPageState extends State<MotorStPage> {
                                           -80 &&
                                       double.parse(controllerMotorStart.text) <
                                           80) {
-                                    if (double.parse(controllerMotorStart.text) <=
+                                    if (double.parse(
+                                            controllerMotorStart.text) <=
                                         0) {
                                       controllerMotorStart.text =
                                           (-80).toString();
                                       spd1 = -80;
                                     } else {
-                                      controllerMotorStart.text = (80).toString();
+                                      controllerMotorStart.text =
+                                          (80).toString();
                                       spd1 = 80;
                                     }
                                   }
@@ -181,7 +182,8 @@ class _MotorStPageState extends State<MotorStPage> {
                             newSpd1 = 80;
                           }
                         }
-                        controllerMotorStart.text = (newSpd1.round()).toString();
+                        controllerMotorStart.text =
+                            (newSpd1.round()).toString();
                         setState(() =>
                             spd1 = double.parse(newSpd1.round().toString()));
                       },
@@ -194,34 +196,34 @@ class _MotorStPageState extends State<MotorStPage> {
               ),
             ),
             Container(
-          width: 200,
-          child: (isStartedNegative == false && isStartedPositive == false)
-              ? RaisedButton(
-                  color: Colors.indigo[50],
-                  child: Text('Motor Start',
-                      style:
-                          TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
-                  onPressed: () {
-                    if (spd1 > 0) {
-                      spd3 = 80;
-                      setState(() => isStartedPositive = true);
-                    } else {
-                      spd3 = -80;
-                      setState(() => isStartedNegative = true);
-                    }
-                    user.send(
-                        'CMD_SetStepperMotorSpeed@Main(${user.index - 1},$resolution2,$spd1,$acc,$load)');
-                  },
-                )
-              : RaisedButton(
-                  color: Colors.indigo[50],
-                  child: Text('Motor Start',
-                      style:
-                          TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
-                  onPressed: null),
-        ),
+              width: 200,
+              child: (isStartedNegative == false && isStartedPositive == false)
+                  ? RaisedButton(
+                      color: Colors.indigo[50],
+                      child: Text('Motor Start',
+                          style: TextStyle(
+                              fontSize: 15, fontWeight: FontWeight.bold)),
+                      onPressed: () {
+                        if (spd1 > 0) {
+                          spd3 = 80;
+                          setState(() => isStartedPositive = true);
+                        } else {
+                          spd3 = -80;
+                          setState(() => isStartedNegative = true);
+                        }
+                        user.send(
+                            'CMD_SetStepperMotorSpeed@Main(${user.index - 1},$resolution2,$spd1,$acc,$load)');
+                      },
+                    )
+                  : RaisedButton(
+                      color: Colors.indigo[50],
+                      child: Text('Motor Start',
+                          style: TextStyle(
+                              fontSize: 15, fontWeight: FontWeight.bold)),
+                      onPressed: null),
+            ),
           ],
-        ),     
+        ),
       ];
       var childrenConstSpeedMobile = <Widget>[
         Column(
@@ -259,13 +261,15 @@ class _MotorStPageState extends State<MotorStPage> {
                                           -80 &&
                                       double.parse(controllerMotorStart.text) <
                                           80) {
-                                    if (double.parse(controllerMotorStart.text) <=
+                                    if (double.parse(
+                                            controllerMotorStart.text) <=
                                         0) {
                                       controllerMotorStart.text =
                                           (-80).toString();
                                       spd1 = -80;
                                     } else {
-                                      controllerMotorStart.text = (80).toString();
+                                      controllerMotorStart.text =
+                                          (80).toString();
                                       spd1 = 80;
                                     }
                                   }
@@ -300,7 +304,8 @@ class _MotorStPageState extends State<MotorStPage> {
                             newSpd1 = 80;
                           }
                         }
-                        controllerMotorStart.text = (newSpd1.round()).toString();
+                        controllerMotorStart.text =
+                            (newSpd1.round()).toString();
                         setState(() =>
                             spd1 = double.parse(newSpd1.round().toString()));
                       },
@@ -313,35 +318,34 @@ class _MotorStPageState extends State<MotorStPage> {
               ),
             ),
             Container(
-          width: 200,
-          child: (isStartedNegative == false && isStartedPositive == false)
-              ? RaisedButton(
-                  color: Colors.indigo[50],
-                  child: Text('Motor Start',
-                      style:
-                          TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
-                  onPressed: () {
-                    if (spd1 > 0) {
-                      spd3 = 80;
-                      setState(() => isStartedPositive = true);
-                    } else {
-                      spd3 = -80;
-                      setState(() => isStartedNegative = true);
-                    }
-                    user.send(
-                        'CMD_SetStepperMotorSpeed@Main(${user.index - 1},$resolution2,$spd1,$acc,$load)');
-                  },
-                )
-              : RaisedButton(
-                  color: Colors.indigo[50],
-                  child: Text('Motor Start',
-                      style:
-                          TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
-                  onPressed: null),
-        ),
+              width: 200,
+              child: (isStartedNegative == false && isStartedPositive == false)
+                  ? RaisedButton(
+                      color: Colors.indigo[50],
+                      child: Text('Motor Start',
+                          style: TextStyle(
+                              fontSize: 15, fontWeight: FontWeight.bold)),
+                      onPressed: () {
+                        if (spd1 > 0) {
+                          spd3 = 80;
+                          setState(() => isStartedPositive = true);
+                        } else {
+                          spd3 = -80;
+                          setState(() => isStartedNegative = true);
+                        }
+                        user.send(
+                            'CMD_SetStepperMotorSpeed@Main(${user.index - 1},$resolution2,$spd1,$acc,$load)');
+                      },
+                    )
+                  : RaisedButton(
+                      color: Colors.indigo[50],
+                      child: Text('Motor Start',
+                          style: TextStyle(
+                              fontSize: 15, fontWeight: FontWeight.bold)),
+                      onPressed: null),
+            ),
           ],
         ),
-        
       ];
       var childrenChangeSpeedWeb = <Widget>[
         Row(
@@ -392,10 +396,13 @@ class _MotorStPageState extends State<MotorStPage> {
                                   }
                                 },
                                 onEditingComplete: () {
-                                  if (!isStartedPositive && !isStartedPositive) {
-                                    if (double.parse(controllerSpeedChange.text) >
+                                  if (!isStartedPositive &&
+                                      !isStartedPositive) {
+                                    if (double.parse(
+                                                controllerSpeedChange.text) >
                                             -80 &&
-                                        double.parse(controllerSpeedChange.text) <
+                                        double.parse(
+                                                controllerSpeedChange.text) <
                                             80) {
                                       if (double.parse(
                                               controllerSpeedChange.text) <=
@@ -411,8 +418,8 @@ class _MotorStPageState extends State<MotorStPage> {
                                     }
                                   }
                                   try {
-                                    spd3 =
-                                        double.parse(controllerSpeedChange.text);
+                                    spd3 = double.parse(
+                                        controllerSpeedChange.text);
                                   } catch (e) {
                                     if (isStartedPositive) {
                                       print(e);
@@ -458,7 +465,8 @@ class _MotorStPageState extends State<MotorStPage> {
                               child: Slider(
                                 value: double.parse(controllerSpeedChange.text),
                                 onChanged: (newSpd3) {
-                                  controllerSpeedChange.text = newSpd3.toString();
+                                  controllerSpeedChange.text =
+                                      newSpd3.toString();
                                   setState(() => spd3 =
                                       double.parse(newSpd3.round().toString()));
                                 },
@@ -472,7 +480,8 @@ class _MotorStPageState extends State<MotorStPage> {
                               child: Slider(
                                 value: double.parse(controllerSpeedChange.text),
                                 onChanged: (newSpd3) {
-                                  controllerSpeedChange.text = newSpd3.toString();
+                                  controllerSpeedChange.text =
+                                      newSpd3.toString();
                                   setState(() => spd3 =
                                       double.parse(newSpd3.round().toString()));
                                 },
@@ -485,19 +494,20 @@ class _MotorStPageState extends State<MotorStPage> {
               ),
             ),
             Container(
-          width: 200,
-          child: RaisedButton(
-            color: Colors.indigo[50],
-            child: Text('Motor Speed Change',
-                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
-            onPressed: () {
-              user.send(
-                  'CMD_SetStepperMotorSpeed@Main(${user.index - 1},$resolution2,$spd3,$acc,$load)');
-            },
-          ),
-        ),
+              width: 200,
+              child: RaisedButton(
+                color: Colors.indigo[50],
+                child: Text('Motor Speed Change',
+                    style:
+                        TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+                onPressed: () {
+                  user.send(
+                      'CMD_SetStepperMotorSpeed@Main(${user.index - 1},$resolution2,$spd3,$acc,$load)');
+                },
+              ),
+            ),
           ],
-        ),        
+        ),
       ];
       var childrenChangeSpeedMobile = <Widget>[
         Column(
@@ -548,10 +558,13 @@ class _MotorStPageState extends State<MotorStPage> {
                                   }
                                 },
                                 onEditingComplete: () {
-                                  if (!isStartedPositive && !isStartedPositive) {
-                                    if (double.parse(controllerSpeedChange.text) >
+                                  if (!isStartedPositive &&
+                                      !isStartedPositive) {
+                                    if (double.parse(
+                                                controllerSpeedChange.text) >
                                             -80 &&
-                                        double.parse(controllerSpeedChange.text) <
+                                        double.parse(
+                                                controllerSpeedChange.text) <
                                             80) {
                                       if (double.parse(
                                               controllerSpeedChange.text) <=
@@ -567,8 +580,8 @@ class _MotorStPageState extends State<MotorStPage> {
                                     }
                                   }
                                   try {
-                                    spd3 =
-                                        double.parse(controllerSpeedChange.text);
+                                    spd3 = double.parse(
+                                        controllerSpeedChange.text);
                                   } catch (e) {
                                     if (isStartedPositive) {
                                       print(e);
@@ -614,7 +627,8 @@ class _MotorStPageState extends State<MotorStPage> {
                               child: Slider(
                                 value: double.parse(controllerSpeedChange.text),
                                 onChanged: (newSpd3) {
-                                  controllerSpeedChange.text = newSpd3.toString();
+                                  controllerSpeedChange.text =
+                                      newSpd3.toString();
                                   setState(() => spd3 =
                                       double.parse(newSpd3.round().toString()));
                                 },
@@ -628,7 +642,8 @@ class _MotorStPageState extends State<MotorStPage> {
                               child: Slider(
                                 value: double.parse(controllerSpeedChange.text),
                                 onChanged: (newSpd3) {
-                                  controllerSpeedChange.text = newSpd3.toString();
+                                  controllerSpeedChange.text =
+                                      newSpd3.toString();
                                   setState(() => spd3 =
                                       double.parse(newSpd3.round().toString()));
                                 },
@@ -641,19 +656,20 @@ class _MotorStPageState extends State<MotorStPage> {
               ),
             ),
             Container(
-          width: 200,
-          child: RaisedButton(
-            color: Colors.indigo[50],
-            child: Text('Motor Speed Change',
-                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
-            onPressed: () {
-              user.send(
-                  'CMD_SetStepperMotorSpeed@Main(${user.index - 1},$resolution2,$spd3,$acc,$load)');
-            },
-          ),
-        ),
+              width: 200,
+              child: RaisedButton(
+                color: Colors.indigo[50],
+                child: Text('Motor Speed Change',
+                    style:
+                        TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+                onPressed: () {
+                  user.send(
+                      'CMD_SetStepperMotorSpeed@Main(${user.index - 1},$resolution2,$spd3,$acc,$load)');
+                },
+              ),
+            ),
           ],
-        ),       
+        ),
       ];
       return Scaffold(
         appBar: AppBar(
@@ -667,63 +683,71 @@ class _MotorStPageState extends State<MotorStPage> {
                         Padding(
                             padding: const EdgeInsets.all(5.0),
                             child: Column(
-                                    children: MediaQuery.of(context).size.width < 600 ? childrenConstSpeedMobile
-                                    : childrenConstSpeedWeb,
-                                  )),
-                        Padding(
-                          padding: const EdgeInsets.all(5.0),
-                          child: MediaQuery.of(context).size.width < 600 ? Column(
-                            children: <Widget>[
-                              Container(
-                                width: 250,
-                                child: RaisedButton(
-                                  color: Colors.indigo[50],
-                                  child: Text('Motor Stop',
-                                      style: TextStyle(
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.bold)),
-                                  onPressed: () {
-                                    setState(() => isStartedNegative = false);
-                                    setState(() => isStartedPositive = false);
-
-                                    user.send(
-                                        'CMD_SetStepperMotorSpeed@Main(${user.index - 1},$resolution2,0,$acc,$load)');
-                                  },
-                                ),
-                              ),
-                            ],
-                          ) :
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(80, 10, 0, 10),
-                            child: Row(
-                              children: <Widget>[
-                                Container(
-                                  width: 250,
-                                  child: RaisedButton(
-                                    color: Colors.indigo[50],
-                                    child: Text('Motor Stop',
-                                        style: TextStyle(
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.bold)),
-                                    onPressed: () {
-                                      setState(() => isStartedNegative = false);
-                                      setState(() => isStartedPositive = false);
-
-                                      user.send(
-                                          'CMD_SetStepperMotorSpeed@Main(${user.index - 1},$resolution2,0,$acc,$load)');
-                                    },
-                                  ),
-                                ),
-                              ],
-                            ),
-                          )
-                        ),
+                              children: MediaQuery.of(context).size.width < 600
+                                  ? childrenConstSpeedMobile
+                                  : childrenConstSpeedWeb,
+                            )),
                         Padding(
                             padding: const EdgeInsets.all(5.0),
-                            child:Column(
-                                    children: MediaQuery.of(context).size.width < 600 ? childrenChangeSpeedMobile
-                                    : childrenChangeSpeedWeb,
+                            child: MediaQuery.of(context).size.width < 600
+                                ? Column(
+                                    children: <Widget>[
+                                      Container(
+                                        width: 250,
+                                        child: RaisedButton(
+                                          color: Colors.indigo[50],
+                                          child: Text('Motor Stop',
+                                              style: TextStyle(
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.bold)),
+                                          onPressed: () {
+                                            setState(() =>
+                                                isStartedNegative = false);
+                                            setState(() =>
+                                                isStartedPositive = false);
+
+                                            user.send(
+                                                'CMD_SetStepperMotorSpeed@Main(${user.index - 1},$resolution2,0,$acc,$load)');
+                                          },
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                : Padding(
+                                    padding: const EdgeInsets.fromLTRB(
+                                        80, 10, 0, 10),
+                                    child: Row(
+                                      children: <Widget>[
+                                        Container(
+                                          width: 250,
+                                          child: RaisedButton(
+                                            color: Colors.indigo[50],
+                                            child: Text('Motor Stop',
+                                                style: TextStyle(
+                                                    fontSize: 15,
+                                                    fontWeight:
+                                                        FontWeight.bold)),
+                                            onPressed: () {
+                                              setState(() =>
+                                                  isStartedNegative = false);
+                                              setState(() =>
+                                                  isStartedPositive = false);
+
+                                              user.send(
+                                                  'CMD_SetStepperMotorSpeed@Main(${user.index - 1},$resolution2,0,$acc,$load)');
+                                            },
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   )),
+                        Padding(
+                            padding: const EdgeInsets.all(5.0),
+                            child: Column(
+                              children: MediaQuery.of(context).size.width < 600
+                                  ? childrenChangeSpeedMobile
+                                  : childrenChangeSpeedWeb,
+                            )),
                       ],
                     )
                   ])
@@ -743,8 +767,9 @@ class _MotorStPageState extends State<MotorStPage> {
                                         child: Column(
                                           children: <Widget>[
                                             Padding(
-                                              padding: const EdgeInsets.fromLTRB(
-                                                  40, 30, 0, 0),
+                                              padding:
+                                                  const EdgeInsets.fromLTRB(
+                                                      40, 30, 0, 0),
                                               child: Row(
                                                 children: <Widget>[
                                                   Container(
@@ -774,8 +799,7 @@ class _MotorStPageState extends State<MotorStPage> {
                                                                           newString) <
                                                                       0) {
                                                                     controllerExConst2
-                                                                        .text = (pow(
-                                                                                2,
+                                                                        .text = (pow(2,
                                                                                 32) -
                                                                             1)
                                                                         .toString();
@@ -785,8 +809,7 @@ class _MotorStPageState extends State<MotorStPage> {
                                                                         1;
                                                                   } else {
                                                                     controllerExConst2
-                                                                        .text = (-pow(
-                                                                                2,
+                                                                        .text = (-pow(2,
                                                                                 32) +
                                                                             1)
                                                                         .toString();
@@ -799,13 +822,11 @@ class _MotorStPageState extends State<MotorStPage> {
                                                               },
                                                               onEditingComplete:
                                                                   () {
-                                                                if (double.parse(
-                                                                            controllerExConst2
-                                                                                .text) >
+                                                                if (double.parse(controllerExConst2
+                                                                            .text) >
                                                                         1 &&
                                                                     double.parse(
-                                                                            controllerExConst2
-                                                                                .text) <
+                                                                            controllerExConst2.text) <
                                                                         1) {
                                                                   controllerExConst2
                                                                           .text =
@@ -845,8 +866,10 @@ class _MotorStPageState extends State<MotorStPage> {
                                                     child: Slider(
                                                       value: steps1,
                                                       onChanged: (newsteps1) {
-                                                        controllerExConst2.text =
-                                                            newsteps1.toString();
+                                                        controllerExConst2
+                                                                .text =
+                                                            newsteps1
+                                                                .toString();
                                                         setState(() => steps1 =
                                                             newsteps1
                                                                 .roundToDouble());
@@ -862,8 +885,9 @@ class _MotorStPageState extends State<MotorStPage> {
                                               ),
                                             ),
                                             Padding(
-                                              padding: const EdgeInsets.fromLTRB(
-                                                  40, 0, 0, 0),
+                                              padding:
+                                                  const EdgeInsets.fromLTRB(
+                                                      40, 0, 0, 0),
                                               child: Row(
                                                 children: <Widget>[
                                                   Container(
@@ -888,7 +912,8 @@ class _MotorStPageState extends State<MotorStPage> {
                                                                             .text =
                                                                         (80000)
                                                                             .toString();
-                                                                    spd21 = 80000;
+                                                                    spd21 =
+                                                                        80000;
                                                                   }
                                                                 },
                                                                 onEditingComplete:
@@ -916,7 +941,8 @@ class _MotorStPageState extends State<MotorStPage> {
                                                                 maxLength: 10,
                                                                 decoration:
                                                                     InputDecoration(
-                                                                  counterText: "",
+                                                                  counterText:
+                                                                      "",
                                                                   border:
                                                                       InputBorder
                                                                           .none,
@@ -924,7 +950,8 @@ class _MotorStPageState extends State<MotorStPage> {
                                                                 controller:
                                                                     controllerExConst,
                                                                 style: TextStyle(
-                                                                    fontSize: 15,
+                                                                    fontSize:
+                                                                        15,
                                                                     fontWeight:
                                                                         FontWeight
                                                                             .bold)),
@@ -974,13 +1001,14 @@ class _MotorStPageState extends State<MotorStPage> {
                                   padding: const EdgeInsets.all(5.0),
                                   child: Column(
                                     children: <Widget>[
-                                      Container(                                      
+                                      Container(
                                         width: 400,
                                         child: Column(
                                           children: <Widget>[
                                             Padding(
-                                              padding: const EdgeInsets.fromLTRB(
-                                                  40, 40, 0, 0),
+                                              padding:
+                                                  const EdgeInsets.fromLTRB(
+                                                      40, 40, 0, 0),
                                               child: Row(
                                                 children: <Widget>[
                                                   Container(
@@ -1010,8 +1038,7 @@ class _MotorStPageState extends State<MotorStPage> {
                                                                           newString) <
                                                                       0) {
                                                                     controllerExMax2
-                                                                        .text = (pow(
-                                                                                2,
+                                                                        .text = (pow(2,
                                                                                 32) -
                                                                             1)
                                                                         .toString();
@@ -1021,8 +1048,7 @@ class _MotorStPageState extends State<MotorStPage> {
                                                                         1;
                                                                   } else {
                                                                     controllerExMax2
-                                                                        .text = (-pow(
-                                                                                2,
+                                                                        .text = (-pow(2,
                                                                                 32) +
                                                                             1)
                                                                         .toString();
@@ -1035,13 +1061,11 @@ class _MotorStPageState extends State<MotorStPage> {
                                                               },
                                                               onEditingComplete:
                                                                   () {
-                                                                if (double.parse(
-                                                                            controllerExMax2
-                                                                                .text) >
+                                                                if (double.parse(controllerExMax2
+                                                                            .text) >
                                                                         1 &&
                                                                     double.parse(
-                                                                            controllerExMax2
-                                                                                .text) <
+                                                                            controllerExMax2.text) <
                                                                         1) {
                                                                   controllerExMax2
                                                                           .text =
@@ -1096,8 +1120,9 @@ class _MotorStPageState extends State<MotorStPage> {
                                               ),
                                             ),
                                             Padding(
-                                              padding: const EdgeInsets.fromLTRB(
-                                                  40, 0, 0, 0),
+                                              padding:
+                                                  const EdgeInsets.fromLTRB(
+                                                      40, 0, 0, 0),
                                               child: Row(
                                                 children: <Widget>[
                                                   Container(
@@ -1122,7 +1147,8 @@ class _MotorStPageState extends State<MotorStPage> {
                                                                             .text =
                                                                         (80000)
                                                                             .toString();
-                                                                    spd22 = 80000;
+                                                                    spd22 =
+                                                                        80000;
                                                                   }
                                                                 },
                                                                 onEditingComplete:
@@ -1150,7 +1176,8 @@ class _MotorStPageState extends State<MotorStPage> {
                                                                 maxLength: 10,
                                                                 decoration:
                                                                     InputDecoration(
-                                                                  counterText: "",
+                                                                  counterText:
+                                                                      "",
                                                                   border:
                                                                       InputBorder
                                                                           .none,
@@ -1158,7 +1185,8 @@ class _MotorStPageState extends State<MotorStPage> {
                                                                 controller:
                                                                     controllerExMax,
                                                                 style: TextStyle(
-                                                                    fontSize: 15,
+                                                                    fontSize:
+                                                                        15,
                                                                     fontWeight:
                                                                         FontWeight
                                                                             .bold)),

@@ -56,12 +56,12 @@ class _SolenoidPageState extends State<SolenoidPage> {
                     child: RaisedButton(
                       color: Colors.indigo[50],
                       onPressed: () {
-                        if(isChecked)
-                        {
-                          user.send('CMD_SetDCSolenoidPWM@Main(${user.index - 1},1,$pwm,$inittime)');
-                        }
-                        else{
-                          user.send('CMD_SetDCSolenoid@Main(${user.index - 1},1)');
+                        if (isChecked) {
+                          user.send(
+                              'CMD_SetDCSolenoidPWM@Main(${user.index - 1},1,$pwm,$inittime)');
+                        } else {
+                          user.send(
+                              'CMD_SetDCSolenoid@Main(${user.index - 1},1)');
                         }
                       },
                       child: Text('Set Solenoid ON',
@@ -76,7 +76,8 @@ class _SolenoidPageState extends State<SolenoidPage> {
                     child: RaisedButton(
                       color: Colors.indigo[50],
                       onPressed: () {
-                        user.send('CMD_SetDCSolenoid@Main(${user.index - 1},0)');
+                        user.send(
+                            'CMD_SetDCSolenoid@Main(${user.index - 1},0)');
                       },
                       child: Text('Set Solenoid OFF',
                           style: TextStyle(
@@ -102,10 +103,10 @@ class _SolenoidPageState extends State<SolenoidPage> {
                         ),
                         isChecked
                             ? Column(
-                              children: <Widget>[
-                                Container(
-                                  width: 350,
-                                  child: Row(
+                                children: <Widget>[
+                                  Container(
+                                    width: 350,
+                                    child: Row(
                                       children: <Widget>[
                                         Slider(
                                           value: pwm,
@@ -124,7 +125,7 @@ class _SolenoidPageState extends State<SolenoidPage> {
                                                 fontWeight: FontWeight.bold)),
                                       ],
                                     ),
-                                ),
+                                  ),
                                   Container(
                                     width: 350,
                                     child: Row(
@@ -140,18 +141,19 @@ class _SolenoidPageState extends State<SolenoidPage> {
                                           max: 2000,
                                           divisions: 100,
                                         ),
-                                        Text('Init Time: ${inittime.round()} ms',
+                                        Text(
+                                            'Init Time: ${inittime.round()} ms',
                                             style: TextStyle(
                                                 fontSize: 15,
                                                 fontWeight: FontWeight.bold)),
                                       ],
                                     ),
                                   ),
-                              ],
-                            )
+                                ],
+                              )
                             : Column(
-                              children: <Widget>[
-                                Slider(
+                                children: <Widget>[
+                                  Slider(
                                     value: pwm,
                                     onChanged: null,
                                     min: 0,
@@ -165,8 +167,8 @@ class _SolenoidPageState extends State<SolenoidPage> {
                                     max: 100,
                                     divisions: 100,
                                   ),
-                              ],
-                            )
+                                ],
+                              )
                       ],
                     ),
                   ),

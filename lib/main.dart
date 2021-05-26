@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:provaProvider/settings.dart';
 import 'package:provider/provider.dart';
-import 'analogic_input.dart';
+import 'analog_input.dart';
 import 'image.dart';
 import 'login_page.dart';
 import 'photocells.dart';
 import 'ws_manage.dart';
-import 'continous_motor.dart';
+import 'continuous_motor.dart';
 import 'solenoid.dart';
 import 'stepper_motor.dart';
 import 'digital_output.dart';
 
 void main() => runApp(
     ChangeNotifierProvider(create: (_) => WebSocketClass(), child: MyApp()));
-  TextEditingController controller = TextEditingController();
+TextEditingController controller = TextEditingController();
 
 List<Color> color = [Colors.lightBlue[200]];
 
@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
         '/Photocells': (_) => Photocells(),
         '/PhotocellPage': (_) => PhotocellPage(),
         '/inputA': (_) => AnalogicInputs(),
-        '/inputAnalogicPage': (_) => AnalogicInputPage(),
+        '/inputAnalogPage': (_) => AnalogInputPage(),
         '/StepperMotor': (_) => MotorST(),
         '/StepperMotorPage': (_) => MotorStPage(),
         '/DCMotor': (_) => DCMotor(),
@@ -69,12 +69,14 @@ class UserInfoPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final user = Provider.of<WebSocketClass>(context);
     user.generateButtonsList(context);
-    List<FlatButton> funct = [
-      FlatButton(
+    List<TextButton> func = [
+      TextButton(
         onPressed: () {
           Navigator.pushNamed(context, '/Photocells');
         },
-        color: Colors.indigo[50],
+        style: TextButton.styleFrom(
+          primary: Colors.indigo[50],
+        ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -83,8 +85,10 @@ class UserInfoPage extends StatelessWidget {
           ],
         ),
       ),
-      FlatButton(
-        color: Colors.indigo[50],
+      TextButton(
+        style: TextButton.styleFrom(
+          primary: Colors.indigo[50],
+        ),
         onPressed: () {
           Navigator.pushNamed(context, '/inputA');
         },
@@ -96,8 +100,10 @@ class UserInfoPage extends StatelessWidget {
           ],
         ),
       ),
-      FlatButton(
-        color: Colors.indigo[50],
+      TextButton(
+        style: TextButton.styleFrom(
+          primary: Colors.indigo[50],
+        ),
         onPressed: () {
           Navigator.pushNamed(context, '/StepperMotor');
         },
@@ -109,8 +115,10 @@ class UserInfoPage extends StatelessWidget {
           ],
         ),
       ),
-      FlatButton(
-        color: Colors.indigo[50],
+      TextButton(
+        style: TextButton.styleFrom(
+          primary: Colors.indigo[50],
+        ),
         onPressed: () {
           Navigator.pushNamed(context, '/DCMotor');
         },
@@ -122,8 +130,10 @@ class UserInfoPage extends StatelessWidget {
           ],
         ),
       ),
-      FlatButton(
-        color: Colors.indigo[50],
+      TextButton(
+        style: TextButton.styleFrom(
+          primary: Colors.indigo[50],
+        ),
         onPressed: () {
           Navigator.pushNamed(context, '/Solenoids');
         },
@@ -135,8 +145,10 @@ class UserInfoPage extends StatelessWidget {
           ],
         ),
       ),
-      FlatButton(
-        color: Colors.indigo[50],
+      TextButton(
+        style: TextButton.styleFrom(
+          primary: Colors.indigo[50],
+        ),
         onPressed: () {
           Navigator.pushNamed(context, '/DigitalOutputs');
         },
@@ -148,8 +160,10 @@ class UserInfoPage extends StatelessWidget {
           ],
         ),
       ),
-      FlatButton(
-        color: Colors.indigo[50],
+      TextButton(
+        style: TextButton.styleFrom(
+          primary: Colors.indigo[50],
+        ),
         onPressed: () {
           Navigator.pushNamed(context, '/Image');
         },
@@ -163,30 +177,27 @@ class UserInfoPage extends StatelessWidget {
       ),
     ];
     return Scaffold(
-        appBar: AppBar(
-          title: Text('@Main'),
-          actions: <Widget>[
-            IconButton(
-              icon: Icon(Icons.arrow_back),
-              tooltip: 'go Back',
-              onPressed: () {
-                user.disconnect();
-              },
-            )
-          ],
-        ),
-        body: Center(
-            child: ListView(
-              padding: EdgeInsets.fromLTRB(80, 100, 80, 50),
-              children: funct
-            )
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: (){
-            Navigator.pushNamed(context, '/Settings');
-          },
-          child: Icon(Icons.settings),
-        ),
+      appBar: AppBar(
+        title: Text('@Main'),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.arrow_back),
+            tooltip: 'go Back',
+            onPressed: () {
+              user.disconnect();
+            },
+          )
+        ],
+      ),
+      body: Center(
+          child: ListView(
+              padding: EdgeInsets.fromLTRB(80, 100, 80, 50), children: func)),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.pushNamed(context, '/Settings');
+        },
+        child: Icon(Icons.settings),
+      ),
     );
   }
 }

@@ -10,8 +10,8 @@ class Photocells extends StatelessWidget {
   Widget build(BuildContext context) {
     double columnWidth = 100;
     var screen = MediaQuery.of(context);
-    if(screen.size.width > 550){
-      columnWidth = screen.size.width/5;
+    if (screen.size.width > 550) {
+      columnWidth = screen.size.width / 5;
     }
     return Consumer<WebSocketClass>(builder: (_, user, __) {
       return Scaffold(
@@ -20,49 +20,32 @@ class Photocells extends StatelessWidget {
             title: Text('Photocells'),
           ),
           body: Center(
-            child: user.photocellsIndex != -1 ?
-              ListView(
-                scrollDirection: Axis.horizontal,             
-                children: <Widget>[
-                Row(                    
-                  children: <Widget>[
-                Container(
-                  width: columnWidth,
-                  child: Column(            
-                      children: 
-                        user.photocellButtons[0]  
+            child: user.photocellsIndex != -1
+                ? ListView(scrollDirection: Axis.horizontal, children: <Widget>[
+                    Row(children: <Widget>[
+                      Container(
+                        width: columnWidth,
+                        child: Column(children: user.photocellButtons[0]),
                       ),
-                ),
-                Container(
-                  width: columnWidth,
-                  child: Column(            
-                      children:
-                        user.photocellButtons[1]                       
+                      Container(
+                        width: columnWidth,
+                        child: Column(children: user.photocellButtons[1]),
                       ),
-                ),
-                Container(
-                  width: columnWidth,
-                  child: Column(            
-                      children: 
-                        user.photocellButtons[2]                        
+                      Container(
+                        width: columnWidth,
+                        child: Column(children: user.photocellButtons[2]),
                       ),
-                ),
-                Container(
-                  width: columnWidth,
-                  child: Column(            
-                      children: 
-                        user.photocellButtons[3]                      
+                      Container(
+                        width: columnWidth,
+                        child: Column(children: user.photocellButtons[3]),
                       ),
-                ),
-                Container(
-                  width: columnWidth,
-                  child: Column(             
-                      children: 
-                        user.photocellButtons[4]                         
+                      Container(
+                        width: columnWidth,
+                        child: Column(children: user.photocellButtons[4]),
                       ),
-                ),        
-            ]),
-                ]): Container(),
+                    ]),
+                  ])
+                : Container(),
           ));
     });
   }
@@ -110,7 +93,7 @@ class _PhotocellPageState extends State<PhotocellPage> {
                           children: <Widget>[
                             RaisedButton(
                               onPressed: () {
-                                print(user.index-1);
+                                print(user.index - 1);
                                 user.send(
                                     'CMD_SetAnalogOutput@Main(${user.index - 1},$value)');
                               },
