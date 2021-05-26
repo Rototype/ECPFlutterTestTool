@@ -1,6 +1,6 @@
-# provaProvider
+# rotosocket
 
-A new Flutter project.
+Rototype WebSocket Console
 
 ## Getting Started
 

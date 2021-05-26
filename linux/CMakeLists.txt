@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.10)
 project(runner LANGUAGES CXX)
 
-set(BINARY_NAME "rotosock")
-set(APPLICATION_ID "com.example.rotosock")
+set(BINARY_NAME "rotosocket")
+set(APPLICATION_ID "com.rototype.rotosocket")
 
 cmake_policy(SET CMP0063 NEW)
 

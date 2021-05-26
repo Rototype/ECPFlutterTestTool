@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
+
 import 'ws_manage.dart';
 
 class LoginPage extends StatefulWidget {
@@ -29,7 +30,7 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       key: _key,
       appBar: AppBar(
-        title: Text("Rotosock"),
+        title: Text("Rototype WebSocket Console"),
       ),
       body: Form(
         key: _formKey,
@@ -47,9 +48,8 @@ class _LoginPageState extends State<LoginPage> {
                     onPressed: () async {
                       if (_formKey.currentState.validate()) {
                         if (!await user.wsconnect())
-                          _key.currentState.showSnackBar(SnackBar(
-                            content: Text("Something is wrong"),
-                          ));
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text("Something went wrong")));
                       }
                     },
                     child: Text(

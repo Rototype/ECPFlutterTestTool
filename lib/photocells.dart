@@ -91,7 +91,7 @@ class _PhotocellPageState extends State<PhotocellPage> {
                                 )),
                         Column(
                           children: <Widget>[
-                            RaisedButton(
+                            ElevatedButton(
                               onPressed: () {
                                 print(user.index - 1);
                                 user.send(

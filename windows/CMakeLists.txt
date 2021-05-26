@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.15)
-project(rotosock LANGUAGES CXX)
+project(rotosocket LANGUAGES CXX)
 
-set(BINARY_NAME "rotosock")
+set(BINARY_NAME "rotosocket")
 
 cmake_policy(SET CMP0063 NEW)
 

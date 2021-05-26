@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:provaProvider/ws_manage.dart';
+import 'ws_manage.dart';
 import 'package:provider/provider.dart';
 
 class Output extends StatefulWidget {
@@ -30,7 +30,7 @@ class _OutputState extends State<Output> {
                         ),
                         Padding(
                           padding: const EdgeInsets.fromLTRB(5, 5, 0, 0),
-                          child: RaisedButton(
+                          child: ElevatedButton(
                               child: Text(
                                 "ON",
                                 style: TextStyle(fontWeight: FontWeight.bold),
@@ -43,7 +43,7 @@ class _OutputState extends State<Output> {
                         ),
                         Padding(
                           padding: const EdgeInsets.fromLTRB(5, 5, 0, 0),
-                          child: RaisedButton(
+                          child: ElevatedButton(
                               onPressed: () {
                                 user.send(
                                     'CMD_SetDigitalOutput@Main($index,0)');

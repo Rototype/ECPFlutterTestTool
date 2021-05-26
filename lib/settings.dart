@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:provaProvider/ws_manage.dart';
+import 'ws_manage.dart';
 import 'package:provider/provider.dart';
 
 class Setting extends StatelessWidget {
@@ -15,11 +15,13 @@ class Setting extends StatelessWidget {
             child: ListView(
           padding: EdgeInsets.all(10),
           children: <Widget>[
-            FlatButton(
+            TextButton(
               onPressed: () {
                 Navigator.pushNamed(context, '/Network');
               },
-              color: Colors.indigo[50],
+              style: TextButton.styleFrom(
+                primary: Colors.indigo[50],
+              ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
@@ -29,8 +31,10 @@ class Setting extends StatelessWidget {
                 ],
               ),
             ),
-            FlatButton(
-              color: Colors.indigo[50],
+            TextButton(
+              style: TextButton.styleFrom(
+                primary: Colors.indigo[50],
+              ),
               onPressed: () {
                 Navigator.pushNamed(context, '/Restart');
               },
@@ -43,8 +47,10 @@ class Setting extends StatelessWidget {
                 ],
               ),
             ),
-            FlatButton(
-              color: Colors.indigo[50],
+            TextButton(
+              style: TextButton.styleFrom(
+                primary: Colors.indigo[50],
+              ),
               onPressed: () {
                 Navigator.pushNamed(context, '/ParameterOption');
               },
@@ -159,8 +165,9 @@ class _NwOptionsState extends State<NwOptions> {
                                     keyboardType:
                                         TextInputType.numberWithOptions(
                                             decimal: true),
-                                    inputFormatters: <TextInputFormatter>[
-                                      WhitelistingTextInputFormatter.digitsOnly
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter.allow(
+                                          RegExp('[0-9]'))
                                     ],
                                     // Only numbers can be entered
                                     textAlign: TextAlign.center,
@@ -194,8 +201,9 @@ class _NwOptionsState extends State<NwOptions> {
                                 Container(
                                   width: 60,
                                   child: TextFormField(
-                                    inputFormatters: <TextInputFormatter>[
-                                      WhitelistingTextInputFormatter.digitsOnly
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter.allow(
+                                          RegExp('[0-9]'))
                                     ],
                                     keyboardType: TextInputType.number,
                                     textAlign: TextAlign.center,
@@ -263,8 +271,9 @@ class _NwOptionsState extends State<NwOptions> {
                                 Container(
                                   width: 60,
                                   child: TextFormField(
-                                    inputFormatters: <TextInputFormatter>[
-                                      WhitelistingTextInputFormatter.digitsOnly
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter.allow(
+                                          RegExp('[0-9]'))
                                     ],
                                     keyboardType: TextInputType.number,
                                     textAlign: TextAlign.center,
@@ -320,8 +329,9 @@ class _NwOptionsState extends State<NwOptions> {
                                 Container(
                                   width: 60,
                                   child: TextFormField(
-                                    inputFormatters: <TextInputFormatter>[
-                                      WhitelistingTextInputFormatter.digitsOnly
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter.allow(
+                                          RegExp('[0-9]'))
                                     ],
                                     keyboardType: TextInputType.number,
                                     textAlign: TextAlign.center,
@@ -356,8 +366,9 @@ class _NwOptionsState extends State<NwOptions> {
                                 Container(
                                   width: 60,
                                   child: TextFormField(
-                                    inputFormatters: <TextInputFormatter>[
-                                      WhitelistingTextInputFormatter.digitsOnly
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter.allow(
+                                          RegExp('[0-9]'))
                                     ],
                                     keyboardType: TextInputType.number,
                                     textAlign: TextAlign.center,
@@ -392,8 +403,9 @@ class _NwOptionsState extends State<NwOptions> {
                                 Container(
                                   width: 60,
                                   child: TextFormField(
-                                    inputFormatters: <TextInputFormatter>[
-                                      WhitelistingTextInputFormatter.digitsOnly
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter.allow(
+                                          RegExp('[0-9]'))
                                     ],
                                     keyboardType: TextInputType.number,
                                     textAlign: TextAlign.center,
@@ -428,8 +440,9 @@ class _NwOptionsState extends State<NwOptions> {
                                 Container(
                                   width: 60,
                                   child: TextField(
-                                    inputFormatters: <TextInputFormatter>[
-                                      WhitelistingTextInputFormatter.digitsOnly
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter.allow(
+                                          RegExp('[0-9]'))
                                     ],
                                     keyboardType:
                                         TextInputType.numberWithOptions(
@@ -488,8 +501,9 @@ class _NwOptionsState extends State<NwOptions> {
                                   width: 60,
                                   child: TextFormField(
                                     keyboardType: TextInputType.number,
-                                    inputFormatters: <TextInputFormatter>[
-                                      WhitelistingTextInputFormatter.digitsOnly
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter.allow(
+                                          RegExp('[0-9]'))
                                     ],
                                     textAlign: TextAlign.center,
                                     onChanged: (String value) {
@@ -524,8 +538,9 @@ class _NwOptionsState extends State<NwOptions> {
                                   width: 60,
                                   child: TextFormField(
                                     keyboardType: TextInputType.number,
-                                    inputFormatters: <TextInputFormatter>[
-                                      WhitelistingTextInputFormatter.digitsOnly
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter.allow(
+                                          RegExp('[0-9]'))
                                     ],
                                     textAlign: TextAlign.center,
                                     focusNode: textSecondFocusNode2,
@@ -560,8 +575,9 @@ class _NwOptionsState extends State<NwOptions> {
                                   width: 60,
                                   child: TextFormField(
                                     keyboardType: TextInputType.number,
-                                    inputFormatters: <TextInputFormatter>[
-                                      WhitelistingTextInputFormatter.digitsOnly
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter.allow(
+                                          RegExp('[0-9]'))
                                     ],
                                     textAlign: TextAlign.center,
                                     focusNode: textThirdFocusNode2,
@@ -596,8 +612,9 @@ class _NwOptionsState extends State<NwOptions> {
                                   width: 60,
                                   child: TextFormField(
                                     keyboardType: TextInputType.number,
-                                    inputFormatters: <TextInputFormatter>[
-                                      WhitelistingTextInputFormatter.digitsOnly
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter.allow(
+                                          RegExp('[0-9]'))
                                     ],
                                     textAlign: TextAlign.center,
                                     focusNode: textFourthFocusNode2,
@@ -651,7 +668,7 @@ class _NwOptionsState extends State<NwOptions> {
                       padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
                       child: Row(
                         children: <Widget>[
-                          RaisedButton(
+                          ElevatedButton(
                               onPressed: () {
                                 String ip = controller11.text +
                                     "." +
@@ -690,10 +707,10 @@ class _NwOptionsState extends State<NwOptions> {
 }
 
 class RestartOptions extends StatelessWidget {
-  TextEditingController controller = new TextEditingController();
-  TextEditingController controller2 = new TextEditingController();
+  final TextEditingController controller = new TextEditingController();
+  final TextEditingController controller2 = new TextEditingController();
 
-  bool value = false;
+  final bool value = false;
 
   @override
   Widget build(BuildContext context) {
@@ -710,8 +727,10 @@ class RestartOptions extends StatelessWidget {
               children: <Widget>[
                 Padding(
                   padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-                  child: RaisedButton(
-                    color: Colors.indigo[50],
+                  child: ElevatedButton(
+                    style: TextButton.styleFrom(
+                      primary: Colors.indigo[50],
+                    ),
                     child: Text(
                       'Restart MC',
                       style:
@@ -724,8 +743,10 @@ class RestartOptions extends StatelessWidget {
                 ),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-                  child: RaisedButton(
-                    color: Colors.indigo[50],
+                  child: ElevatedButton(
+                    style: TextButton.styleFrom(
+                      primary: Colors.indigo[50],
+                    ),
                     child: Text(
                       'Restart     HWController',
                       style:
@@ -738,8 +759,10 @@ class RestartOptions extends StatelessWidget {
                 ),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-                  child: RaisedButton(
-                    color: Colors.indigo[50],
+                  child: ElevatedButton(
+                    style: TextButton.styleFrom(
+                      primary: Colors.indigo[50],
+                    ),
                     child: Text(
                       'Restart FPGA',
                       style:

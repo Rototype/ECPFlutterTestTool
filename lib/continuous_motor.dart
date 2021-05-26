@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'ws_manage.dart';
 import 'package:provider/provider.dart';
+
+import 'ws_manage.dart';
 
 class DCMotor extends StatelessWidget {
   @override
@@ -61,8 +62,10 @@ class _DCMotorPageState extends State<DCMotorPage> {
                           padding: const EdgeInsets.all(10.0),
                           child: Container(
                             width: 150,
-                            child: RaisedButton(
-                              color: Colors.indigo[50],
+                            child: ElevatedButton(
+                              style: TextButton.styleFrom(
+                                primary: Colors.indigo[50],
+                              ),
                               child: Text('Off',
                                   style: TextStyle(
                                       fontSize: 15,
@@ -78,8 +81,10 @@ class _DCMotorPageState extends State<DCMotorPage> {
                           padding: const EdgeInsets.all(10.0),
                           child: Container(
                             width: 150,
-                            child: RaisedButton(
-                              color: Colors.indigo[50],
+                            child: ElevatedButton(
+                              style: TextButton.styleFrom(
+                                primary: Colors.indigo[50],
+                              ),
                               onPressed: () {
                                 user.send(
                                     'CMD_SetDCMotor@Main(${user.index - 1},brake)');
@@ -101,8 +106,10 @@ class _DCMotorPageState extends State<DCMotorPage> {
                               padding: const EdgeInsets.all(10.0),
                               child: Container(
                                 width: 210,
-                                child: RaisedButton(
-                                  color: Colors.indigo[50],
+                                child: ElevatedButton(
+                                  style: TextButton.styleFrom(
+                                    primary: Colors.indigo[50],
+                                  ),
                                   child: Text('Run Clockwise',
                                       style: TextStyle(
                                           fontSize: 15,
@@ -123,8 +130,10 @@ class _DCMotorPageState extends State<DCMotorPage> {
                               padding: const EdgeInsets.all(10.0),
                               child: Container(
                                 width: 210,
-                                child: RaisedButton(
-                                  color: Colors.indigo[50],
+                                child: ElevatedButton(
+                                  style: TextButton.styleFrom(
+                                    primary: Colors.indigo[50],
+                                  ),
                                   onPressed: () {
                                     if (!isChecked) {
                                       user.send(

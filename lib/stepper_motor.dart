@@ -1,9 +1,9 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'ws_manage.dart';
 import 'package:provider/provider.dart';
+
+import 'ws_manage.dart';
 
 class MotorST extends StatelessWidget {
   const MotorST({Key key}) : super(key: key);
@@ -198,8 +198,10 @@ class _MotorStPageState extends State<MotorStPage> {
             Container(
               width: 200,
               child: (isStartedNegative == false && isStartedPositive == false)
-                  ? RaisedButton(
-                      color: Colors.indigo[50],
+                  ? ElevatedButton(
+                      style: TextButton.styleFrom(
+                        primary: Colors.indigo[50],
+                      ),
                       child: Text('Motor Start',
                           style: TextStyle(
                               fontSize: 15, fontWeight: FontWeight.bold)),
@@ -215,8 +217,10 @@ class _MotorStPageState extends State<MotorStPage> {
                             'CMD_SetStepperMotorSpeed@Main(${user.index - 1},$resolution2,$spd1,$acc,$load)');
                       },
                     )
-                  : RaisedButton(
-                      color: Colors.indigo[50],
+                  : ElevatedButton(
+                      style: TextButton.styleFrom(
+                        primary: Colors.indigo[50],
+                      ),
                       child: Text('Motor Start',
                           style: TextStyle(
                               fontSize: 15, fontWeight: FontWeight.bold)),
@@ -320,8 +324,10 @@ class _MotorStPageState extends State<MotorStPage> {
             Container(
               width: 200,
               child: (isStartedNegative == false && isStartedPositive == false)
-                  ? RaisedButton(
-                      color: Colors.indigo[50],
+                  ? ElevatedButton(
+                      style: TextButton.styleFrom(
+                        primary: Colors.indigo[50],
+                      ),
                       child: Text('Motor Start',
                           style: TextStyle(
                               fontSize: 15, fontWeight: FontWeight.bold)),
@@ -337,8 +343,10 @@ class _MotorStPageState extends State<MotorStPage> {
                             'CMD_SetStepperMotorSpeed@Main(${user.index - 1},$resolution2,$spd1,$acc,$load)');
                       },
                     )
-                  : RaisedButton(
-                      color: Colors.indigo[50],
+                  : ElevatedButton(
+                      style: TextButton.styleFrom(
+                        primary: Colors.indigo[50],
+                      ),
                       child: Text('Motor Start',
                           style: TextStyle(
                               fontSize: 15, fontWeight: FontWeight.bold)),
@@ -495,8 +503,10 @@ class _MotorStPageState extends State<MotorStPage> {
             ),
             Container(
               width: 200,
-              child: RaisedButton(
-                color: Colors.indigo[50],
+              child: ElevatedButton(
+                style: TextButton.styleFrom(
+                  primary: Colors.indigo[50],
+                ),
                 child: Text('Motor Speed Change',
                     style:
                         TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
@@ -657,8 +667,10 @@ class _MotorStPageState extends State<MotorStPage> {
             ),
             Container(
               width: 200,
-              child: RaisedButton(
-                color: Colors.indigo[50],
+              child: ElevatedButton(
+                style: TextButton.styleFrom(
+                  primary: Colors.indigo[50],
+                ),
                 child: Text('Motor Speed Change',
                     style:
                         TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
@@ -694,8 +706,10 @@ class _MotorStPageState extends State<MotorStPage> {
                                     children: <Widget>[
                                       Container(
                                         width: 250,
-                                        child: RaisedButton(
-                                          color: Colors.indigo[50],
+                                        child: ElevatedButton(
+                                          style: TextButton.styleFrom(
+                                            primary: Colors.indigo[50],
+                                          ),
                                           child: Text('Motor Stop',
                                               style: TextStyle(
                                                   fontSize: 15,
@@ -720,8 +734,10 @@ class _MotorStPageState extends State<MotorStPage> {
                                       children: <Widget>[
                                         Container(
                                           width: 250,
-                                          child: RaisedButton(
-                                            color: Colors.indigo[50],
+                                          child: ElevatedButton(
+                                            style: TextButton.styleFrom(
+                                              primary: Colors.indigo[50],
+                                            ),
                                             child: Text('Motor Stop',
                                                 style: TextStyle(
                                                     fontSize: 15,
@@ -982,8 +998,10 @@ class _MotorStPageState extends State<MotorStPage> {
                                       ),
                                       Container(
                                         width: 250,
-                                        child: RaisedButton(
-                                          color: Colors.indigo[50],
+                                        child: ElevatedButton(
+                                          style: TextButton.styleFrom(
+                                            primary: Colors.indigo[50],
+                                          ),
                                           child: Text('Execute constant Speed',
                                               style: TextStyle(
                                                   fontSize: 15,
@@ -1217,8 +1235,10 @@ class _MotorStPageState extends State<MotorStPage> {
                                       ),
                                       Container(
                                         width: 250,
-                                        child: RaisedButton(
-                                          color: Colors.indigo[50],
+                                        child: ElevatedButton(
+                                          style: TextButton.styleFrom(
+                                            primary: Colors.indigo[50],
+                                          ),
                                           child: Text('Execute at Max Speed',
                                               style: TextStyle(
                                                   fontSize: 15,
@@ -1477,15 +1497,15 @@ class _MotorStPageState extends State<MotorStPage> {
           items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(
               icon: Icon(Icons.show_chart),
-              title: Text('Continuous'),
+              label: ('Continuous'),
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.apps),
-              title: Text('Steps'),
+              label: ('Steps'),
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.settings_applications),
-              title: Text('Configuration'),
+              label: ('Configuration'),
             )
           ],
           selectedItemColor: Colors.red[800],

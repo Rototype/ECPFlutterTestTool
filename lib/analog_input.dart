@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'ws_manage.dart';
 import 'package:provider/provider.dart';
+
+import 'ws_manage.dart';
 
 class AnalogicInputs extends StatelessWidget {
   //TextEditingController controller = new TextEditingController();
@@ -48,7 +49,7 @@ class AnalogInputPage extends StatelessWidget {
                     ? Padding(
                         padding: const EdgeInsets.all(20.0),
                         child: Text(
-                            'Readed Value: ${user.inputList[user.index - 1]}',
+                            'Read Value: ${user.inputList[user.index - 1]}',
                             style: TextStyle(
                                 fontSize: 15, fontWeight: FontWeight.bold)),
                       )

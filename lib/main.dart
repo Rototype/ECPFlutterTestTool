@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:provaProvider/settings.dart';
+import 'settings.dart';
 import 'package:provider/provider.dart';
+
 import 'analog_input.dart';
+import 'continuous_motor.dart';
+import 'digital_output.dart';
 import 'image.dart';
 import 'login_page.dart';
 import 'photocells.dart';
-import 'ws_manage.dart';
-import 'continuous_motor.dart';
 import 'solenoid.dart';
 import 'stepper_motor.dart';
-import 'digital_output.dart';
+import 'ws_manage.dart';
 
 void main() => runApp(
     ChangeNotifierProvider(create: (_) => WebSocketClass(), child: MyApp()));

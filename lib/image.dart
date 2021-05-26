@@ -1,9 +1,10 @@
 import 'dart:convert';
-import 'dart:io';
-import 'package:flutter/material.dart';
-import 'package:provaProvider/ws_manage.dart';
-import 'package:provider/provider.dart';
 import 'dart:typed_data';
+
+import 'package:flutter/material.dart';
+import 'ws_manage.dart';
+import 'package:provider/provider.dart';
+
 import 'websocket.dart';
 
 class ImageData {
@@ -77,8 +78,10 @@ class _ImagePickerPageState extends State<ImagePickerPage> {
                                   border:
                                       Border.all(color: Colors.red, width: 5)),
                               child: Image.memory(data)),
-                          FlatButton(
-                            color: Colors.indigo[50],
+                          TextButton(
+                            style: TextButton.styleFrom(
+                              primary: Colors.indigo[50],
+                            ),
                             child: Text("Send Image",
                                 style: TextStyle(
                                     fontSize: 15, fontWeight: FontWeight.bold)),
@@ -105,8 +108,10 @@ class _ImagePickerPageState extends State<ImagePickerPage> {
                                         border: Border.all(
                                             color: Colors.red, width: 5)),
                                     child: Image.memory(user.image)),
-                                FlatButton(
-                                  color: Colors.indigo[50],
+                                TextButton(
+                                  style: TextButton.styleFrom(
+                                    primary: Colors.indigo[50],
+                                  ),
                                   child: Text("Delete Image",
                                       style: TextStyle(
                                           fontSize: 15,

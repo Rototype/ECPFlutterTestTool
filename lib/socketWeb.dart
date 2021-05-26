@@ -1,11 +1,11 @@
-import 'websocket.dart';
+import 'package:image_picker_web/image_picker_web.dart';
 import 'package:web_socket_channel/html.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
-import 'package:image_picker_web/image_picker_web.dart';
-import 'image.dart';
+
+import 'websocket.dart';
 
 class WebKeyFinder implements SocketFinder {
-  var imageWeb;
+  dynamic imageWeb;
   HtmlWebSocketChannel channel;
 
   WebKeyFinder() {

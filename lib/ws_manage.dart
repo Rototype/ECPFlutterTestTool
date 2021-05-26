@@ -2,9 +2,11 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
 import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
+
 import 'websocket.dart';
 
 enum Status {
@@ -14,7 +16,7 @@ enum Status {
 
 class InputClass {
   int id;
-  FlatButton button;
+  TextButton button;
 
   InputClass(id, button) {
     this.id = id;
@@ -24,7 +26,7 @@ class InputClass {
 
 class StepperMotorClass {
   int id;
-  FlatButton button;
+  TextButton button;
 
   StepperMotorClass(id, button) {
     this.id = id;
@@ -34,7 +36,7 @@ class StepperMotorClass {
 
 class DcMotorClass {
   int id;
-  FlatButton button;
+  TextButton button;
 
   DcMotorClass(id, button) {
     this.id = id;
@@ -44,7 +46,7 @@ class DcMotorClass {
 
 class SolenoidClass {
   int id;
-  FlatButton button;
+  TextButton button;
 
   SolenoidClass(id, button) {
     this.id = id;
@@ -77,11 +79,11 @@ class WebSocketClass with ChangeNotifier {
 
   Timer timerTimeout = new Timer(Duration(seconds: 0), () {});
 
-  List<String> messageStringHWcontroller = new List<String>();
-  List<String> messageStringMain = new List<String>();
+  List<String> messageStringHWcontroller = <String>[];
+  List<String> messageStringMain = <String>[];
 
-  List<int> outputList = new List<int>();
-  List<int> inputList = new List<int>();
+  List<int> outputList = <int>[];
+  List<int> inputList = <int>[];
 
   Uint8List image;
   int photocellsIndex = -1;
@@ -95,12 +97,12 @@ class WebSocketClass with ChangeNotifier {
 
   TextEditingController ipurl = new TextEditingController();
 
-  List<List<FlatButton>> photocellButtons = new List<List<FlatButton>>();
-  List<InputClass> inputButtons = new List<InputClass>();
-  List<DcMotorClass> dcMotorButtons = new List<DcMotorClass>();
-  List<StepperMotorClass> stepperMotorButtons = new List<StepperMotorClass>();
-  List<SolenoidClass> solenoidButtons = new List<SolenoidClass>();
-  List<OutputClass> outputButtons = new List<OutputClass>();
+  List<List<TextButton>> photocellButtons = <List<TextButton>>[];
+  List<InputClass> inputButtons = <InputClass>[];
+  List<DcMotorClass> dcMotorButtons = <DcMotorClass>[];
+  List<StepperMotorClass> stepperMotorButtons = <StepperMotorClass>[];
+  List<SolenoidClass> solenoidButtons = <SolenoidClass>[];
+  List<OutputClass> outputButtons = <OutputClass>[];
 
   WebSocketClass();
 
@@ -246,20 +248,20 @@ class WebSocketClass with ChangeNotifier {
 
   void generateButtonsList(BuildContext context) {
     try {
-      photocellButtons = new List<List<FlatButton>>();
-      inputButtons = new List<InputClass>();
-      stepperMotorButtons = new List<StepperMotorClass>();
-      dcMotorButtons = new List<DcMotorClass>();
-      solenoidButtons = new List<SolenoidClass>();
-      outputButtons = new List<OutputClass>();
+      photocellButtons = <List<TextButton>>[];
+      inputButtons = <InputClass>[];
+      stepperMotorButtons = <StepperMotorClass>[];
+      dcMotorButtons = <DcMotorClass>[];
+      solenoidButtons = <SolenoidClass>[];
+      outputButtons = <OutputClass>[];
       photocellsIndex = 0;
 
       for (int i = 0; i < 5; i++) {
-        photocellButtons.add(new List<FlatButton>());
+        photocellButtons.add(<TextButton>[]);
       }
 
       for (int i = 0, i2 = 1; i < 50; i++, i2++) {
-        photocellButtons[photocellsIndex].add(new FlatButton(
+        photocellButtons[photocellsIndex].add(new TextButton(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
@@ -291,7 +293,7 @@ class WebSocketClass with ChangeNotifier {
       for (int i = 0; i < 5; i++) {
         inputButtons.add(new InputClass(
             i + 1,
-            new FlatButton(
+            new TextButton(
               onPressed: () {
                 index = i + 1;
                 Navigator.pushNamed(context, '/inputAnalogicPage');
@@ -306,7 +308,7 @@ class WebSocketClass with ChangeNotifier {
       for (int i = 0; i < 20; i++) {
         stepperMotorButtons.add(new StepperMotorClass(
             i + 1,
-            new FlatButton(
+            new TextButton(
                 onPressed: () {
                   index = i + 1;
                   Navigator.pushNamed(context, '/StepperMotorPage');
@@ -318,7 +320,7 @@ class WebSocketClass with ChangeNotifier {
       for (int i = 0; i < 10; i++) {
         dcMotorButtons.add(new DcMotorClass(
             i + 1,
-            new FlatButton(
+            new TextButton(
                 onPressed: () {
                   index = i + 1;
                   Navigator.pushNamed(context, '/DCMotorPage');
@@ -328,7 +330,7 @@ class WebSocketClass with ChangeNotifier {
                         fontSize: 15, fontWeight: FontWeight.bold)))));
         solenoidButtons.add(new SolenoidClass(
             i + 1,
-            new FlatButton(
+            new TextButton(
                 onPressed: () {
                   index = i + 1;
                   Navigator.pushNamed(context, '/SolenoidPage');
