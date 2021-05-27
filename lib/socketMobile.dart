@@ -8,8 +8,7 @@ import 'websocket.dart';
 class SharedPrefKeyFinder implements SocketFinder {
   IOWebSocketChannel channel;
   File imageMobile;
-  final picker = ImagePicker();
-
+  
   SharedPrefKeyFinder() {
     print('Mobile OK');
   }
@@ -18,14 +17,12 @@ class SharedPrefKeyFinder implements SocketFinder {
     return false;
   }
 
-
   Future<void> pickImage() async {
-    final pickedFile = await picker.getImage(source: ImageSource.gallery);
-    if (pickedFile != null) {
-      imageMobile = File(pickedFile.path);
-    }
+    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+    imageMobile = image;
   }
 
+  
   getImage() async {
     return await imageMobile.readAsBytes();
   }
