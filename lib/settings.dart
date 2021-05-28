@@ -19,9 +19,6 @@ class Setting extends StatelessWidget {
               onPressed: () {
                 Navigator.pushNamed(context, '/Network');
               },
-              style: TextButton.styleFrom(
-                primary: Colors.indigo[50],
-              ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
@@ -32,9 +29,6 @@ class Setting extends StatelessWidget {
               ),
             ),
             TextButton(
-              style: TextButton.styleFrom(
-                primary: Colors.indigo[50],
-              ),
               onPressed: () {
                 Navigator.pushNamed(context, '/Restart');
               },
@@ -48,9 +42,6 @@ class Setting extends StatelessWidget {
               ),
             ),
             TextButton(
-              style: TextButton.styleFrom(
-                primary: Colors.indigo[50],
-              ),
               onPressed: () {
                 Navigator.pushNamed(context, '/ParameterOption');
               },

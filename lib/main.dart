@@ -75,9 +75,6 @@ class UserInfoPage extends StatelessWidget {
         onPressed: () {
           Navigator.pushNamed(context, '/Photocells');
         },
-        style: TextButton.styleFrom(
-          primary: Colors.indigo[50],
-        ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -87,9 +84,6 @@ class UserInfoPage extends StatelessWidget {
         ),
       ),
       TextButton(
-        style: TextButton.styleFrom(
-          primary: Colors.indigo[50],
-        ),
         onPressed: () {
           Navigator.pushNamed(context, '/inputA');
         },
@@ -102,9 +96,6 @@ class UserInfoPage extends StatelessWidget {
         ),
       ),
       TextButton(
-        style: TextButton.styleFrom(
-          primary: Colors.indigo[50],
-        ),
         onPressed: () {
           Navigator.pushNamed(context, '/StepperMotor');
         },
@@ -117,9 +108,6 @@ class UserInfoPage extends StatelessWidget {
         ),
       ),
       TextButton(
-        style: TextButton.styleFrom(
-          primary: Colors.indigo[50],
-        ),
         onPressed: () {
           Navigator.pushNamed(context, '/DCMotor');
         },
@@ -132,9 +120,6 @@ class UserInfoPage extends StatelessWidget {
         ),
       ),
       TextButton(
-        style: TextButton.styleFrom(
-          primary: Colors.indigo[50],
-        ),
         onPressed: () {
           Navigator.pushNamed(context, '/Solenoids');
         },
@@ -147,9 +132,6 @@ class UserInfoPage extends StatelessWidget {
         ),
       ),
       TextButton(
-        style: TextButton.styleFrom(
-          primary: Colors.indigo[50],
-        ),
         onPressed: () {
           Navigator.pushNamed(context, '/DigitalOutputs');
         },
@@ -162,9 +144,6 @@ class UserInfoPage extends StatelessWidget {
         ),
       ),
       TextButton(
-        style: TextButton.styleFrom(
-          primary: Colors.indigo[50],
-        ),
         onPressed: () {
           Navigator.pushNamed(context, '/Image');
         },
@@ -179,7 +158,7 @@ class UserInfoPage extends StatelessWidget {
     ];
     return Scaffold(
       appBar: AppBar(
-        title: Text('@Main'),
+        title: Text('Main'),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.arrow_back),
