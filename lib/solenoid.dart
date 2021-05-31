@@ -55,9 +55,7 @@ class _SolenoidPageState extends State<SolenoidPage> {
                   Padding(
                     padding: EdgeInsets.fromLTRB(0, 50, 0, 0),
                     child: ElevatedButton(
-                      style: TextButton.styleFrom(
-                        primary: Colors.indigo[50],
-                      ),
+                      
                       onPressed: () {
                         if (isChecked) {
                           user.send(
@@ -77,9 +75,7 @@ class _SolenoidPageState extends State<SolenoidPage> {
                   Padding(
                     padding: EdgeInsets.fromLTRB(0, 35, 0, 0),
                     child: ElevatedButton(
-                      style: TextButton.styleFrom(
-                        primary: Colors.indigo[50],
-                      ),
+                      
                       onPressed: () {
                         user.send(
                             'CMD_SetDCSolenoid@Main(${user.index - 1},0)');

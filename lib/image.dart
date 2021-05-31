@@ -44,6 +44,7 @@ class _ImagePickerPageState extends State<ImagePickerPage> {
           title: Text('Imagine Processing '),
         ),
         floatingActionButton: FloatingActionButton(
+          tooltip: 'Open image',
           child: Icon(Icons.open_in_browser),
           onPressed: () async {
             if (wSocket.isWeb()) {

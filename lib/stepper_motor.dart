@@ -199,9 +199,6 @@ class _MotorStPageState extends State<MotorStPage> {
               width: 200,
               child: (isStartedNegative == false && isStartedPositive == false)
                   ? ElevatedButton(
-                      style: TextButton.styleFrom(
-                        primary: Colors.indigo[50],
-                      ),
                       child: Text('Motor Start',
                           style: TextStyle(
                               fontSize: 15, fontWeight: FontWeight.bold)),
@@ -218,9 +215,6 @@ class _MotorStPageState extends State<MotorStPage> {
                       },
                     )
                   : ElevatedButton(
-                      style: TextButton.styleFrom(
-                        primary: Colors.indigo[50],
-                      ),
                       child: Text('Motor Start',
                           style: TextStyle(
                               fontSize: 15, fontWeight: FontWeight.bold)),
@@ -325,9 +319,6 @@ class _MotorStPageState extends State<MotorStPage> {
               width: 200,
               child: (isStartedNegative == false && isStartedPositive == false)
                   ? ElevatedButton(
-                      style: TextButton.styleFrom(
-                        primary: Colors.indigo[50],
-                      ),
                       child: Text('Motor Start',
                           style: TextStyle(
                               fontSize: 15, fontWeight: FontWeight.bold)),
@@ -344,9 +335,6 @@ class _MotorStPageState extends State<MotorStPage> {
                       },
                     )
                   : ElevatedButton(
-                      style: TextButton.styleFrom(
-                        primary: Colors.indigo[50],
-                      ),
                       child: Text('Motor Start',
                           style: TextStyle(
                               fontSize: 15, fontWeight: FontWeight.bold)),

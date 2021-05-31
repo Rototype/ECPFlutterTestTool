@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'settings.dart';
 import 'package:provider/provider.dart';
 
@@ -12,40 +13,59 @@ import 'solenoid.dart';
 import 'stepper_motor.dart';
 import 'ws_manage.dart';
 
-void main() => runApp(
-    ChangeNotifierProvider(create: (_) => WebSocketClass(), child: MyApp()));
-TextEditingController controller = TextEditingController();
+void main() async {
+  WidgetsFlutterBinding
+      .ensureInitialized(); // this line is needed to use async/await in main()
 
-List<Color> color = [Colors.lightBlue[200]];
+  final prefs = await SharedPreferences.getInstance();
+
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(  create: (_) => WebSocketClass(prefs)), 
+        ChangeNotifierProvider(  create: (_) => ThemeChangerClass(prefs)),
+      ],
+      child: MyApp()
+    )
+  );
+}
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(
-        primarySwatch: Colors.red,
-      ),
-      home: HomePage(),
-      routes: {
-        '/Photocells': (_) => Photocells(),
-        '/PhotocellPage': (_) => PhotocellPage(),
-        '/inputA': (_) => AnalogicInputs(),
-        '/inputAnalogPage': (_) => AnalogInputPage(),
-        '/StepperMotor': (_) => MotorST(),
-        '/StepperMotorPage': (_) => MotorStPage(),
-        '/DCMotor': (_) => DCMotor(),
-        '/DCMotorPage': (_) => DCMotorPage(),
-        '/Solenoids': (_) => Solenoid(),
-        '/SolenoidPage': (_) => SolenoidPage(),
-        '/DigitalOutputs': (_) => Output(),
-        '/Image': (_) => ImagePickerPage(),
-        '/Settings': (_) => Setting(),
-        '/Network': (_) => NwOptions(),
-        '/Restart': (_) => RestartOptions(),
-        '/ParameterOption': (_) => HwcOptions(),
-        '/IpConfig': (_) => IpConfig(),
-      },
-    );
+      return Builder(builder: (BuildContext context) {
+        final themeChanger = Provider.of<ThemeChangerClass>(context);
+        return MaterialApp(
+          themeMode: themeChanger.themeMode,
+          theme: ThemeData(
+            brightness: Brightness.light,
+            primarySwatch: Colors.red,
+          ),
+          darkTheme: ThemeData(
+            brightness: Brightness.dark,
+          ),
+          home: HomePage(),
+          routes: {
+            '/Photocells': (_) => Photocells(),
+            '/PhotocellPage': (_) => PhotocellPage(),
+            '/inputA': (_) => AnalogicInputs(),
+            '/inputAnalogPage': (_) => AnalogInputPage(),
+            '/StepperMotor': (_) => MotorST(),
+            '/StepperMotorPage': (_) => MotorStPage(),
+            '/DCMotor': (_) => DCMotor(),
+            '/DCMotorPage': (_) => DCMotorPage(),
+            '/Solenoids': (_) => Solenoid(),
+            '/SolenoidPage': (_) => SolenoidPage(),
+            '/DigitalOutputs': (_) => Output(),
+            '/Image': (_) => ImagePickerPage(),
+            '/Settings': (_) => Setting(),
+            '/Network': (_) => NwOptions(),
+            '/Restart': (_) => RestartOptions(),
+            '/ParameterOption': (_) => HwcOptions(),
+            '/IpConfig': (_) => IpConfig(),
+          },
+        );
+      });
   }
 }
 
@@ -158,11 +178,11 @@ class UserInfoPage extends StatelessWidget {
     ];
     return Scaffold(
       appBar: AppBar(
-        title: Text('Main'),
+        title: Text('Main menu'),
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.arrow_back),
-            tooltip: 'go Back',
+            icon: Icon(Icons.close),
+            tooltip: 'Disconnect',
             onPressed: () {
               user.disconnect();
             },
@@ -173,10 +193,11 @@ class UserInfoPage extends StatelessWidget {
           child: ListView(
               padding: EdgeInsets.fromLTRB(80, 100, 80, 50), children: func)),
       floatingActionButton: FloatingActionButton(
+        tooltip: 'Board Options',
         onPressed: () {
           Navigator.pushNamed(context, '/Settings');
         },
-        child: Icon(Icons.settings),
+        child: Icon(Icons.build),
       ),
     );
   }

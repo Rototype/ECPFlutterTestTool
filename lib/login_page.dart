@@ -66,6 +66,7 @@ class _LoginPageState extends State<LoginPage> {
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.settings),
+        tooltip: 'Settings',
         onPressed: () {
           ipConfig = true;
           Navigator.pushNamed(context, '/IpConfig');
@@ -76,41 +77,46 @@ class _LoginPageState extends State<LoginPage> {
 }
 
 class IpConfig extends StatelessWidget {
+  final TextEditingController _urlcontroller = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
-    return Consumer(builder: (__, WebSocketClass user, _) {
-      if (user.ipurl.text == "") {
-        user.ipurl.text = "ws://127.0.0.1:5001";
-      }
-      return Scaffold(
+    return Scaffold(
         appBar: AppBar(
-          title: Text('Ip Configuration'),
+          title: Text('Configuration'),
         ),
-        body: Center(
-          child: Row(
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.fromLTRB(15, 5, 0, 0),
-                child: Container(
-                  width: 100,
-                  child: Text(
-                    'Full URL: ',
-                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ),
-              Padding(
-                  padding: EdgeInsets.fromLTRB(15, 5, 0, 0),
-                  child: Container(
-                    width: 200,
-                    child: TextField(
-                      controller: user.ipurl,
-                    ),
-                  ))
-            ],
-          ),
-        ),
-      );
-    });
+        body: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                  Consumer(builder: (__, WebSocketClass user, _) {
+                    _urlcontroller.text = user.ws_url;
+                    return FocusScope(
+                        onFocusChange: (hasFocus) {
+                          if (!hasFocus)
+                            user.ws_url = _urlcontroller.text; // validate if we leave the page
+                        },
+                        child: TextFormField(
+                          autofocus: true,
+                          controller: _urlcontroller,
+                          decoration: InputDecoration(
+                            labelText: 'Websocket URL:',
+                            hintText: 'ws://127.0.0.1:5001',
+                          ),
+                          onEditingComplete: () =>
+                              user.ws_url = _urlcontroller.text,
+                        ));
+                  }),
+                  Consumer(builder: (__, ThemeChangerClass user, _) {
+                    return CheckboxListTile(
+                      title: Text("Yes, My eyes are hurt by the light themes"),
+                      value: user.isDarkMode,
+                      controlAffinity: ListTileControlAffinity.leading,
+                      onChanged: (checked) => user.isDarkMode = checked,
+                    );
+                  }),
+                ])));
   }
 }

@@ -5,6 +5,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 import 'websocket.dart';
@@ -64,13 +65,39 @@ class OutputClass {
   }
 }
 
+class ThemeChangerClass with ChangeNotifier {
+  SharedPreferences _prefs;
+
+  ThemeChangerClass(SharedPreferences _p) {
+    _prefs = _p;
+  }
+
+  get themeMode => isDarkMode ? ThemeMode.dark : ThemeMode.light;
+
+  bool get isDarkMode => _prefs.getBool('isDarkMode') ?? false;
+  set isDarkMode(bool _dark) {
+    _prefs.setBool('isDarkMode', _dark);
+    notifyListeners();
+  }
+}
+
 class WebSocketClass with ChangeNotifier {
+  SharedPreferences _prefs;
+
+  WebSocketClass(SharedPreferences _p) {
+    _prefs = _p;
+  }
+
+  String get ws_url =>
+      _prefs.getString('ws_url') ??
+      'ws://127.0.0.1:5001'; // loopback as default
+  set ws_url(String _url) {
+    _prefs.setString('ws_url', _url);
+    notifyListeners();
+  }
+
   WebSocketChannel _channel;
   SocketFinder wSocket;
-
-  //String _url = "ws://127.0.0.1:5001";
-  //String _url = "ws://192.168.1.101:5001";
-  //String _url = "ws://192.168.1.37:8080";
 
   Status status = Status.Unauthenticated;
 
@@ -93,10 +120,6 @@ class WebSocketClass with ChangeNotifier {
   BigInt result = BigInt.from(0);
   int analogInput = 0;
 
-  String url;
-
-  TextEditingController ipurl = new TextEditingController();
-
   List<List<TextButton>> photocellButtons = <List<TextButton>>[];
   List<InputClass> inputButtons = <InputClass>[];
   List<DcMotorClass> dcMotorButtons = <DcMotorClass>[];
@@ -104,12 +127,10 @@ class WebSocketClass with ChangeNotifier {
   List<SolenoidClass> solenoidButtons = <SolenoidClass>[];
   List<OutputClass> outputButtons = <OutputClass>[];
 
-  WebSocketClass();
-
   Future<bool> wsconnect() async {
     try {
       wSocket = new SocketFinder();
-      _channel = wSocket.getSocketValue(ipurl.text);
+      _channel = wSocket.getSocketValue(ws_url);
 
       if (_channel == null) {
         timerPeriod.cancel();
@@ -128,47 +149,48 @@ class WebSocketClass with ChangeNotifier {
             timerTimeout = Timer(Duration(seconds: 60), () {
               disconnect();
             });
+  
+            String message2 = message;
+
+
+            //
+            // Controlli eseguiti tramite la logica dei comandi del WebServer di Prova
+            //
+            List<String> split = message2.split(RegExp("[!_@]+"));
+
+            if (split[1] == 'ReadAnalogInput') {
+              split = message2.split(RegExp("[\s_@)(!]+"));
+              if (indexReadAnalog == 5) {
+                indexReadAnalog = 0;
+              }
+              if (indexReadAnalog == 0) {
+                inputList[0] = int.parse(split[3]);
+              }
+              if (indexReadAnalog == 1) {
+                inputList[1] = int.parse(split[3]);
+              }
+              if (indexReadAnalog == 2) {
+                inputList[2] = int.parse(split[3]);
+              }
+              if (indexReadAnalog == 3) {
+                inputList[3] = int.parse(split[3]);
+              }
+              if (indexReadAnalog == 4) {
+                inputList[4] = int.parse(split[3]);
+              }
+              indexReadAnalog++;
+            } else if (split[1] == 'ReadDigitalInput') {
+              split = message2.split(RegExp("[_@)(!]+"));
+              result = BigInt.parse(split[3].split('x')[1], radix: 16);
+            } else if (split[1] == "InvertImage") {
+              split = split[2].split('[')[1].split(']');
+              print(split);
+              image = base64.decode(split[0]);
+            } else {
+              print("listened: " + message);
+            }
           } catch (e) {
             print(e);
-          }
-
-          String message2 = message;
-
-          //
-          // Controlli eseguiti tramite la logica dei comandi del WebServer di Prova
-          //
-          List<String> split = message2.split(RegExp("[!_@]+"));
-
-          if (split[1] == 'ReadAnalogInput') {
-            split = message2.split(RegExp("[\s_@)(!]+"));
-            if (indexReadAnalog == 5) {
-              indexReadAnalog = 0;
-            }
-            if (indexReadAnalog == 0) {
-              inputList[0] = int.parse(split[3]);
-            }
-            if (indexReadAnalog == 1) {
-              inputList[1] = int.parse(split[3]);
-            }
-            if (indexReadAnalog == 2) {
-              inputList[2] = int.parse(split[3]);
-            }
-            if (indexReadAnalog == 3) {
-              inputList[3] = int.parse(split[3]);
-            }
-            if (indexReadAnalog == 4) {
-              inputList[4] = int.parse(split[3]);
-            }
-            indexReadAnalog++;
-          } else if (split[1] == 'ReadDigitalInput') {
-            split = message2.split(RegExp("[_@)(!]+"));
-            result = BigInt.parse(split[3].split('x')[1], radix: 16);
-          } else if (split[1] == "InvertImage") {
-            split = split[2].split('[')[1].split(']');
-            print(split);
-            image = base64.decode(split[0]);
-          } else {
-            print("listened: " + message);
           }
 
           notifyListeners();
