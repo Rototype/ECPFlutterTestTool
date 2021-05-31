@@ -8,8 +8,6 @@ import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
-import 'websocket.dart';
-
 enum Status {
   Authenticated,
   Unauthenticated,
@@ -97,7 +95,7 @@ class WebSocketClass with ChangeNotifier {
   }
 
   WebSocketChannel _channel;
-  SocketFinder wSocket;
+
 
   Status status = Status.Unauthenticated;
 
@@ -129,8 +127,9 @@ class WebSocketClass with ChangeNotifier {
 
   Future<bool> wsconnect() async {
     try {
-      wSocket = new SocketFinder();
-      _channel = wSocket.getSocketValue(ws_url);
+      _channel = WebSocketChannel.connect(
+        Uri.parse(ws_url),
+      );
 
       if (_channel == null) {
         timerPeriod.cancel();
@@ -139,7 +138,7 @@ class WebSocketClass with ChangeNotifier {
       } else {
         _channel.stream.listen((message) {
           // onMessage:
-
+          //print('rx:$message');
           try {
             //
             // Gestione Timer timeout
@@ -249,6 +248,7 @@ class WebSocketClass with ChangeNotifier {
   }
 
   void send(String data) {
+    //print('tx:$data');
     try {
       if (!timerTimeout.isActive) {
         timerTimeout = Timer(Duration(seconds: 60), () {

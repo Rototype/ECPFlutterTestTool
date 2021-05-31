@@ -39,7 +39,6 @@ dependencies:
 
   image_picker: 0.7.5
 
-  #image_picker_web: ^2.0.2
   web_socket_channel: ^2.1.0
   percent_indicator: ^3.0.1
 
