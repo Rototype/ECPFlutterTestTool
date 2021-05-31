@@ -13,12 +13,7 @@ abstract class SocketFinder {
   WebSocketChannel getSocketValue(String url);
 
   bool isWeb();
-
-  Future<void> pickImage() async {}
-
-  /// stores a key value pair in the respective storage.
-  getImage() {}
-
+    
   /// factory constructor to return the correct implementation.
   factory SocketFinder() => getSocketFinder();
 }

@@ -5,17 +5,26 @@ import 'package:flutter/material.dart';
 import 'ws_manage.dart';
 import 'package:provider/provider.dart';
 
-import 'websocket.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ImageData {
+
+  ImageData();
+
+  final picker = ImagePicker();
+
   Uint8List data;
   String message;
   String error;
 
-  ImageData(String message, Uint8List data, String error) {
-    this.data = data;
-    this.message = message;
-    this.error = error;
+  Future<void> Pick() async {
+    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      data = await pickedFile.readAsBytes();
+      message = pickedFile.path;
+    } else {
+      error = 'No image selected.';
+    }
   }
 }
 
@@ -25,18 +34,9 @@ class ImagePickerPage extends StatefulWidget {
 }
 
 class _ImagePickerPageState extends State<ImagePickerPage> {
-  Uint8List data;
-  String error;
-  ImageData imageData;
-  String message;
-  String name = '';
-  SocketFinder wSocket;
-
-  var _image;
-
+  final ImageData imageData = ImageData();
   @override
   Widget build(BuildContext context) {
-    wSocket = new SocketFinder();
     var screen = MediaQuery.of(context);
     return Consumer<WebSocketClass>(builder: (_, user, __) {
       return Scaffold(
@@ -44,28 +44,14 @@ class _ImagePickerPageState extends State<ImagePickerPage> {
           title: Text('Imagine Processing '),
         ),
         floatingActionButton: FloatingActionButton(
-          tooltip: 'Open image',
-          child: Icon(Icons.open_in_browser),
-          onPressed: () async {
-            if (wSocket.isWeb()) {
-              await wSocket.pickImage();
-              if (wSocket.getImage() != null) {
-                setState(() {
-                  data = wSocket.getImage();
-                });
-              }
-            } else {
-              await wSocket.pickImage();
-              if (wSocket.getImage() != null) {
-                setState(() async {
-                  data = await wSocket.getImage();
-                });
-              }
-            }
-          },
-        ),
+            tooltip: 'Open image',
+            child: Icon(Icons.open_in_browser),
+            onPressed: () async {
+              await imageData.Pick();
+              if (imageData.data != null) setState(() {});
+            }),
         body: Center(
-          child: _image != null || data != null
+          child: imageData.data != null
               ? ListView(
                   scrollDirection: Axis.vertical,
                   children: <Widget>[
@@ -78,18 +64,15 @@ class _ImagePickerPageState extends State<ImagePickerPage> {
                               decoration: BoxDecoration(
                                   border:
                                       Border.all(color: Colors.red, width: 5)),
-                              child: Image.memory(data)),
+                              child: Image.memory(imageData.data)),
                           TextButton(
-                            style: TextButton.styleFrom(
-                              primary: Colors.indigo[50],
-                            ),
                             child: Text("Send Image",
                                 style: TextStyle(
                                     fontSize: 15, fontWeight: FontWeight.bold)),
                             onPressed: () {
                               try {
                                 user.send(
-                                    "CMD_InvertImage@Main[${base64.encode(data)}]");
+                                    "CMD_InvertImage@Main[${base64.encode(imageData.data)}]");
                               } catch (e) {
                                 print(e);
                               }
