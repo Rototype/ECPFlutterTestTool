@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 
 import 'ws_manage.dart';
@@ -11,20 +10,15 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
-  bool ipConfig = false;
 
   @override
   Widget build(BuildContext context) {
-    SchedulerBinding.instance.addPostFrameCallback((_) => setState(() {
-          if (!ipConfig) {
-            if (Navigator.canPop(context)) {
-              Navigator.pop(context);
-            } else {
-              ipConfig = false;
-            }
-          }
-        }));
     final user = Provider.of<WebSocketClass>(context);
+
+  // return to the first page from any page. 
+  // wait until the widget drawn was complete before invoking navigator (this avoids multiple call to setstate)
+    WidgetsBinding.instance.addPostFrameCallback((_) =>  Navigator.of(context).popUntil((route) => route.isFirst)); 
+
     return Scaffold(
       appBar: AppBar(
         title: Text("Rototype WebSocket Console"),
@@ -58,7 +52,6 @@ class _LoginPageState extends State<LoginPage> {
         child: Icon(Icons.settings),
         tooltip: 'Settings',
         onPressed: () {
-          ipConfig = true;
           Navigator.pushNamed(context, '/IpConfig');
         },
       ),

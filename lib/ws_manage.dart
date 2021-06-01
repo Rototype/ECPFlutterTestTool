@@ -82,12 +82,12 @@ class ThemeChangerClass with ChangeNotifier {
 class WebSocketClass with ChangeNotifier {
   SharedPreferences _prefs;
 
-  final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
+  final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey =
+      GlobalKey<ScaffoldMessengerState>();
 
   WebSocketClass(SharedPreferences _p) {
     _prefs = _p;
   }
-
 
   String get ws_url =>
       _prefs.getString('ws_url') ??
@@ -99,13 +99,12 @@ class WebSocketClass with ChangeNotifier {
 
   WebSocketChannel _channel;
 
-
   Status status = Status.Unauthenticated;
 
   Timer timerPeriod = Timer(Duration(seconds: 1), () {});
   Timer timerInputAnalog = Timer(Duration(seconds: 1), () {});
 
-  Timer timerTimeout = new Timer(Duration(seconds: 0), () {});
+  int missedPing = 0;
 
   List<String> messageStringHWcontroller = <String>[];
   List<String> messageStringMain = <String>[];
@@ -130,6 +129,7 @@ class WebSocketClass with ChangeNotifier {
 
   Future<bool> wsconnect() async {
     try {
+      missedPing = 0;
       _channel = WebSocketChannel.connect(
         Uri.parse(ws_url),
       );
@@ -141,49 +141,56 @@ class WebSocketClass with ChangeNotifier {
       } else {
         _channel.stream.listen((message) {
           //print('rx:$message');
-            timerTimeout.cancel();
-            String message2 = message;
-            List<String> split = message2.split(RegExp("[!_@]+"));
+          String message2 = message;
 
-            if (split[1] == 'ReadAnalogInput') {
-              split = message2.split(RegExp("[\s_@)(!]+"));
-              if (indexReadAnalog == 5) {
-                indexReadAnalog = 0;
-              }
-              if (indexReadAnalog == 0) {
-                inputList[0] = int.parse(split[3]);
-              }
-              if (indexReadAnalog == 1) {
-                inputList[1] = int.parse(split[3]);
-              }
-              if (indexReadAnalog == 2) {
-                inputList[2] = int.parse(split[3]);
-              }
-              if (indexReadAnalog == 3) {
-                inputList[3] = int.parse(split[3]);
-              }
-              if (indexReadAnalog == 4) {
-                inputList[4] = int.parse(split[3]);
-              }
-              indexReadAnalog++;
-            } else if (split[1] == 'ReadDigitalInput') {
-              split = message2.split(RegExp("[_@)(!]+"));
-              result = BigInt.parse(split[3].split('x')[1], radix: 16);
-            } else if (split[1] == "InvertImage") {
-              split = split[2].split('[')[1].split(']');
-              print(split);
-              image = base64.decode(split[0]);
-            } else {
-              print("listened: " + message);
+          try {
+          List<String> split = message2.split(RegExp("[!_@]+"));
+          if (split[1] == 'ReadAnalogInput') {
+            missedPing--; // retrig the polling: keep alive the connection
+            split = message2.split(RegExp("[\s_@)(!]+"));
+            if (indexReadAnalog == 5) {
+              indexReadAnalog = 0;
             }
-
+            if (indexReadAnalog == 0) {
+              inputList[0] = int.parse(split[3]);
+            }
+            if (indexReadAnalog == 1) {
+              inputList[1] = int.parse(split[3]);
+            }
+            if (indexReadAnalog == 2) {
+              inputList[2] = int.parse(split[3]);
+            }
+            if (indexReadAnalog == 3) {
+              inputList[3] = int.parse(split[3]);
+            }
+            if (indexReadAnalog == 4) {
+              inputList[4] = int.parse(split[3]);
+            }
+            indexReadAnalog++;
+          } else if (split[1] == 'ReadDigitalInput') {
+            split = message2.split(RegExp("[_@)(!]+"));
+            result = BigInt.parse(split[3].split('x')[1], radix: 16);
+          } else if (split[1] == "InvertImage") {
+            split = split[2].split('[')[1].split(']');
+            print(split);
+            image = base64.decode(split[0]);
+          } else {
+            print("listened: " + message);
+          }
           notifyListeners();
+
+          } catch (e) {
+            print(e);
+            disconnect('unknown reply from client');
+        }
+
         }, onDone: () {
           disconnect('');
-        }, onError: (error) {
+        }, onError: (e) {
+          print(e);
           disconnect('Connection not accepted by client');
         });
-      }
+      } 
 
       // Timer utilizzato per il poll del WebServer
       for (int i = 0; i < 5; i++) {
@@ -197,8 +204,12 @@ class WebSocketClass with ChangeNotifier {
         send('CMD_ReadDigitalInput@Main#');
       });
 
-      timerInputAnalog = Timer.periodic(Duration(milliseconds: 800), (timer) {
-        send('CMD_ReadAnalogInput@Main($indexReadAnalog)');
+      timerInputAnalog = Timer.periodic(Duration(seconds: 1), (timer) {
+        if (missedPing++ > 3) {
+          disconnect('Missing reply from client');
+        } else {
+          send('CMD_ReadAnalogInput@Main($indexReadAnalog)');
+        }
       });
 
       status = Status.Authenticated;
@@ -213,35 +224,34 @@ class WebSocketClass with ChangeNotifier {
   }
 
   Future<void> disconnect(String message) async {
+
     timerPeriod.cancel();
-    timerTimeout.cancel();
     timerInputAnalog.cancel();
+
+    if (Status == Status.Unauthenticated)
+      return false;
     status = Status.Unauthenticated;
     notifyListeners();
 
     if (!message.isEmpty) {
       scaffoldMessengerKey.currentState.showSnackBar(SnackBar(
-        content: Text(message, textAlign: TextAlign.center,),
+        content: Text(
+          message,
+          textAlign: TextAlign.center,
+        ),
       ));
     }
 
-
     try {
       _channel.sink.close(); // trigger listen onDone
-    } catch (err) {
-      print('sink.close error');
+    } catch (e) {
+      print('sink.close error: $e');
     }
   }
 
   void send(String data) {
     //print('tx:$data');
     try {
-      if (!timerTimeout.isActive) {
-        timerTimeout = Timer(Duration(seconds: 60), () {
-          disconnect("Missing reply from client");
-        });
-      }
-     
       _channel.sink.add(data);
     } catch (err) {
       print(err);
