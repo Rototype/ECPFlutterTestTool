@@ -492,9 +492,6 @@ class _MotorStPageState extends State<MotorStPage> {
             Container(
               width: 200,
               child: ElevatedButton(
-                style: TextButton.styleFrom(
-                  primary: Colors.indigo[50],
-                ),
                 child: Text('Motor Speed Change',
                     style:
                         TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
@@ -656,9 +653,6 @@ class _MotorStPageState extends State<MotorStPage> {
             Container(
               width: 200,
               child: ElevatedButton(
-                style: TextButton.styleFrom(
-                  primary: Colors.indigo[50],
-                ),
                 child: Text('Motor Speed Change',
                     style:
                         TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
@@ -695,9 +689,6 @@ class _MotorStPageState extends State<MotorStPage> {
                                       Container(
                                         width: 250,
                                         child: ElevatedButton(
-                                          style: TextButton.styleFrom(
-                                            primary: Colors.indigo[50],
-                                          ),
                                           child: Text('Motor Stop',
                                               style: TextStyle(
                                                   fontSize: 15,
@@ -723,9 +714,6 @@ class _MotorStPageState extends State<MotorStPage> {
                                         Container(
                                           width: 250,
                                           child: ElevatedButton(
-                                            style: TextButton.styleFrom(
-                                              primary: Colors.indigo[50],
-                                            ),
                                             child: Text('Motor Stop',
                                                 style: TextStyle(
                                                     fontSize: 15,
@@ -987,9 +975,6 @@ class _MotorStPageState extends State<MotorStPage> {
                                       Container(
                                         width: 250,
                                         child: ElevatedButton(
-                                          style: TextButton.styleFrom(
-                                            primary: Colors.indigo[50],
-                                          ),
                                           child: Text('Execute constant Speed',
                                               style: TextStyle(
                                                   fontSize: 15,
@@ -1224,9 +1209,6 @@ class _MotorStPageState extends State<MotorStPage> {
                                       Container(
                                         width: 250,
                                         child: ElevatedButton(
-                                          style: TextButton.styleFrom(
-                                            primary: Colors.indigo[50],
-                                          ),
                                           child: Text('Execute at Max Speed',
                                               style: TextStyle(
                                                   fontSize: 15,

@@ -63,9 +63,6 @@ class _DCMotorPageState extends State<DCMotorPage> {
                           child: Container(
                             width: 150,
                             child: ElevatedButton(
-                              style: TextButton.styleFrom(
-                                primary: Colors.indigo[50],
-                              ),
                               child: Text('Off',
                                   style: TextStyle(
                                       fontSize: 15,
@@ -82,9 +79,6 @@ class _DCMotorPageState extends State<DCMotorPage> {
                           child: Container(
                             width: 150,
                             child: ElevatedButton(
-                              style: TextButton.styleFrom(
-                                primary: Colors.indigo[50],
-                              ),
                               onPressed: () {
                                 user.send(
                                     'CMD_SetDCMotor@Main(${user.index - 1},brake)');
@@ -107,9 +101,6 @@ class _DCMotorPageState extends State<DCMotorPage> {
                               child: Container(
                                 width: 210,
                                 child: ElevatedButton(
-                                  style: TextButton.styleFrom(
-                                    primary: Colors.indigo[50],
-                                  ),
                                   child: Text('Run Clockwise',
                                       style: TextStyle(
                                           fontSize: 15,
@@ -131,9 +122,6 @@ class _DCMotorPageState extends State<DCMotorPage> {
                               child: Container(
                                 width: 210,
                                 child: ElevatedButton(
-                                  style: TextButton.styleFrom(
-                                    primary: Colors.indigo[50],
-                                  ),
                                   onPressed: () {
                                     if (!isChecked) {
                                       user.send(

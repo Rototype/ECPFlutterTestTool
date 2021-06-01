@@ -93,9 +93,6 @@ class _ImagePickerPageState extends State<ImagePickerPage> {
                                             color: Colors.red, width: 5)),
                                     child: Image.memory(user.image)),
                                 TextButton(
-                                  style: TextButton.styleFrom(
-                                    primary: Colors.indigo[50],
-                                  ),
                                   child: Text("Delete Image",
                                       style: TextStyle(
                                           fontSize: 15,

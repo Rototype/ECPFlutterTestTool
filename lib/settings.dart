@@ -9,7 +9,7 @@ class Setting extends StatelessWidget {
     return Consumer<WebSocketClass>(builder: (_, user, __) {
       return Scaffold(
         appBar: AppBar(
-          title: Text('Settings'),
+          title: Text('Options'),
         ),
         body: Center(
             child: ListView(
@@ -719,9 +719,6 @@ class RestartOptions extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
                   child: ElevatedButton(
-                    style: TextButton.styleFrom(
-                      primary: Colors.indigo[50],
-                    ),
                     child: Text(
                       'Restart MC',
                       style:
@@ -735,9 +732,6 @@ class RestartOptions extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
                   child: ElevatedButton(
-                    style: TextButton.styleFrom(
-                      primary: Colors.indigo[50],
-                    ),
                     child: Text(
                       'Restart     HWController',
                       style:
@@ -751,9 +745,6 @@ class RestartOptions extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
                   child: ElevatedButton(
-                    style: TextButton.styleFrom(
-                      primary: Colors.indigo[50],
-                    ),
                     child: Text(
                       'Restart FPGA',
                       style:
