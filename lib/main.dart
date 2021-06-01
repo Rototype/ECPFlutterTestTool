@@ -35,7 +35,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
       return Builder(builder: (BuildContext context) {
         final themeChanger = Provider.of<ThemeChangerClass>(context);
+        final WebSocket = Provider.of<WebSocketClass>(context);
         return MaterialApp(
+          scaffoldMessengerKey: WebSocket.scaffoldMessengerKey,
           themeMode: themeChanger.themeMode,
           theme: ThemeData(
             brightness: Brightness.light,
@@ -184,7 +186,7 @@ class UserInfoPage extends StatelessWidget {
             icon: Icon(Icons.close),
             tooltip: 'Disconnect',
             onPressed: () {
-              user.disconnect();
+              user.disconnect('');
             },
           )
         ],

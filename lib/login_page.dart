@@ -11,8 +11,6 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
-  final _formKey = GlobalKey<FormState>();
-  final _key = GlobalKey<ScaffoldState>();
   bool ipConfig = false;
 
   @override
@@ -28,12 +26,10 @@ class _LoginPageState extends State<LoginPage> {
         }));
     final user = Provider.of<WebSocketClass>(context);
     return Scaffold(
-      key: _key,
       appBar: AppBar(
         title: Text("Rototype WebSocket Console"),
       ),
       body: Form(
-        key: _formKey,
         child: Center(
           child: ListView(
             shrinkWrap: true,
@@ -45,13 +41,7 @@ class _LoginPageState extends State<LoginPage> {
                   borderRadius: BorderRadius.circular(100.0),
                   color: Colors.red,
                   child: MaterialButton(
-                    onPressed: () async {
-                      if (_formKey.currentState.validate()) {
-                        if (!await user.wsconnect())
-                          ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text("Something went wrong")));
-                      }
-                    },
+                    onPressed: () async { await user.wsconnect(); },
                     child: Text(
                       "Connect",
                       style: style.copyWith(

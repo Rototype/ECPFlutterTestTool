@@ -82,9 +82,12 @@ class ThemeChangerClass with ChangeNotifier {
 class WebSocketClass with ChangeNotifier {
   SharedPreferences _prefs;
 
+  final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
+
   WebSocketClass(SharedPreferences _p) {
     _prefs = _p;
   }
+
 
   String get ws_url =>
       _prefs.getString('ws_url') ??
@@ -137,24 +140,9 @@ class WebSocketClass with ChangeNotifier {
         return false;
       } else {
         _channel.stream.listen((message) {
-          // onMessage:
           //print('rx:$message');
-          try {
-            //
-            // Gestione Timer timeout
-            //
             timerTimeout.cancel();
-
-            timerTimeout = Timer(Duration(seconds: 60), () {
-              disconnect();
-            });
-  
             String message2 = message;
-
-
-            //
-            // Controlli eseguiti tramite la logica dei comandi del WebServer di Prova
-            //
             List<String> split = message2.split(RegExp("[!_@]+"));
 
             if (split[1] == 'ReadAnalogInput') {
@@ -188,27 +176,12 @@ class WebSocketClass with ChangeNotifier {
             } else {
               print("listened: " + message);
             }
-          } catch (e) {
-            print(e);
-          }
 
           notifyListeners();
         }, onDone: () {
-          print('ws closed');
-
-          timerPeriod.cancel();
-          timerTimeout.cancel();
-          timerInputAnalog.cancel();
-          status = Status.Unauthenticated;
-          notifyListeners();
+          disconnect('');
         }, onError: (error) {
-          print('error $error');
-
-          timerPeriod.cancel();
-          timerTimeout.cancel();
-          timerInputAnalog.cancel();
-          status = Status.Unauthenticated;
-          notifyListeners();
+          disconnect('Connection not accepted by client');
         });
       }
 
@@ -234,13 +207,26 @@ class WebSocketClass with ChangeNotifier {
     } catch (e) {
       print('error $e');
       status = Status.Unauthenticated;
+      disconnect(e.toString());
       return false;
     }
   }
 
-  Future<void> disconnect() async {
+  Future<void> disconnect(String message) async {
+    timerPeriod.cancel();
+    timerTimeout.cancel();
+    timerInputAnalog.cancel();
+    status = Status.Unauthenticated;
+    notifyListeners();
+
+    if (!message.isEmpty) {
+      scaffoldMessengerKey.currentState.showSnackBar(SnackBar(
+        content: Text(message, textAlign: TextAlign.center,),
+      ));
+    }
+
+
     try {
-      timerPeriod.cancel();
       _channel.sink.close(); // trigger listen onDone
     } catch (err) {
       print('sink.close error');
@@ -252,16 +238,10 @@ class WebSocketClass with ChangeNotifier {
     try {
       if (!timerTimeout.isActive) {
         timerTimeout = Timer(Duration(seconds: 60), () {
-          disconnect();
+          disconnect("Missing reply from client");
         });
       }
-      List<String> split = data.split(RegExp("[\s_@)(!]+"));
-
-      if (split[1] != 'ReadAnalogInput' &&
-          split[1] != 'ReadDigitalInput' &&
-          split[1] != 'InvertImage') {
-        print(data);
-      }
+     
       _channel.sink.add(data);
     } catch (err) {
       print(err);
