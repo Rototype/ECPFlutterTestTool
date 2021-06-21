@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31205.134
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Rototype Websocket Console", "Rototype Websocket Console\Rototype Websocket Console.vdproj", "{F866F4BD-CBE8-458F-99FF-7617CCF73701}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Default = Debug|Default
+		Release|Default = Release|Default
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F866F4BD-CBE8-458F-99FF-7617CCF73701}.Debug|Default.ActiveCfg = Debug
+		{F866F4BD-CBE8-458F-99FF-7617CCF73701}.Debug|Default.Build.0 = Debug
+		{F866F4BD-CBE8-458F-99FF-7617CCF73701}.Release|Default.ActiveCfg = Release
+		{F866F4BD-CBE8-458F-99FF-7617CCF73701}.Release|Default.Build.0 = Release
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {56935702-037D-4AD6-9217-0BF8ED35EFE6}
+	EndGlobalSection
+EndGlobal
