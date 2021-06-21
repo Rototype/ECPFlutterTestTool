@@ -3,14 +3,16 @@ import 'dart:convert';
 import 'dart:math';
 import 'dart:typed_data';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 enum Status {
-  Authenticated,
-  Unauthenticated,
+  SocketConnected,
+  SocketNotConnected,
+  SocketCrash
 }
 
 class InputClass {
@@ -81,7 +83,6 @@ class ThemeChangerClass with ChangeNotifier {
 
 class WebSocketClass with ChangeNotifier {
   SharedPreferences _prefs;
-
   final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey =
       GlobalKey<ScaffoldMessengerState>();
 
@@ -99,18 +100,32 @@ class WebSocketClass with ChangeNotifier {
 
   WebSocketChannel _channel;
 
-  Status status = Status.Unauthenticated;
+  Status _status = Status.SocketNotConnected;
+  Status get status => _status;
+  set status(Status st) {
+    _status = st;
+    notifyListeners();
+  }
+
+  // invoked to change state from SocketCrash to SocketNotConnected without notifyListeners
+  // SocketCrash returns to ConnectPage from any state, but we we only have to do it once.
+  statusRemoveCrash() {
+    _status = Status.SocketNotConnected;
+  }
 
   Timer timerPeriod = Timer(Duration(seconds: 1), () {});
   Timer timerInputAnalog = Timer(Duration(seconds: 1), () {});
 
+  final endRegExp = RegExp(r'END_(\w+)@Main(#|\((\w+)\)|\[(.+)\])');
+
   int missedPing = 0;
 
-  List<String> messageStringHWcontroller = <String>[];
-  List<String> messageStringMain = <String>[];
+  var messageStringHWcontroller = <String>[];
+  var messageStringMain = <String>[];
 
-  List<int> outputList = <int>[];
-  List<int> inputList = <int>[];
+  var outputList = <int>[];
+  var inputList = <int>[];
+  var lastinputList = <int>[];
 
   Uint8List image;
   int photocellsIndex = -1;
@@ -119,106 +134,129 @@ class WebSocketClass with ChangeNotifier {
   int index = -1;
   BigInt result = BigInt.from(0);
   int analogInput = 0;
+  String lastDigitalInput = '';
 
-  List<List<TextButton>> photocellButtons = <List<TextButton>>[];
-  List<InputClass> inputButtons = <InputClass>[];
-  List<DcMotorClass> dcMotorButtons = <DcMotorClass>[];
-  List<StepperMotorClass> stepperMotorButtons = <StepperMotorClass>[];
-  List<SolenoidClass> solenoidButtons = <SolenoidClass>[];
-  List<OutputClass> outputButtons = <OutputClass>[];
+
+  var photocellButtons = <List<TextButton>>[];
+  var inputButtons = <InputClass>[];
+  var dcMotorButtons = <DcMotorClass>[];
+  var stepperMotorButtons = <StepperMotorClass>[];
+  var solenoidButtons = <SolenoidClass>[];
+  var outputButtons = <OutputClass>[];
 
   Future<bool> wsconnect() async {
     try {
+      inputList.clear();
+      lastinputList.clear();
+      for (int i = 0; i < 5; i++) {
+        inputList.add(0);
+        lastinputList.add(-1);
+      }
+      outputList.clear();
+      for (int i = 0; i < 10; i++) {
+        outputList.add(0);
+      }
+
       missedPing = 0;
+      lastDigitalInput = '';
+      status = Status.SocketConnected;
+
       _channel = WebSocketChannel.connect(
         Uri.parse(ws_url),
       );
 
       if (_channel == null) {
-        timerPeriod.cancel();
-        status = Status.Unauthenticated;
+        disconnect('Socket failed');
         return false;
       } else {
         _channel.stream.listen((message) {
-          //print('rx:$message');
-          String message2 = message;
+          print('rx:$message');
+
+          // ---------------------------------------------------------------------------
+          // to test the image send & receive + polling with an echo server:
+          // docker run -d -p 8080:8080 inanimate/echo-server
+          // ---------------------------------------------------------------------------
+          /*
+          if (message.toString().startsWith("Request served"))
+            return;
+          var s = DateTime.now().microsecondsSinceEpoch.toRadixString(16);
+          if ( message == 'CMD_ReadDigitalInput@Main#')
+            message = 'END_ReadDigitalInput@Main(0x$s)';
+          else if (message.toString().startsWith('CMD_'))
+            message = 'END_' + message.toString().substring(4);
+          */
 
           try {
-          List<String> split = message2.split(RegExp("[!_@]+"));
-          if (split[1] == 'ReadAnalogInput') {
-            missedPing--; // retrig the polling: keep alive the connection
-            split = message2.split(RegExp("[\s_@)(!]+"));
-            if (indexReadAnalog == 5) {
-              indexReadAnalog = 0;
+            final match = endRegExp.firstMatch(message);
+
+            switch(match[1]) {
+              case 'ReadAnalogInput':
+
+                missedPing--; // retrig the polling: keep alive the connection
+                inputList[indexReadAnalog] = int.parse(match[3]);
+                if (lastinputList[indexReadAnalog] != inputList[indexReadAnalog]) {
+                  lastinputList[indexReadAnalog] = inputList[indexReadAnalog];
+                  notifyListeners();
+                }
+                if (indexReadAnalog >= 4)
+                  indexReadAnalog = 0;
+                else
+                  indexReadAnalog++;
+              break;
+              case 'ReadDigitalInput':
+                if ( match[3] != lastDigitalInput) {
+                    result = BigInt.parse(match[3].split('x')[1], radix: 16);
+                    notifyListeners();
+                    lastDigitalInput = match[3];
+                }
+                break;
+              case 'InvertImage':
+                image = base64.decode(match[4]);
+                notifyListeners();
+                break;
+              default:
+                print("listened: " + message);
+                break;
             }
-            if (indexReadAnalog == 0) {
-              inputList[0] = int.parse(split[3]);
-            }
-            if (indexReadAnalog == 1) {
-              inputList[1] = int.parse(split[3]);
-            }
-            if (indexReadAnalog == 2) {
-              inputList[2] = int.parse(split[3]);
-            }
-            if (indexReadAnalog == 3) {
-              inputList[3] = int.parse(split[3]);
-            }
-            if (indexReadAnalog == 4) {
-              inputList[4] = int.parse(split[3]);
-            }
-            indexReadAnalog++;
-          } else if (split[1] == 'ReadDigitalInput') {
-            split = message2.split(RegExp("[_@)(!]+"));
-            result = BigInt.parse(split[3].split('x')[1], radix: 16);
-          } else if (split[1] == "InvertImage") {
-            split = split[2].split('[')[1].split(']');
-            print(split);
-            image = base64.decode(split[0]);
-          } else {
-            print("listened: " + message);
-          }
-          notifyListeners();
+
 
           } catch (e) {
             print(e);
             disconnect('unknown reply from client');
-        }
+          }
 
         }, onDone: () {
-          disconnect('');
+          disconnect(''); // no text, so disconnect anyway, but we are happy
         }, onError: (e) {
-          print(e);
-          disconnect('Connection not accepted by client');
+          print('error $e');
+          var msg = e.toString().split(':').last;
+          disconnect(msg); 
         });
       } 
 
-      // Timer utilizzato per il poll del WebServer
-      for (int i = 0; i < 5; i++) {
-        inputList.add(0);
-      }
-      for (int i = 0; i < 10; i++) {
-        outputList.add(0);
-      }
+      
 
       timerPeriod = Timer.periodic(Duration(seconds: 2), (timer2) {
         send('CMD_ReadDigitalInput@Main#');
       });
 
       timerInputAnalog = Timer.periodic(Duration(seconds: 1), (timer) {
-        if (missedPing++ > 3) {
+        if (missedPing++ > 5) {
           disconnect('Missing reply from client');
         } else {
+          send('CMD_ReadAnalogInput@Main($indexReadAnalog)');
+          send('CMD_ReadAnalogInput@Main($indexReadAnalog)');
+          send('CMD_ReadAnalogInput@Main($indexReadAnalog)');
+          send('CMD_ReadAnalogInput@Main($indexReadAnalog)');
           send('CMD_ReadAnalogInput@Main($indexReadAnalog)');
         }
       });
 
-      status = Status.Authenticated;
-      notifyListeners();
       return true;
     } catch (e) {
       print('error $e');
-      status = Status.Unauthenticated;
-      disconnect(e.toString());
+      var msg = e.toString().split(':').last;
+      disconnect(msg);
       return false;
     }
   }
@@ -228,17 +266,26 @@ class WebSocketClass with ChangeNotifier {
     timerPeriod.cancel();
     timerInputAnalog.cancel();
 
-    if (Status == Status.Unauthenticated)
-      return false;
-    status = Status.Unauthenticated;
-    notifyListeners();
+    // alredy disconnected?
+    if (status != Status.SocketConnected)
+      return;
 
-    if (!message.isEmpty) {
+    if (message.isEmpty) {
+      // user disconnects
+      status = Status.SocketNotConnected;
+    } else {
+      // something bad happened
+      status = Status.SocketCrash;
       scaffoldMessengerKey.currentState.showSnackBar(SnackBar(
-        content: Text(
-          message,
-          textAlign: TextAlign.center,
-        ),
+        behavior: SnackBarBehavior.floating,
+        content: Row(    
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Icon(Icons.error, color: Colors.red, size: 40),
+            SizedBox(width: 10),
+            Text(message)
+          ]
+        )
       ));
     }
 

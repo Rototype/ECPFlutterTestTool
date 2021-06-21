@@ -7,7 +7,7 @@ import 'analog_input.dart';
 import 'continuous_motor.dart';
 import 'digital_output.dart';
 import 'image.dart';
-import 'login_page.dart';
+import 'reconnect.dart';
 import 'photocells.dart';
 import 'solenoid.dart';
 import 'stepper_motor.dart';
@@ -42,6 +42,9 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
             brightness: Brightness.light,
             primarySwatch: Colors.red,
+            colorScheme: ColorScheme.fromSwatch(
+              primarySwatch: Colors.blue,
+            ).copyWith()      
           ),
           darkTheme: ThemeData(
             brightness: Brightness.dark,
@@ -76,18 +79,24 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer(builder: (__, WebSocketClass user, _) {
       switch (user.status) {
-        case Status.Unauthenticated:
-          return LoginPage();
-        case Status.Authenticated:
-          return UserInfoPage();
+        case Status.SocketNotConnected:
+          return ReconnectPage();
+        case Status.SocketConnected:
+          return MainMenuPage();
+        case Status.SocketCrash:
         default:
-          return LoginPage();
+          user.statusRemoveCrash();
+          // return to the first page from any page. 
+          // wait until the widget drawn was complete before invoking navigator 
+          // (this avoids avoid multiple simultaneous calls, and the relative exception)
+          WidgetsBinding.instance.addPostFrameCallback((_) =>  Navigator.of(context).popUntil((route) => route.isFirst)); 
+          return ReconnectPage();
       }
     });
   }
 }
 
-class UserInfoPage extends StatelessWidget {
+class MainMenuPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<WebSocketClass>(context);
@@ -182,13 +191,13 @@ class UserInfoPage extends StatelessWidget {
       appBar: AppBar(
         title: Text('Main menu'),
         actions: <Widget>[
-          IconButton(
+          TextButton.icon(
+            label: Text('Disconnect'),
             icon: Icon(Icons.close),
-            tooltip: 'Disconnect',
-            onPressed: () {
-              user.disconnect('');
-            },
-          )
+            onPressed: () => user.disconnect(''),
+          ),
+            SizedBox(width: 10),    // icon + text is touching the border
+
         ],
       ),
       body: Center(

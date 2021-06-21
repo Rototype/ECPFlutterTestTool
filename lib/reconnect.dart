@@ -3,25 +3,20 @@ import 'package:provider/provider.dart';
 
 import 'ws_manage.dart';
 
-class LoginPage extends StatefulWidget {
+class ReconnectPage extends StatefulWidget {
   @override
-  _LoginPageState createState() => _LoginPageState();
+  _ReconnectPageState createState() => _ReconnectPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _ReconnectPageState extends State<ReconnectPage> {
   TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
 
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<WebSocketClass>(context);
-
-  // return to the first page from any page. 
-  // wait until the widget drawn was complete before invoking navigator (this avoids multiple call to setstate)
-    WidgetsBinding.instance.addPostFrameCallback((_) =>  Navigator.of(context).popUntil((route) => route.isFirst)); 
-
     return Scaffold(
       appBar: AppBar(
-        title: Text("Rototype WebSocket Console"),
+        title: Text("Rototype Websocket Console"),
       ),
       body: Form(
         child: Center(

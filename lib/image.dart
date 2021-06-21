@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
-
+import 'package:universal_platform/universal_platform.dart';
+import 'package:file_selector/file_selector.dart';
 import 'package:flutter/material.dart';
 import 'ws_manage.dart';
 import 'package:provider/provider.dart';
@@ -8,7 +9,6 @@ import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ImageData {
-
   ImageData();
 
   final picker = ImagePicker();
@@ -18,15 +18,28 @@ class ImageData {
   String error;
 
   Future<void> Pick() async {
-    final pickedFile = await picker.getImage(source: ImageSource.gallery);
-    if (pickedFile != null) {
-      data = await pickedFile.readAsBytes();
-      message = pickedFile.path;
+    if (UniversalPlatform.isLinux || UniversalPlatform.isWindows) {
+      final typeGroup =
+          XTypeGroup(label: 'images', extensions: ['jpg', 'png', 'bmp']);
+      final pickedFile = await openFile(acceptedTypeGroups: [typeGroup]);
+      if (pickedFile != null) {
+        data = await pickedFile.readAsBytes();
+        message = pickedFile.path;
+      } else {
+        error = 'No image selected.';
+      }
     } else {
-      error = 'No image selected.';
+      final pickedFile = await picker.getImage(source: ImageSource.gallery);
+      if (pickedFile != null) {
+        data = await pickedFile.readAsBytes();
+        message = pickedFile.path;
+      } else {
+        error = 'No image selected.';
+      }
     }
   }
 }
+
 
 class ImagePickerPage extends StatefulWidget {
   @override
@@ -39,16 +52,42 @@ class _ImagePickerPageState extends State<ImagePickerPage> {
   Widget build(BuildContext context) {
     var screen = MediaQuery.of(context);
     return Consumer<WebSocketClass>(builder: (_, user, __) {
+
       return Scaffold(
         appBar: AppBar(
           title: Text('Imagine Processing '),
+          actions: <Widget>[
+            TextButton.icon(
+              label: Text('Send'),
+              icon: Icon(Icons.send),
+
+              onPressed: imageData.data == null? null : () {
+                try {
+                  user.send("CMD_InvertImage@Main[${base64.encode(imageData.data)}]");
+                } catch (e) {
+                  print(e);
+                }
+              }
+            ),
+            TextButton.icon(
+              label: Text('Delete'),
+              icon: Icon(Icons.delete_forever),
+
+              onPressed: user.image == null? null : () {
+                user.image = null;
+                if (this.mounted) setState(() {});
+              }
+            ),
+            SizedBox(width: 10),    // icon + text is touching the border
+
+          ],
         ),
         floatingActionButton: FloatingActionButton(
             tooltip: 'Open image',
             child: Icon(Icons.open_in_browser),
             onPressed: () async {
               await imageData.Pick();
-              if (imageData.data != null) setState(() {});
+              if (imageData.data != null) if (this.mounted) setState(() {});
             }),
         body: Center(
           child: imageData.data != null
