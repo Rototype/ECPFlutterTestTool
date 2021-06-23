@@ -1,6 +1,6 @@
-# rotosocket
+# ECP Flutter Test tool
 
-Rototype WebSocket Console
+This is a testing tool for Electronic Common Platform
 
 ## Getting Started
 
