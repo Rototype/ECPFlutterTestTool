@@ -3,33 +3,58 @@ import 'package:provider/provider.dart';
 
 import 'ws_manage.dart';
 
+final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+Widget getSolenoidButtons(int i, bool active) {
+  return TextButton(
+    child: SizedBox(
+      width: 80,
+      child: Row(
+        children: <Widget>[
+          Hero(
+            tag: 'hero $i',
+            child: active ? const Icon(Icons.sync_alt, color: Colors.red) : const Icon(Icons.sync_alt, color: Colors.green),
+          ),
+          Text('S ${i + 1}'),
+        ],
+      ),
+    ),
+    onPressed: () {
+      Navigator.pushNamed(_scaffoldKey.currentContext, '/SolenoidPage', arguments: i);
+    },
+  );
+}
+
+dynamic solenoidButtons;
+
 class Solenoid extends StatelessWidget {
+  const Solenoid({Key key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
+    var wsc = Provider.of<WebSocketClass>(context, listen: false);
+    solenoidButtons = List.generate(WebSocketClass.solenoidStateSize, (i) => getSolenoidButtons(i, wsc.getSolenoidState(i)));
+
     return Consumer<WebSocketClass>(builder: (_, user, __) {
       return Scaffold(
+          key: _scaffoldKey,
           resizeToAvoidBottomInset: true,
           appBar: AppBar(
-            title: Text('Solenoids'),
+            title: const Text('Solenoids'),
           ),
-          body: Container(
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                SizedBox(
-                    width: 200,
-                    child: ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: user.solenoidButtons.length,
-                        itemBuilder: (_, int index) {
-                          return user.solenoidButtons[index].button;
-                        }))
-              ])));
+          body: SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              padding: const EdgeInsets.only(top: 20),
+              child: Wrap(
+                children: solenoidButtons,
+              )));
     });
   }
 }
 
 class SolenoidPage extends StatefulWidget {
+  const SolenoidPage({Key key}) : super(key: key);
+
   @override
   _SolenoidPageState createState() => _SolenoidPageState();
 }
@@ -41,10 +66,12 @@ class _SolenoidPageState extends State<SolenoidPage> {
 
   @override
   Widget build(BuildContext context) {
+    final index = ModalRoute.of(context).settings.arguments as int;
+
     return Consumer<WebSocketClass>(builder: (_, user, __) {
       return Scaffold(
         appBar: AppBar(
-          title: Text(' Solenoid ${user.index}'),
+          title: Text(' Solenoid ${index + 1}'),
         ),
         body: Center(
           child: ListView(
@@ -52,20 +79,23 @@ class _SolenoidPageState extends State<SolenoidPage> {
             children: <Widget>[
               Column(
                 children: <Widget>[
+                  Hero(
+                    tag: 'hero $index',
+                    child: user.getSolenoidState(index) ? const Icon(Icons.sync_alt, color: Colors.red, size: 100) : const Icon(Icons.sync_alt, color: Colors.green, size: 100),
+                  ),
                   Padding(
-                    padding: EdgeInsets.fromLTRB(0, 50, 0, 0),
+                    padding: const EdgeInsets.fromLTRB(0, 50, 0, 0),
                     child: ElevatedButton(
-                      
                       onPressed: () {
                         if (isChecked) {
-                          user.send(
-                              'CMD_SetDCSolenoidPWM@Main(${user.index - 1},1,$pwm,$inittime)');
+                          user.send('CMD_SetDCSolenoidPWM@Main($index,1,${pwm.toInt()},${inittime.toInt()})');
                         } else {
-                          user.send(
-                              'CMD_SetDCSolenoid@Main(${user.index - 1},1)');
+                          user.send('CMD_SetDCSolenoid@Main($index,1)');
                         }
+                        user.setSolenoidState(index, true);
+                        solenoidButtons[index] = getSolenoidButtons(index, true);
                       },
-                      child: Text('Set Solenoid ON',
+                      child: const Text('Set Solenoid ON',
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
@@ -73,14 +103,14 @@ class _SolenoidPageState extends State<SolenoidPage> {
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.fromLTRB(0, 35, 0, 0),
+                    padding: const EdgeInsets.fromLTRB(0, 35, 0, 0),
                     child: ElevatedButton(
-                      
                       onPressed: () {
-                        user.send(
-                            'CMD_SetDCSolenoid@Main(${user.index - 1},0)');
+                        user.send('CMD_SetDCSolenoid@Main($index,0)');
+                        user.setSolenoidState(index, false);
+                        solenoidButtons[index] = getSolenoidButtons(index, false);
                       },
-                      child: Text('Set Solenoid OFF',
+                      child: const Text('Set Solenoid OFF',
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
@@ -91,9 +121,7 @@ class _SolenoidPageState extends State<SolenoidPage> {
                     padding: const EdgeInsets.all(10.0),
                     child: Row(
                       children: <Widget>[
-                        Text('Enable PWM: ',
-                            style: TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.bold)),
+                        const Text('Enable PWM: ', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
                         Checkbox(
                           value: isChecked,
                           onChanged: (bool newValue) {
@@ -105,7 +133,7 @@ class _SolenoidPageState extends State<SolenoidPage> {
                         isChecked
                             ? Column(
                                 children: <Widget>[
-                                  Container(
+                                  SizedBox(
                                     width: 350,
                                     child: Row(
                                       children: <Widget>[
@@ -120,14 +148,11 @@ class _SolenoidPageState extends State<SolenoidPage> {
                                           max: 100,
                                           divisions: 100,
                                         ),
-                                        Text('PWM: ${pwm.round()}%',
-                                            style: TextStyle(
-                                                fontSize: 15,
-                                                fontWeight: FontWeight.bold)),
+                                        Text('PWM: ${pwm.round()}%', style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
                                       ],
                                     ),
                                   ),
-                                  Container(
+                                  SizedBox(
                                     width: 350,
                                     child: Row(
                                       children: <Widget>[
@@ -142,11 +167,7 @@ class _SolenoidPageState extends State<SolenoidPage> {
                                           max: 2000,
                                           divisions: 100,
                                         ),
-                                        Text(
-                                            'Init Time: ${inittime.round()} ms',
-                                            style: TextStyle(
-                                                fontSize: 15,
-                                                fontWeight: FontWeight.bold)),
+                                        Text('Init Time: ${inittime.round()} ms', style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
                                       ],
                                     ),
                                   ),

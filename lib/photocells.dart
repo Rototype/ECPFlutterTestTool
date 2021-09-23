@@ -1,57 +1,87 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'ws_manage.dart';
 
-class Photocells extends StatelessWidget {
+final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+Widget getPhotocellButton(int i, BigInt result) {
+  return (TextButton(
+    child: SizedBox(
+      width: 80,
+      child: Row(
+        children: <Widget>[
+          result & BigInt.from(pow(2, i)) == BigInt.from(0)
+              ? Hero(
+                  tag: 'hero $i',
+                  child: const Icon(
+                    Icons.lightbulb_outline,
+                    color: Colors.greenAccent,
+                  ))
+              : Hero(
+                  tag: 'hero $i',
+                  child: const Icon(
+                    Icons.lightbulb_outline,
+                    color: Colors.red,
+                  )),
+          Text('F ${i + 1}'),
+        ],
+      ),
+    ),
+    onPressed: () {
+      Navigator.pushNamed(_scaffoldKey.currentContext, '/PhotocellPage', arguments: i);
+    },
+  ));
+}
+
+dynamic photocellButtons;
+
+class Photocells extends StatefulWidget {
+  const Photocells({Key key}) : super(key: key);
+
+  @override
+  State createState() => PhotocellsState();
+}
+
+class PhotocellsState extends State<Photocells> {
+  WebSocketClass _wsc;
+
+  @override
+  void didChangeDependencies() {
+    _wsc = Provider.of<WebSocketClass>(context, listen: false);
+    _wsc.startSensorPolling();
+    super.didChangeDependencies();
+  }
+
+  @override
+  void dispose() {
+    _wsc.stopSensorPolling();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    double columnWidth = 100;
-    var screen = MediaQuery.of(context);
-    if (screen.size.width > 550) {
-      columnWidth = screen.size.width / 5;
-    }
     return Consumer<WebSocketClass>(builder: (_, user, __) {
+      photocellButtons = List.generate(WebSocketClass.photocellStateSize, (i) => getPhotocellButton(i, _wsc.result));
       return Scaffold(
-          resizeToAvoidBottomInset: true,
+          key: _scaffoldKey,
           appBar: AppBar(
-            title: Text('Photocells'),
+            title: const Text('Photocells'),
           ),
-          body: Center(
-            child: user.photocellsIndex != -1
-                ? ListView(scrollDirection: Axis.horizontal, children: <Widget>[
-                    Row(children: <Widget>[
-                      Container(
-                        width: columnWidth,
-                        child: Column(children: user.photocellButtons[0]),
-                      ),
-                      Container(
-                        width: columnWidth,
-                        child: Column(children: user.photocellButtons[1]),
-                      ),
-                      Container(
-                        width: columnWidth,
-                        child: Column(children: user.photocellButtons[2]),
-                      ),
-                      Container(
-                        width: columnWidth,
-                        child: Column(children: user.photocellButtons[3]),
-                      ),
-                      Container(
-                        width: columnWidth,
-                        child: Column(children: user.photocellButtons[4]),
-                      ),
-                    ]),
-                  ])
-                : Container(),
-          ));
+          body: SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              padding: const EdgeInsets.only(top: 20),
+              child: Wrap(
+                children: photocellButtons,
+              )));
     });
   }
 }
 
 class PhotocellPage extends StatefulWidget {
+  const PhotocellPage({Key key}) : super(key: key);
+
   @override
   _PhotocellPageState createState() => _PhotocellPageState();
 }
@@ -61,72 +91,62 @@ class _PhotocellPageState extends State<PhotocellPage> {
 
   @override
   Widget build(BuildContext context) {
+    final index = ModalRoute.of(context).settings.arguments as int;
+
     return Consumer<WebSocketClass>(builder: (_, user, __) {
       return Scaffold(
           appBar: AppBar(
-            title: Text(' Photocell ${user.index}'),
+            title: Text(' Photocell ${index + 1}'),
           ),
-          body: Container(
-              child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+          body: Row(
             children: <Widget>[
-              user.index != -1
-                  ? Column(
-                      children: <Widget>[
-                        user.result & BigInt.from(pow(2, user.index - 1)) ==
-                                BigInt.from(0)
-                            ? Hero(
-                                tag: 'hero ${user.index - 1}',
-                                child: Icon(
-                                  Icons.lightbulb_outline,
-                                  color: Colors.greenAccent,
-                                  size: 200,
-                                ))
-                            : Hero(
-                                tag: 'hero ${user.index - 1}',
-                                child: Icon(
-                                  Icons.lightbulb_outline,
-                                  color: Colors.red,
-                                  size: 200,
-                                )),
-                        Column(
-                          children: <Widget>[
-                            ElevatedButton(
-                              onPressed: () {
-                                print(user.index - 1);
-                                user.send(
-                                    'CMD_SetAnalogOutput@Main(${user.index - 1},$value)');
-                              },
-                              child: Text('Set Diode PWM',
-                                  style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold)),
-                            ),
-                            Row(
-                              children: <Widget>[
-                                Text('Value: $value',
-                                    style: TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.bold)),
-                                Slider(
-                                  value: value,
-                                  onChanged: (newValue) {
-                                    setState(() => value = newValue);
-                                  },
-                                  label: '${value.round()}',
-                                  min: 0,
-                                  max: 1000,
-                                  divisions: 100,
-                                ),
-                              ],
-                            )
-                          ],
-                        ),
-                      ],
-                    )
-                  : Column()
+              Column(
+                children: <Widget>[
+                  user.result & BigInt.from(pow(2, index)) == BigInt.from(0)
+                      ? Hero(
+                          tag: 'hero $index',
+                          child: const Icon(
+                            Icons.lightbulb_outline,
+                            color: Colors.greenAccent,
+                            size: 100,
+                          ))
+                      : Hero(
+                          tag: 'hero $index',
+                          child: const Icon(
+                            Icons.lightbulb_outline,
+                            color: Colors.red,
+                            size: 100,
+                          )),
+                  Column(
+                    children: <Widget>[
+                      ElevatedButton(
+                        onPressed: () {
+                          debugPrint('$index');
+                          user.send('CMD_SetAnalogOutput@Main($index,$value)');
+                        },
+                        child: const Text('Set Diode PWM', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+                      ),
+                      Row(
+                        children: <Widget>[
+                          Text('Value: $value', style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+                          Slider(
+                            value: value,
+                            onChanged: (newValue) {
+                              setState(() => value = newValue);
+                            },
+                            label: '${value.round()}',
+                            min: 0,
+                            max: 1000,
+                            divisions: 100,
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                ],
+              )
             ],
-          )));
+          ));
     });
   }
 }

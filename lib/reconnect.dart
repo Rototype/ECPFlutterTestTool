@@ -1,50 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:rotosocket/theme_changer.dart';
 
 import 'ws_manage.dart';
 
 class ReconnectPage extends StatefulWidget {
+  const ReconnectPage({Key key}) : super(key: key);
+
   @override
   _ReconnectPageState createState() => _ReconnectPageState();
 }
 
 class _ReconnectPageState extends State<ReconnectPage> {
-  TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
-
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<WebSocketClass>(context);
+    final themeChanger = Provider.of<ThemeChangerClass>(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text("Rototype Websocket Console"),
+        title: Text("Rototype Websocket Console ${themeChanger.version}"),
       ),
-      body: Form(
-        child: Center(
-          child: ListView(
-            shrinkWrap: true,
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 100.0),
-                child: Material(
-                  elevation: 50.0,
-                  borderRadius: BorderRadius.circular(100.0),
-                  color: Colors.red,
-                  child: MaterialButton(
-                    onPressed: () async { await user.wsconnect(); },
-                    child: Text(
-                      "Connect",
-                      style: style.copyWith(
-                          color: Colors.white, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                ),
-              ),
-            ],
+      body: ListView(padding: const EdgeInsets.all(50), children: <Widget>[
+        ElevatedButton(
+          onPressed: () async {
+            await user.wsconnect();
+          },
+          child: const Text('Connect'),
+          style: ElevatedButton.styleFrom(
+            textStyle: const TextStyle(fontWeight: FontWeight.bold),
           ),
         ),
-      ),
+      ]),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.settings),
+        child: const Icon(Icons.settings),
         tooltip: 'Settings',
         onPressed: () {
           Navigator.pushNamed(context, '/IpConfig');
@@ -57,44 +45,43 @@ class _ReconnectPageState extends State<ReconnectPage> {
 class IpConfig extends StatelessWidget {
   final TextEditingController _urlcontroller = TextEditingController();
 
+  IpConfig({Key key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('Configuration'),
+          title: const Text('Configuration'),
         ),
         body: Padding(
             padding: const EdgeInsets.all(20.0),
-            child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                  Consumer(builder: (__, WebSocketClass user, _) {
-                    _urlcontroller.text = user.ws_url;
-                    return FocusScope(
-                        onFocusChange: (hasFocus) {
-                          if (!hasFocus)
-                            user.ws_url = _urlcontroller.text; // validate if we leave the page
-                        },
-                        child: TextFormField(
-                          autofocus: true,
-                          controller: _urlcontroller,
-                          decoration: InputDecoration(
-                            labelText: 'Websocket URL:',
-                            hintText: 'ws://127.0.0.1:5001',
-                          ),
-                          onEditingComplete: () =>
-                              user.ws_url = _urlcontroller.text,
-                        ));
-                  }),
-                  Consumer(builder: (__, ThemeChangerClass user, _) {
-                    return CheckboxListTile(
-                      title: Text("Yes, My eyes are hurt by the light themes"),
-                      value: user.isDarkMode,
-                      controlAffinity: ListTileControlAffinity.leading,
-                      onChanged: (checked) => user.isDarkMode = checked,
-                    );
-                  }),
-                ])));
+            child: Column(mainAxisAlignment: MainAxisAlignment.spaceAround, crossAxisAlignment: CrossAxisAlignment.center, children: <Widget>[
+              Consumer(builder: (__, WebSocketClass user, _) {
+                _urlcontroller.text = user.wsUrl;
+                return FocusScope(
+                    onFocusChange: (hasFocus) {
+                      if (!hasFocus) {
+                        user.wsUrl = _urlcontroller.text;
+                      } // validate if we leave the page
+                    },
+                    child: TextFormField(
+                      autofocus: true,
+                      controller: _urlcontroller,
+                      decoration: const InputDecoration(
+                        labelText: 'Websocket URL:',
+                        hintText: 'ws://localhost:5001',
+                      ),
+                      onEditingComplete: () => user.wsUrl = _urlcontroller.text,
+                    ));
+              }),
+              Consumer(builder: (__, ThemeChangerClass user, _) {
+                return CheckboxListTile(
+                  title: const Text('Yes, My eyes are hurt by the light themes'),
+                  value: user.isDarkMode,
+                  controlAffinity: ListTileControlAffinity.leading,
+                  onChanged: (checked) => user.isDarkMode = checked,
+                );
+              }),
+            ])));
   }
 }

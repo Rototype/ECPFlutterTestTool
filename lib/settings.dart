@@ -4,64 +4,48 @@ import 'ws_manage.dart';
 import 'package:provider/provider.dart';
 
 class Setting extends StatelessWidget {
+  const Setting({Key key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Consumer<WebSocketClass>(builder: (_, user, __) {
       return Scaffold(
         appBar: AppBar(
-          title: Text('Options'),
+          title: const Text('Options'),
         ),
-        body: Center(
-            child: ListView(
-          padding: EdgeInsets.all(10),
+        body: ListView(
+          padding: const EdgeInsets.all(50),
           children: <Widget>[
-            TextButton(
+            ElevatedButton(
               onPressed: () {
                 Navigator.pushNamed(context, '/Network');
               },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Text('Network Options',
-                      style:
-                          TextStyle(fontSize: 15, fontWeight: FontWeight.bold))
-                ],
-              ),
+              child: const Text('Network Options'),
             ),
-            TextButton(
+            const SizedBox(height: 10),
+            ElevatedButton(
               onPressed: () {
                 Navigator.pushNamed(context, '/Restart');
               },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Text('Restart Options',
-                      style:
-                          TextStyle(fontSize: 15, fontWeight: FontWeight.bold))
-                ],
-              ),
+              child: const Text('Restart Options'),
             ),
-            TextButton(
+            const SizedBox(height: 10),
+            ElevatedButton(
               onPressed: () {
                 Navigator.pushNamed(context, '/ParameterOption');
               },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Text('Parameter Options',
-                      style:
-                          TextStyle(fontSize: 15, fontWeight: FontWeight.bold))
-                ],
-              ),
+              child: const Text('Parameter Options'),
             ),
           ],
-        )),
+        ),
       );
     });
   }
 }
 
 class NwOptions extends StatefulWidget {
+  const NwOptions({Key key}) : super(key: key);
+
   @override
   _NwOptionsState createState() => _NwOptionsState();
 }
@@ -71,59 +55,59 @@ class _NwOptionsState extends State<NwOptions> {
 
   int counter2 = 0;
 
-  TextEditingController controller11 = new TextEditingController();
+  TextEditingController controller11 = TextEditingController();
 
-  TextEditingController controller12 = new TextEditingController();
+  TextEditingController controller12 = TextEditingController();
 
-  TextEditingController controller13 = new TextEditingController();
+  TextEditingController controller13 = TextEditingController();
 
-  TextEditingController controller14 = new TextEditingController();
+  TextEditingController controller14 = TextEditingController();
 
-  TextEditingController controller21 = new TextEditingController();
+  TextEditingController controller21 = TextEditingController();
 
-  TextEditingController controller22 = new TextEditingController();
+  TextEditingController controller22 = TextEditingController();
 
-  TextEditingController controller23 = new TextEditingController();
+  TextEditingController controller23 = TextEditingController();
 
-  TextEditingController controller24 = new TextEditingController();
+  TextEditingController controller24 = TextEditingController();
 
-  TextEditingController controller31 = new TextEditingController();
+  TextEditingController controller31 = TextEditingController();
 
-  TextEditingController controller32 = new TextEditingController();
+  TextEditingController controller32 = TextEditingController();
 
-  TextEditingController controller33 = new TextEditingController();
+  TextEditingController controller33 = TextEditingController();
 
-  TextEditingController controller34 = new TextEditingController();
+  TextEditingController controller34 = TextEditingController();
 
   bool value = false;
 
-  FocusNode textSecondFocusNode = new FocusNode();
+  FocusNode textSecondFocusNode = FocusNode();
 
-  FocusNode textThirdFocusNode = new FocusNode();
+  FocusNode textThirdFocusNode = FocusNode();
 
-  FocusNode textFourthFocusNode = new FocusNode();
+  FocusNode textFourthFocusNode = FocusNode();
 
-  FocusNode textFirstFocusNode2 = new FocusNode();
+  FocusNode textFirstFocusNode2 = FocusNode();
 
-  FocusNode textSecondFocusNode2 = new FocusNode();
+  FocusNode textSecondFocusNode2 = FocusNode();
 
-  FocusNode textThirdFocusNode2 = new FocusNode();
+  FocusNode textThirdFocusNode2 = FocusNode();
 
-  FocusNode textFourthFocusNode2 = new FocusNode();
+  FocusNode textFourthFocusNode2 = FocusNode();
 
-  FocusNode textFirstFocusNode3 = new FocusNode();
+  FocusNode textFirstFocusNode3 = FocusNode();
 
-  FocusNode textSecondFocusNode3 = new FocusNode();
+  FocusNode textSecondFocusNode3 = FocusNode();
 
-  FocusNode textThirdFocusNode3 = new FocusNode();
+  FocusNode textThirdFocusNode3 = FocusNode();
 
-  FocusNode textFourthFocusNode3 = new FocusNode();
+  FocusNode textFourthFocusNode3 = FocusNode();
 
   @override
   Widget build(BuildContext context) {
     return Consumer<WebSocketClass>(builder: (_, user, __) {
       return Scaffold(
-          appBar: AppBar(title: Text('Network Options')),
+          appBar: AppBar(title: const Text('Network Options')),
           body: Container(
             padding: const EdgeInsets.all(15),
             child: ListView(
@@ -133,33 +117,27 @@ class _NwOptionsState extends State<NwOptions> {
                   children: <Widget>[
                     Row(
                       children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(15, 0, 0, 0),
-                          child: Container(
+                        const Padding(
+                          padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
+                          child: SizedBox(
                             width: 150,
                             child: Text(
                               'IP Address: ',
-                              style: TextStyle(
-                                  fontSize: 15, fontWeight: FontWeight.bold),
+                              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                             ),
                           ),
                         ),
                         Padding(
                           padding: const EdgeInsets.fromLTRB(20, 20, 0, 20),
-                          child: Container(
+                          child: SizedBox(
                             width: 300,
                             child: Row(
                               children: <Widget>[
-                                Container(
+                                SizedBox(
                                   width: 60,
                                   child: TextFormField(
-                                    keyboardType:
-                                        TextInputType.numberWithOptions(
-                                            decimal: true),
-                                    inputFormatters: [
-                                      FilteringTextInputFormatter.allow(
-                                          RegExp('[0-9]'))
-                                    ],
+                                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                                    inputFormatters: [FilteringTextInputFormatter.allow(RegExp('[0-9]'))],
                                     // Only numbers can be entered
                                     textAlign: TextAlign.center,
                                     onChanged: (String value) {
@@ -167,8 +145,7 @@ class _NwOptionsState extends State<NwOptions> {
                                         if (int.parse(value) > 255) {
                                           controller11.text = "255";
                                         }
-                                        FocusScope.of(context)
-                                            .requestFocus(textSecondFocusNode);
+                                        FocusScope.of(context).requestFocus(textSecondFocusNode);
                                       }
                                     },
                                     maxLength: 3,
@@ -177,25 +154,18 @@ class _NwOptionsState extends State<NwOptions> {
                                         filled: true,
                                         fillColor: Colors.red[100],
                                         counterText: "",
-                                        enabledBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                                width: 1, color: Colors.red)),
-                                        focusedBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                                width: 1, color: Colors.red))),
+                                        enabledBorder: const OutlineInputBorder(borderSide: BorderSide(width: 1, color: Colors.red)),
+                                        focusedBorder: const OutlineInputBorder(borderSide: BorderSide(width: 1, color: Colors.red))),
                                   ),
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
+                                const Padding(
+                                  padding: EdgeInsets.all(8.0),
                                   child: Text('.'),
                                 ),
-                                Container(
+                                SizedBox(
                                   width: 60,
                                   child: TextFormField(
-                                    inputFormatters: [
-                                      FilteringTextInputFormatter.allow(
-                                          RegExp('[0-9]'))
-                                    ],
+                                    inputFormatters: [FilteringTextInputFormatter.allow(RegExp('[0-9]'))],
                                     keyboardType: TextInputType.number,
                                     textAlign: TextAlign.center,
                                     focusNode: textSecondFocusNode,
@@ -204,8 +174,7 @@ class _NwOptionsState extends State<NwOptions> {
                                         if (int.parse(value) > 255) {
                                           controller12.text = "255";
                                         }
-                                        FocusScope.of(context)
-                                            .requestFocus(textThirdFocusNode);
+                                        FocusScope.of(context).requestFocus(textThirdFocusNode);
                                       }
                                     },
                                     maxLength: 3,
@@ -214,19 +183,15 @@ class _NwOptionsState extends State<NwOptions> {
                                         filled: true,
                                         fillColor: Colors.red[100],
                                         counterText: "",
-                                        enabledBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                                width: 1, color: Colors.red)),
-                                        focusedBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                                width: 1, color: Colors.red))),
+                                        enabledBorder: const OutlineInputBorder(borderSide: BorderSide(width: 1, color: Colors.red)),
+                                        focusedBorder: const OutlineInputBorder(borderSide: BorderSide(width: 1, color: Colors.red))),
                                   ),
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
+                                const Padding(
+                                  padding: EdgeInsets.all(8.0),
                                   child: Text('.'),
                                 ),
-                                Container(
+                                SizedBox(
                                   width: 60,
                                   child: TextFormField(
                                     keyboardType: TextInputType.number,
@@ -237,8 +202,7 @@ class _NwOptionsState extends State<NwOptions> {
                                         if (int.parse(value) > 255) {
                                           controller13.text = "255";
                                         }
-                                        FocusScope.of(context)
-                                            .requestFocus(textFourthFocusNode);
+                                        FocusScope.of(context).requestFocus(textFourthFocusNode);
                                       }
                                     },
                                     maxLength: 3,
@@ -247,25 +211,18 @@ class _NwOptionsState extends State<NwOptions> {
                                         filled: true,
                                         fillColor: Colors.red[100],
                                         counterText: "",
-                                        enabledBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                                width: 1, color: Colors.red)),
-                                        focusedBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                                width: 1, color: Colors.red))),
+                                        enabledBorder: const OutlineInputBorder(borderSide: BorderSide(width: 1, color: Colors.red)),
+                                        focusedBorder: const OutlineInputBorder(borderSide: BorderSide(width: 1, color: Colors.red))),
                                   ),
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
+                                const Padding(
+                                  padding: EdgeInsets.all(8.0),
                                   child: Text('.'),
                                 ),
-                                Container(
+                                SizedBox(
                                   width: 60,
                                   child: TextFormField(
-                                    inputFormatters: [
-                                      FilteringTextInputFormatter.allow(
-                                          RegExp('[0-9]'))
-                                    ],
+                                    inputFormatters: [FilteringTextInputFormatter.allow(RegExp('[0-9]'))],
                                     keyboardType: TextInputType.number,
                                     textAlign: TextAlign.center,
                                     onChanged: (String value) {
@@ -273,8 +230,7 @@ class _NwOptionsState extends State<NwOptions> {
                                         if (int.parse(value) > 255) {
                                           controller14.text = "255";
                                         }
-                                        FocusScope.of(context)
-                                            .requestFocus(textFirstFocusNode2);
+                                        FocusScope.of(context).requestFocus(textFirstFocusNode2);
                                       }
                                     },
                                     focusNode: textFourthFocusNode,
@@ -284,12 +240,8 @@ class _NwOptionsState extends State<NwOptions> {
                                         filled: true,
                                         fillColor: Colors.red[100],
                                         counterText: "",
-                                        enabledBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                                width: 1, color: Colors.red)),
-                                        focusedBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                                width: 1, color: Colors.red))),
+                                        enabledBorder: const OutlineInputBorder(borderSide: BorderSide(width: 1, color: Colors.red)),
+                                        focusedBorder: const OutlineInputBorder(borderSide: BorderSide(width: 1, color: Colors.red))),
                                   ),
                                 ),
                               ],
@@ -300,30 +252,26 @@ class _NwOptionsState extends State<NwOptions> {
                     ),
                     Row(
                       children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(15, 0, 0, 15),
-                          child: Container(
+                        const Padding(
+                          padding: EdgeInsets.fromLTRB(15, 0, 0, 15),
+                          child: SizedBox(
                             width: 150,
                             child: Text(
                               'Subnet Mask: ',
-                              style: TextStyle(
-                                  fontSize: 15, fontWeight: FontWeight.bold),
+                              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                             ),
                           ),
                         ),
                         Padding(
                           padding: const EdgeInsets.fromLTRB(20, 0, 0, 20),
-                          child: Container(
+                          child: SizedBox(
                             width: 300,
                             child: Row(
                               children: <Widget>[
-                                Container(
+                                SizedBox(
                                   width: 60,
                                   child: TextFormField(
-                                    inputFormatters: [
-                                      FilteringTextInputFormatter.allow(
-                                          RegExp('[0-9]'))
-                                    ],
+                                    inputFormatters: [FilteringTextInputFormatter.allow(RegExp('[0-9]'))],
                                     keyboardType: TextInputType.number,
                                     textAlign: TextAlign.center,
                                     onChanged: (String value) {
@@ -331,8 +279,7 @@ class _NwOptionsState extends State<NwOptions> {
                                         if (int.parse(value) > 255) {
                                           controller31.text = "255";
                                         }
-                                        FocusScope.of(context)
-                                            .requestFocus(textSecondFocusNode3);
+                                        FocusScope.of(context).requestFocus(textSecondFocusNode3);
                                       }
                                     },
                                     focusNode: textFirstFocusNode2,
@@ -342,25 +289,18 @@ class _NwOptionsState extends State<NwOptions> {
                                         filled: true,
                                         fillColor: Colors.red[100],
                                         counterText: "",
-                                        enabledBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                                width: 1, color: Colors.red)),
-                                        focusedBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                                width: 1, color: Colors.red))),
+                                        enabledBorder: const OutlineInputBorder(borderSide: BorderSide(width: 1, color: Colors.red)),
+                                        focusedBorder: const OutlineInputBorder(borderSide: BorderSide(width: 1, color: Colors.red))),
                                   ),
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
+                                const Padding(
+                                  padding: EdgeInsets.all(8.0),
                                   child: Text('.'),
                                 ),
-                                Container(
+                                SizedBox(
                                   width: 60,
                                   child: TextFormField(
-                                    inputFormatters: [
-                                      FilteringTextInputFormatter.allow(
-                                          RegExp('[0-9]'))
-                                    ],
+                                    inputFormatters: [FilteringTextInputFormatter.allow(RegExp('[0-9]'))],
                                     keyboardType: TextInputType.number,
                                     textAlign: TextAlign.center,
                                     focusNode: textSecondFocusNode3,
@@ -369,8 +309,7 @@ class _NwOptionsState extends State<NwOptions> {
                                         if (int.parse(value) > 255) {
                                           controller32.text = "255";
                                         }
-                                        FocusScope.of(context)
-                                            .requestFocus(textThirdFocusNode3);
+                                        FocusScope.of(context).requestFocus(textThirdFocusNode3);
                                       }
                                     },
                                     maxLength: 3,
@@ -379,25 +318,18 @@ class _NwOptionsState extends State<NwOptions> {
                                         filled: true,
                                         fillColor: Colors.red[100],
                                         counterText: "",
-                                        enabledBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                                width: 1, color: Colors.red)),
-                                        focusedBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                                width: 1, color: Colors.red))),
+                                        enabledBorder: const OutlineInputBorder(borderSide: BorderSide(width: 1, color: Colors.red)),
+                                        focusedBorder: const OutlineInputBorder(borderSide: BorderSide(width: 1, color: Colors.red))),
                                   ),
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
+                                const Padding(
+                                  padding: EdgeInsets.all(8.0),
                                   child: Text('.'),
                                 ),
-                                Container(
+                                SizedBox(
                                   width: 60,
                                   child: TextFormField(
-                                    inputFormatters: [
-                                      FilteringTextInputFormatter.allow(
-                                          RegExp('[0-9]'))
-                                    ],
+                                    inputFormatters: [FilteringTextInputFormatter.allow(RegExp('[0-9]'))],
                                     keyboardType: TextInputType.number,
                                     textAlign: TextAlign.center,
                                     focusNode: textThirdFocusNode3,
@@ -406,8 +338,7 @@ class _NwOptionsState extends State<NwOptions> {
                                         if (int.parse(value) > 255) {
                                           controller33.text = "255";
                                         }
-                                        FocusScope.of(context)
-                                            .requestFocus(textFourthFocusNode3);
+                                        FocusScope.of(context).requestFocus(textFourthFocusNode3);
                                       }
                                     },
                                     maxLength: 3,
@@ -416,36 +347,26 @@ class _NwOptionsState extends State<NwOptions> {
                                         filled: true,
                                         fillColor: Colors.red[100],
                                         counterText: "",
-                                        enabledBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                                width: 1, color: Colors.red)),
-                                        focusedBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                                width: 1, color: Colors.red))),
+                                        enabledBorder: const OutlineInputBorder(borderSide: BorderSide(width: 1, color: Colors.red)),
+                                        focusedBorder: const OutlineInputBorder(borderSide: BorderSide(width: 1, color: Colors.red))),
                                   ),
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
+                                const Padding(
+                                  padding: EdgeInsets.all(8.0),
                                   child: Text('.'),
                                 ),
-                                Container(
+                                SizedBox(
                                   width: 60,
                                   child: TextField(
-                                    inputFormatters: [
-                                      FilteringTextInputFormatter.allow(
-                                          RegExp('[0-9]'))
-                                    ],
-                                    keyboardType:
-                                        TextInputType.numberWithOptions(
-                                            decimal: true),
+                                    inputFormatters: [FilteringTextInputFormatter.allow(RegExp('[0-9]'))],
+                                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
                                     textAlign: TextAlign.center,
                                     onChanged: (String value) {
                                       if (value.length == 3) {
                                         if (int.parse(value) > 255) {
                                           controller34.text = "255";
                                         }
-                                        FocusScope.of(context)
-                                            .requestFocus(textFirstFocusNode3);
+                                        FocusScope.of(context).requestFocus(textFirstFocusNode3);
                                       }
                                     },
                                     focusNode: textFourthFocusNode3,
@@ -455,12 +376,8 @@ class _NwOptionsState extends State<NwOptions> {
                                         filled: true,
                                         fillColor: Colors.red[100],
                                         counterText: "",
-                                        enabledBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                                width: 1, color: Colors.red)),
-                                        focusedBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                                width: 1, color: Colors.red))),
+                                        enabledBorder: const OutlineInputBorder(borderSide: BorderSide(width: 1, color: Colors.red)),
+                                        focusedBorder: const OutlineInputBorder(borderSide: BorderSide(width: 1, color: Colors.red))),
                                   ),
                                 ),
                               ],
@@ -471,39 +388,34 @@ class _NwOptionsState extends State<NwOptions> {
                     ),
                     Row(
                       children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(15, 0, 0, 15),
-                          child: Container(
+                        const Padding(
+                          padding: EdgeInsets.fromLTRB(15, 0, 0, 15),
+                          child: SizedBox(
                             width: 150,
                             child: Text(
                               'Default Gateway: ',
-                              style: TextStyle(
-                                  fontSize: 15, fontWeight: FontWeight.bold),
+                              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                             ),
                           ),
                         ),
                         Padding(
                           padding: const EdgeInsets.fromLTRB(20, 0, 0, 20),
-                          child: Container(
+                          child: SizedBox(
                             width: 300,
                             child: Row(
                               children: <Widget>[
-                                Container(
+                                SizedBox(
                                   width: 60,
                                   child: TextFormField(
                                     keyboardType: TextInputType.number,
-                                    inputFormatters: [
-                                      FilteringTextInputFormatter.allow(
-                                          RegExp('[0-9]'))
-                                    ],
+                                    inputFormatters: [FilteringTextInputFormatter.allow(RegExp('[0-9]'))],
                                     textAlign: TextAlign.center,
                                     onChanged: (String value) {
                                       if (value.length == 3) {
                                         if (int.parse(value) > 255) {
                                           controller21.text = "255";
                                         }
-                                        FocusScope.of(context)
-                                            .requestFocus(textSecondFocusNode2);
+                                        FocusScope.of(context).requestFocus(textSecondFocusNode2);
                                       }
                                     },
                                     focusNode: textFirstFocusNode3,
@@ -513,26 +425,19 @@ class _NwOptionsState extends State<NwOptions> {
                                         filled: true,
                                         fillColor: Colors.red[100],
                                         counterText: "",
-                                        enabledBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                                width: 1, color: Colors.red)),
-                                        focusedBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                                width: 1, color: Colors.red))),
+                                        enabledBorder: const OutlineInputBorder(borderSide: BorderSide(width: 1, color: Colors.red)),
+                                        focusedBorder: const OutlineInputBorder(borderSide: BorderSide(width: 1, color: Colors.red))),
                                   ),
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
+                                const Padding(
+                                  padding: EdgeInsets.all(8.0),
                                   child: Text('.'),
                                 ),
-                                Container(
+                                SizedBox(
                                   width: 60,
                                   child: TextFormField(
                                     keyboardType: TextInputType.number,
-                                    inputFormatters: [
-                                      FilteringTextInputFormatter.allow(
-                                          RegExp('[0-9]'))
-                                    ],
+                                    inputFormatters: [FilteringTextInputFormatter.allow(RegExp('[0-9]'))],
                                     textAlign: TextAlign.center,
                                     focusNode: textSecondFocusNode2,
                                     onChanged: (String value) {
@@ -540,8 +445,7 @@ class _NwOptionsState extends State<NwOptions> {
                                         if (int.parse(value) > 255) {
                                           controller22.text = "255";
                                         }
-                                        FocusScope.of(context)
-                                            .requestFocus(textThirdFocusNode2);
+                                        FocusScope.of(context).requestFocus(textThirdFocusNode2);
                                       }
                                     },
                                     maxLength: 3,
@@ -550,26 +454,19 @@ class _NwOptionsState extends State<NwOptions> {
                                         filled: true,
                                         fillColor: Colors.red[100],
                                         counterText: "",
-                                        enabledBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                                width: 1, color: Colors.red)),
-                                        focusedBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                                width: 1, color: Colors.red))),
+                                        enabledBorder: const OutlineInputBorder(borderSide: BorderSide(width: 1, color: Colors.red)),
+                                        focusedBorder: const OutlineInputBorder(borderSide: BorderSide(width: 1, color: Colors.red))),
                                   ),
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
+                                const Padding(
+                                  padding: EdgeInsets.all(8.0),
                                   child: Text('.'),
                                 ),
-                                Container(
+                                SizedBox(
                                   width: 60,
                                   child: TextFormField(
                                     keyboardType: TextInputType.number,
-                                    inputFormatters: [
-                                      FilteringTextInputFormatter.allow(
-                                          RegExp('[0-9]'))
-                                    ],
+                                    inputFormatters: [FilteringTextInputFormatter.allow(RegExp('[0-9]'))],
                                     textAlign: TextAlign.center,
                                     focusNode: textThirdFocusNode2,
                                     onChanged: (String value) {
@@ -577,8 +474,7 @@ class _NwOptionsState extends State<NwOptions> {
                                         if (int.parse(value) > 255) {
                                           controller23.text = "255";
                                         }
-                                        FocusScope.of(context)
-                                            .requestFocus(textFourthFocusNode2);
+                                        FocusScope.of(context).requestFocus(textFourthFocusNode2);
                                       }
                                     },
                                     maxLength: 3,
@@ -587,26 +483,19 @@ class _NwOptionsState extends State<NwOptions> {
                                         filled: true,
                                         fillColor: Colors.red[100],
                                         counterText: "",
-                                        enabledBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                                width: 1, color: Colors.red)),
-                                        focusedBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                                width: 1, color: Colors.red))),
+                                        enabledBorder: const OutlineInputBorder(borderSide: BorderSide(width: 1, color: Colors.red)),
+                                        focusedBorder: const OutlineInputBorder(borderSide: BorderSide(width: 1, color: Colors.red))),
                                   ),
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
+                                const Padding(
+                                  padding: EdgeInsets.all(8.0),
                                   child: Text('.'),
                                 ),
-                                Container(
+                                SizedBox(
                                   width: 60,
                                   child: TextFormField(
                                     keyboardType: TextInputType.number,
-                                    inputFormatters: [
-                                      FilteringTextInputFormatter.allow(
-                                          RegExp('[0-9]'))
-                                    ],
+                                    inputFormatters: [FilteringTextInputFormatter.allow(RegExp('[0-9]'))],
                                     textAlign: TextAlign.center,
                                     focusNode: textFourthFocusNode2,
                                     maxLength: 3,
@@ -622,12 +511,8 @@ class _NwOptionsState extends State<NwOptions> {
                                         filled: true,
                                         fillColor: Colors.red[100],
                                         counterText: "",
-                                        enabledBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                                width: 1, color: Colors.red)),
-                                        focusedBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                                width: 1, color: Colors.red))),
+                                        enabledBorder: const OutlineInputBorder(borderSide: BorderSide(width: 1, color: Colors.red)),
+                                        focusedBorder: const OutlineInputBorder(borderSide: BorderSide(width: 1, color: Colors.red))),
                                   ),
                                 ),
                               ],
@@ -638,12 +523,11 @@ class _NwOptionsState extends State<NwOptions> {
                     ),
                     Row(
                       children: <Widget>[
-                        Padding(
-                            padding: const EdgeInsets.all(20.0),
+                        const Padding(
+                            padding: EdgeInsets.all(20.0),
                             child: Text(
                               'DHCP: ',
-                              style: TextStyle(
-                                  fontSize: 15, fontWeight: FontWeight.bold),
+                              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                             )),
                         Checkbox(
                           value: value,
@@ -661,29 +545,16 @@ class _NwOptionsState extends State<NwOptions> {
                         children: <Widget>[
                           ElevatedButton(
                               onPressed: () {
-                                String ip = controller11.text +
-                                    "." +
-                                    controller12.text +
-                                    "." +
-                                    controller13.text +
-                                    "." +
-                                    controller14.text;
-                                String dg = controller21.text +
-                                    "." +
-                                    controller22.text +
-                                    "." +
-                                    controller23.text +
-                                    "." +
-                                    controller24.text;
-                                user.send('CMD_UpdateNetworkConfiguration@Main' +
+                                String ip = controller11.text + "." + controller12.text + "." + controller13.text + "." + controller14.text;
+                                String dg = controller21.text + "." + controller22.text + "." + controller23.text + "." + controller24.text;
+                                user.send('CMD_UpdateNetworkConfiguration@Main'
                                     '{ "IpAddress" : "$ip", "DefaultGateway" : "$dg", "DHCP" : "$value" }');
-                                print('CMD_UpdateNetworkConfiguration@Main' +
+                                debugPrint('CMD_UpdateNetworkConfiguration@Main'
                                     '{ "IpAddress" : "$ip", "DefaultGateway" : "$dg", "DHCP" : "$value" }');
                               },
-                              child: Text(
+                              child: const Text(
                                 'Update Network Settings',
-                                style: TextStyle(
-                                    fontSize: 15, fontWeight: FontWeight.bold),
+                                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                               ))
                         ],
                       ),
@@ -698,31 +569,32 @@ class _NwOptionsState extends State<NwOptions> {
 }
 
 class RestartOptions extends StatelessWidget {
-  final TextEditingController controller = new TextEditingController();
-  final TextEditingController controller2 = new TextEditingController();
+  final TextEditingController controller = TextEditingController();
+  final TextEditingController controller2 = TextEditingController();
 
   final bool value = false;
+
+  RestartOptions({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Consumer<WebSocketClass>(builder: (_, user, __) {
       return Scaffold(
           appBar: AppBar(
-              title: Text(
+              title: const Text(
             'Restart Options',
             style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
           )),
           body: Center(
             child: ListView(
-              padding: EdgeInsets.all(100),
+              padding: const EdgeInsets.all(100),
               children: <Widget>[
                 Padding(
                   padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
                   child: ElevatedButton(
-                    child: Text(
+                    child: const Text(
                       'Restart MC',
-                      style:
-                          TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                      style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                     ),
                     onPressed: () {
                       user.send('CMD_Restart@HWController#');
@@ -732,10 +604,9 @@ class RestartOptions extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
                   child: ElevatedButton(
-                    child: Text(
+                    child: const Text(
                       'Restart     HWController',
-                      style:
-                          TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                      style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                     ),
                     onPressed: () {
                       user.send('CMD_Restart@HWController#');
@@ -745,10 +616,9 @@ class RestartOptions extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
                   child: ElevatedButton(
-                    child: Text(
+                    child: const Text(
                       'Restart FPGA',
-                      style:
-                          TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                      style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                     ),
                     onPressed: () {
                       user.send('CMD_Restart@FPGA#');
@@ -769,7 +639,7 @@ class HwcOptions extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Parameter Option'),
+        title: const Text('Parameter Option'),
       ),
     );
   }

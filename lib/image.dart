@@ -17,10 +17,9 @@ class ImageData {
   String message;
   String error;
 
-  Future<void> Pick() async {
+  Future<void> pickFile() async {
     if (UniversalPlatform.isLinux || UniversalPlatform.isWindows) {
-      final typeGroup =
-          XTypeGroup(label: 'images', extensions: ['jpg', 'png', 'bmp']);
+      final typeGroup = XTypeGroup(label: 'images', extensions: ['jpg', 'png', 'bmp']);
       final pickedFile = await openFile(acceptedTypeGroups: [typeGroup]);
       if (pickedFile != null) {
         data = await pickedFile.readAsBytes();
@@ -29,7 +28,7 @@ class ImageData {
         error = 'No image selected.';
       }
     } else {
-      final pickedFile = await picker.getImage(source: ImageSource.gallery);
+      final pickedFile = await picker.pickImage(source: ImageSource.gallery);
       if (pickedFile != null) {
         data = await pickedFile.readAsBytes();
         message = pickedFile.path;
@@ -40,8 +39,9 @@ class ImageData {
   }
 }
 
-
 class ImagePickerPage extends StatefulWidget {
+  const ImagePickerPage({Key key}) : super(key: key);
+
   @override
   _ImagePickerPageState createState() => _ImagePickerPageState();
 }
@@ -52,42 +52,40 @@ class _ImagePickerPageState extends State<ImagePickerPage> {
   Widget build(BuildContext context) {
     var screen = MediaQuery.of(context);
     return Consumer<WebSocketClass>(builder: (_, user, __) {
-
       return Scaffold(
         appBar: AppBar(
-          title: Text('Imagine Processing '),
+          title: const Text('Imagine Processing '),
           actions: <Widget>[
-            TextButton.icon(
-              label: Text('Send'),
-              icon: Icon(Icons.send),
-
-              onPressed: imageData.data == null? null : () {
-                try {
-                  user.send("CMD_InvertImage@Main[${base64.encode(imageData.data)}]");
-                } catch (e) {
-                  print(e);
-                }
-              }
-            ),
-            TextButton.icon(
-              label: Text('Delete'),
-              icon: Icon(Icons.delete_forever),
-
-              onPressed: user.image == null? null : () {
-                user.image = null;
-                if (this.mounted) setState(() {});
-              }
-            ),
-            SizedBox(width: 10),    // icon + text is touching the border
-
+            ElevatedButton.icon(
+                label: const Text('Send'),
+                icon: const Icon(Icons.send),
+                onPressed: imageData.data == null
+                    ? null
+                    : () {
+                        try {
+                          user.send("CMD_InvertImage@Main[${base64.encode(imageData.data)}]");
+                        } catch (e) {
+                          debugPrint(e.toString());
+                        }
+                      }),
+            ElevatedButton.icon(
+                label: const Text('Delete'),
+                icon: const Icon(Icons.delete_forever),
+                onPressed: user.image == null
+                    ? null
+                    : () {
+                        user.image = null;
+                        if (mounted) setState(() {});
+                      }),
+            const SizedBox(width: 10), // icon + text is touching the border
           ],
         ),
         floatingActionButton: FloatingActionButton(
             tooltip: 'Open image',
-            child: Icon(Icons.open_in_browser),
+            child: const Icon(Icons.open_in_browser),
             onPressed: () async {
-              await imageData.Pick();
-              if (imageData.data != null) if (this.mounted) setState(() {});
+              await imageData.pickFile();
+              if (imageData.data != null) if (mounted) setState(() {});
             }),
         body: Center(
           child: imageData.data != null
@@ -95,25 +93,17 @@ class _ImagePickerPageState extends State<ImagePickerPage> {
                   scrollDirection: Axis.vertical,
                   children: <Widget>[
                     Padding(
-                      padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                      padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
                       child: Column(
                         children: <Widget>[
-                          Container(
-                              width: screen.size.width,
-                              decoration: BoxDecoration(
-                                  border:
-                                      Border.all(color: Colors.red, width: 5)),
-                              child: Image.memory(imageData.data)),
-                          TextButton(
-                            child: Text("Send Image",
-                                style: TextStyle(
-                                    fontSize: 15, fontWeight: FontWeight.bold)),
+                          Container(width: screen.size.width, decoration: BoxDecoration(border: Border.all(color: Colors.red, width: 5)), child: Image.memory(imageData.data)),
+                          ElevatedButton(
+                            child: const Text("Send Image", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
                             onPressed: () {
                               try {
-                                user.send(
-                                    "CMD_InvertImage@Main[${base64.encode(imageData.data)}]");
+                                user.send("CMD_InvertImage@Main[${base64.encode(imageData.data)}]");
                               } catch (e) {
-                                print(e);
+                                debugPrint(e.toString());
                               }
                             },
                           )
@@ -122,25 +112,17 @@ class _ImagePickerPageState extends State<ImagePickerPage> {
                     ),
                     user.image != null
                         ? Padding(
-                            padding: EdgeInsets.fromLTRB(10, 50, 10, 30),
+                            padding: const EdgeInsets.fromLTRB(10, 50, 10, 30),
                             child: Column(
                               children: [
-                                Container(
-                                    width: screen.size.width,
-                                    decoration: BoxDecoration(
-                                        border: Border.all(
-                                            color: Colors.red, width: 5)),
-                                    child: Image.memory(user.image)),
-                                TextButton(
-                                  child: Text("Delete Image",
-                                      style: TextStyle(
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.bold)),
+                                Container(width: screen.size.width, decoration: BoxDecoration(border: Border.all(color: Colors.red, width: 5)), child: Image.memory(user.image)),
+                                ElevatedButton(
+                                  child: const Text("Delete Image", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
                                   onPressed: () {
                                     try {
                                       user.image = null;
                                     } catch (e) {
-                                      print(e);
+                                      debugPrint(e.toString());
                                     }
                                   },
                                 )
@@ -151,8 +133,7 @@ class _ImagePickerPageState extends State<ImagePickerPage> {
                   ],
                 )
               : Container(
-                  decoration: BoxDecoration(
-                      border: Border.all(color: Colors.red, width: 5)),
+                  decoration: BoxDecoration(border: Border.all(color: Colors.red, width: 5)),
                 ),
         ),
       );
