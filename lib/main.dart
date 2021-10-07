@@ -16,13 +16,15 @@ import 'stepper_motor.dart';
 import 'ws_manage.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized(); // this line is needed to use async/await in main()
+  WidgetsFlutterBinding
+      .ensureInitialized(); // this line is needed to use async/await in main()
 
   final prefs = await SharedPreferences.getInstance();
-  final String version= (await PackageInfo.fromPlatform()).version;
-  
+  final version = (await PackageInfo.fromPlatform()).version;
+  final imageAssets = await preloadAssets();
+
   runApp(MultiProvider(providers: [
-    ChangeNotifierProvider(create: (_) => WebSocketClass(prefs)),
+    ChangeNotifierProvider(create: (_) => WebSocketClass(prefs, imageAssets)),
     ChangeNotifierProvider(create: (_) => ThemeChangerClass(prefs, version)),
   ], child: const MyApp()));
 }
@@ -90,7 +92,8 @@ class HomePage extends StatelessWidget {
           // return to the first page from any page.
           // wait until the widget drawn was complete before invoking navigator
           // (this avoids avoid multiple simultaneous calls, and the relative exception)
-          WidgetsBinding.instance.addPostFrameCallback((_) => Navigator.of(context).popUntil((route) => route.isFirst));
+          WidgetsBinding.instance.addPostFrameCallback(
+              (_) => Navigator.of(context).popUntil((route) => route.isFirst));
           return const ReconnectPage();
       }
     });

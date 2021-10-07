@@ -13,14 +13,17 @@ Widget getDcMotorButtons(int i, bool active) {
         children: <Widget>[
           Hero(
             tag: 'hero $i',
-            child: active ? const Icon(Icons.autorenew, color: Colors.red) : const Icon(Icons.autorenew, color: Colors.green),
+            child: active
+                ? const Icon(Icons.autorenew, color: Colors.red)
+                : const Icon(Icons.autorenew, color: Colors.green),
           ),
           Text('M ${i + 1}'),
         ],
       ),
     ),
     onPressed: () {
-      Navigator.pushNamed(_scaffoldKey.currentContext, '/DCMotorPage', arguments: i);
+      Navigator.pushNamed(_scaffoldKey.currentContext, '/DCMotorPage',
+          arguments: i);
     },
   );
 }
@@ -33,7 +36,8 @@ class DCMotor extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var wsc = Provider.of<WebSocketClass>(context, listen: false);
-    dcMotorButtons = List.generate(WebSocketClass.dcMotorStateSize, (i) => getDcMotorButtons(i, wsc.getdcMotorState(i)));
+    dcMotorButtons = List.generate(WebSocketClass.dcMotorStateSize,
+        (i) => getDcMotorButtons(i, wsc.getdcMotorState(i)));
 
     return Consumer<WebSocketClass>(builder: (_, user, __) {
       return Scaffold(
@@ -60,9 +64,9 @@ class DCMotorPage extends StatefulWidget {
 }
 
 class _DCMotorPageState extends State<DCMotorPage> {
-  double pwm = 0;
-  bool isChecked = false;
-  double value = 20000;
+  double pwm = 33;
+  bool isPwmChecked = false;
+  double pwmFreq = 50;
 
   @override
   Widget build(BuildContext context) {
@@ -73,179 +77,117 @@ class _DCMotorPageState extends State<DCMotorPage> {
           appBar: AppBar(
             title: Text(' DC Motor ${index + 1}'),
           ),
-          body: Row(
-            children: <Widget>[
-              Column(
-                children: <Widget>[
-                  Hero(
-                    tag: 'hero $index',
-                    child: user.getdcMotorState(index) ? const Icon(Icons.autorenew, color: Colors.red, size: 100) : const Icon(Icons.autorenew, color: Colors.green, size: 100),
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.fromLTRB(0, 30, 0, 0),
-                  ),
-                  Row(
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: SizedBox(
-                          width: 150,
-                          child: ElevatedButton(
-                            child: const Text('Off', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
-                            onPressed: () {
-                              user.send('CMD_SetDCMotor@Main($index,0)');
-                              user.setdcMotorState(index, false);
-                              dcMotorButtons[index] = getDcMotorButtons(index, false);
-                            },
-                          ),
+          body: SingleChildScrollView(
+              padding: const EdgeInsets.all(10.0),
+              scrollDirection: Axis.vertical,
+              child: SizedBox(
+                  width: 350.0,
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Hero(
+                          tag: 'hero $index',
+                          child: user.getdcMotorState(index)
+                              ? const Icon(Icons.autorenew,
+                                  color: Colors.red, size: 100)
+                              : const Icon(Icons.autorenew,
+                                  color: Colors.green, size: 100),
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: SizedBox(
-                          width: 150,
-                          child: ElevatedButton(
-                            onPressed: () {
-                              user.send('CMD_SetDCMotor@Main($index,brake)');
-                              user.setdcMotorState(index, false);
-                              dcMotorButtons[index] = getDcMotorButtons(index, false);
-                            },
-                            child: const Text('Brake', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
-                          ),
+                        const SizedBox(height: 10),
+                        ElevatedButton(
+                          child: const Text('Run Clockwise',
+                              style: TextStyle(
+                                  fontSize: 15, fontWeight: FontWeight.bold)),
+                          onPressed: () {
+                            if (!isPwmChecked) {
+                              user.send('CMD_SetDCMotorPWM@Main($index,1,100,20)');
+                            } else {
+                              user.send(
+                                  'CMD_SetDCMotorPWM@Main($index,1,${pwm.toInt()},${pwmFreq.toInt()})');
+                            }
+                            user.setdcMotorState(index, true);
+                            dcMotorButtons[index] =
+                                getDcMotorButtons(index, true);
+                          },
                         ),
-                      )
-                    ],
-                  ),
-                  Row(
-                    children: <Widget>[
-                      Column(
-                        children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: SizedBox(
-                              width: 210,
-                              child: ElevatedButton(
-                                child: const Text('Run Clockwise', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
-                                onPressed: () {
-                                  if (!isChecked) {
-                                    user.send('CMD_SetDCMotor@Main($index,1)');
-                                  } else {
-                                    user.send('CMD_SetDCMotorPWM@Main($index,1,$pwm,$value)');
-                                  }
-                                  user.setdcMotorState(index, true);
-                                  dcMotorButtons[index] = getDcMotorButtons(index, true);
-                                },
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: SizedBox(
-                              width: 210,
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  if (!isChecked) {
-                                    user.send('CMD_SetDCMotor@Main($index,-1)');
-                                  } else {
-                                    user.send('CMD_SetDCMotorPWM@Main($index,-1,$pwm,$value)');
-                                  }
-                                  user.setdcMotorState(index, true);
-                                  dcMotorButtons[index] = getDcMotorButtons(index, true);
-                                },
-                                child: const Text('Run Counter Clockwise', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                    ],
-                  ),
-                  Column(
-                    children: <Widget>[
-                      const Padding(
-                        padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                      ),
-                      Row(
-                        children: <Widget>[
-                          const Text('Enable PWM: ', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
-                          Checkbox(
-                            value: isChecked,
+                        const SizedBox(height: 10),
+                        ElevatedButton(
+                          child: const Text('Run Counter Clockwise',
+                              style: TextStyle(
+                                  fontSize: 15, fontWeight: FontWeight.bold)),
+                          onPressed: () {
+                            if (!isPwmChecked) {
+                              user.send('CMD_SetDCMotorPWM@Main($index,-1,100,20)');
+                            } else {
+                              user.send(
+                                  'CMD_SetDCMotorPWM@Main($index,-1,${pwm.toInt()},${pwmFreq.toInt()})');
+                            }
+                            user.setdcMotorState(index, true);
+                            dcMotorButtons[index] =
+                                getDcMotorButtons(index, true);
+                          },
+                        ),
+                        const SizedBox(height: 10),
+                        ElevatedButton(
+                          child: const Text('Off',
+                              style: TextStyle(
+                                  fontSize: 15, fontWeight: FontWeight.bold)),
+                          onPressed: () {
+                            user.send('CMD_SetDCMotor@Main($index,0)');
+                            user.setdcMotorState(index, false);
+                            dcMotorButtons[index] =
+                                getDcMotorButtons(index, false);
+                          },
+                        ),
+                        const SizedBox(height: 10),
+                        ElevatedButton(
+                          child: const Text('Brake',
+                              style: TextStyle(
+                                  fontSize: 15, fontWeight: FontWeight.bold)),
+                          onPressed: () {
+                            user.send('CMD_SetDCMotor@Main($index,brake)');
+                            user.setdcMotorState(index, false);
+                            dcMotorButtons[index] =
+                                getDcMotorButtons(index, false);
+                          },
+                        ),
+                        const SizedBox(height: 10),
+                        CheckboxListTile(
+                            title: const Text('Enable PWM:'),
+                            value: isPwmChecked,
                             onChanged: (bool newValue) {
-                              setState(() {
-                                isChecked = newValue;
-                              });
-                            },
-                          ),
-                        ],
-                      ),
-                      if (isChecked)
-                        Column(
-                          children: <Widget>[
-                            SizedBox(
-                              width: 350,
-                              child: Row(
-                                children: <Widget>[
-                                  Slider(
-                                    value: pwm,
-                                    onChanged: (newValue) {
-                                      setState(() {
-                                        pwm = newValue;
-                                      });
-                                    },
-                                    min: 0,
-                                    max: 100,
-                                    divisions: 100,
-                                  ),
-                                  Text('PWM: ${pwm.round()}%', style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
-                                ],
-                              ),
-                            ),
-                            SizedBox(
-                              width: 350,
-                              child: Row(
-                                children: <Widget>[
-                                  Slider(
-                                    value: value,
-                                    onChanged: (newValue) {
-                                      setState(() {
-                                        value = newValue;
-                                      });
-                                    },
-                                    min: 20000,
-                                    max: 100000,
-                                    divisions: 16,
-                                  ),
-                                  Text('PWM: ${value.round()} Hz', style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
-                                ],
-                              ),
-                            ),
-                          ],
-                        )
-                      else
-                        Column(
-                          children: <Widget>[
-                            Slider(
-                              value: pwm,
-                              onChanged: null,
-                              min: 0,
-                              max: 100,
-                              divisions: 100,
-                            ),
-                            Slider(
-                              value: value,
-                              onChanged: null,
-                              min: 20000,
-                              max: 100000,
-                              divisions: 16,
-                            ),
-                          ],
-                        )
-                    ],
-                  ),
-                ],
-              ),
-            ],
-          ));
+                              setState(() => isPwmChecked = newValue);
+                            }),
+                        Text('Duty cycle: ${pwm.round()}%'),
+                        Slider(
+                          label: '${pwm.round()}%',
+                          value: pwm,
+                          onChanged: !isPwmChecked
+                              ? null
+                              : (newValue) {
+                                  setState(() => pwm = newValue);
+                                },
+                          min: 20,
+                          max: 100,
+                          divisions: (100 - 20),
+                        ),
+                        Text('frequency: ${pwmFreq.round()} KHz'),
+                        Slider(
+                          label: '${pwmFreq.round()} KHz',
+                          value: pwmFreq,
+                          onChanged: !isPwmChecked
+                              ? null
+                              : (newValue) {
+                                  setState(() {
+                                    pwmFreq = newValue;
+                                  });
+                                },
+                          min: 20,
+                          max: 100,
+                          divisions: ((100 - 20) ~/ 5),
+                        ),
+                      ]))));
     });
   }
 }

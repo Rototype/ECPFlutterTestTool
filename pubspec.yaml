@@ -38,8 +38,8 @@ dependencies:
   shared_preferences: ^2.0.6
 
 
+  flutter_image_slideshow: any
   image_picker: ^0.8.0
-
   # awiting for the desktop version of image_picker...
   file_selector: ^0.8.2
   file_selector_windows: ^0.0.2
@@ -67,11 +67,17 @@ dev_dependencies:
 
 # The following section is specific to Flutter.
 flutter:
-
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+  assets:
+    - images/colorlarge.bmp
+    - images/graylevel.bmp
+    - images/nysmall.bmp
+    - images/rotologo.bmp
+
+
 
   # To add assets to your application, add an assets section, like this:
   # assets:

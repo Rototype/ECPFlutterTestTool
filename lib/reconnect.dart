@@ -55,33 +55,38 @@ class IpConfig extends StatelessWidget {
         ),
         body: Padding(
             padding: const EdgeInsets.all(20.0),
-            child: Column(mainAxisAlignment: MainAxisAlignment.spaceAround, crossAxisAlignment: CrossAxisAlignment.center, children: <Widget>[
-              Consumer(builder: (__, WebSocketClass user, _) {
-                _urlcontroller.text = user.wsUrl;
-                return FocusScope(
-                    onFocusChange: (hasFocus) {
-                      if (!hasFocus) {
-                        user.wsUrl = _urlcontroller.text;
-                      } // validate if we leave the page
-                    },
-                    child: TextFormField(
-                      autofocus: true,
-                      controller: _urlcontroller,
-                      decoration: const InputDecoration(
-                        labelText: 'Websocket URL:',
-                        hintText: 'ws://localhost:5001',
-                      ),
-                      onEditingComplete: () => user.wsUrl = _urlcontroller.text,
-                    ));
-              }),
-              Consumer(builder: (__, ThemeChangerClass user, _) {
-                return CheckboxListTile(
-                  title: const Text('Yes, My eyes are hurt by the light themes'),
-                  value: user.isDarkMode,
-                  controlAffinity: ListTileControlAffinity.leading,
-                  onChanged: (checked) => user.isDarkMode = checked,
-                );
-              }),
-            ])));
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Consumer(builder: (__, WebSocketClass user, _) {
+                    _urlcontroller.text = user.wsUrl;
+                    return FocusScope(
+                        onFocusChange: (hasFocus) {
+                          if (!hasFocus) {
+                            user.wsUrl = _urlcontroller.text;
+                          } // validate if we leave the page
+                        },
+                        child: TextFormField(
+                          autofocus: true,
+                          controller: _urlcontroller,
+                          decoration: const InputDecoration(
+                            labelText: 'Websocket URL:',
+                            hintText: 'ws://localhost:5001',
+                          ),
+                          onEditingComplete: () =>
+                              user.wsUrl = _urlcontroller.text,
+                        ));
+                  }),
+                  Consumer(builder: (__, ThemeChangerClass user, _) {
+                    return CheckboxListTile(
+                      title: const Text(
+                          'Yes, My eyes are hurt by the light themes'),
+                      value: user.isDarkMode,
+                      controlAffinity: ListTileControlAffinity.leading,
+                      onChanged: (checked) => user.isDarkMode = checked,
+                    );
+                  }),
+                ])));
   }
 }

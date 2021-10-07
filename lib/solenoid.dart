@@ -13,14 +13,17 @@ Widget getSolenoidButtons(int i, bool active) {
         children: <Widget>[
           Hero(
             tag: 'hero $i',
-            child: active ? const Icon(Icons.sync_alt, color: Colors.red) : const Icon(Icons.sync_alt, color: Colors.green),
+            child: active
+                ? const Icon(Icons.sync_alt, color: Colors.red)
+                : const Icon(Icons.sync_alt, color: Colors.green),
           ),
           Text('S ${i + 1}'),
         ],
       ),
     ),
     onPressed: () {
-      Navigator.pushNamed(_scaffoldKey.currentContext, '/SolenoidPage', arguments: i);
+      Navigator.pushNamed(_scaffoldKey.currentContext, '/SolenoidPage',
+          arguments: i);
     },
   );
 }
@@ -33,7 +36,8 @@ class Solenoid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var wsc = Provider.of<WebSocketClass>(context, listen: false);
-    solenoidButtons = List.generate(WebSocketClass.solenoidStateSize, (i) => getSolenoidButtons(i, wsc.getSolenoidState(i)));
+    solenoidButtons = List.generate(WebSocketClass.solenoidStateSize,
+        (i) => getSolenoidButtons(i, wsc.getSolenoidState(i)));
 
     return Consumer<WebSocketClass>(builder: (_, user, __) {
       return Scaffold(
@@ -60,9 +64,9 @@ class SolenoidPage extends StatefulWidget {
 }
 
 class _SolenoidPageState extends State<SolenoidPage> {
-  double pwm = 0;
-  double inittime = 0;
-  bool isChecked = false;
+  double pwm = 33;
+  double initTime = 80;
+  bool isPwmChecked = false;
 
   @override
   Widget build(BuildContext context) {
@@ -70,136 +74,89 @@ class _SolenoidPageState extends State<SolenoidPage> {
 
     return Consumer<WebSocketClass>(builder: (_, user, __) {
       return Scaffold(
-        appBar: AppBar(
-          title: Text(' Solenoid ${index + 1}'),
-        ),
-        body: Center(
-          child: ListView(
-            scrollDirection: Axis.horizontal,
-            children: <Widget>[
-              Column(
-                children: <Widget>[
-                  Hero(
-                    tag: 'hero $index',
-                    child: user.getSolenoidState(index) ? const Icon(Icons.sync_alt, color: Colors.red, size: 100) : const Icon(Icons.sync_alt, color: Colors.green, size: 100),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 50, 0, 0),
-                    child: ElevatedButton(
-                      onPressed: () {
-                        if (isChecked) {
-                          user.send('CMD_SetDCSolenoidPWM@Main($index,1,${pwm.toInt()},${inittime.toInt()})');
-                        } else {
-                          user.send('CMD_SetDCSolenoid@Main($index,1)');
-                        }
-                        user.setSolenoidState(index, true);
-                        solenoidButtons[index] = getSolenoidButtons(index, true);
-                      },
-                      child: const Text('Set Solenoid ON',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          )),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 35, 0, 0),
-                    child: ElevatedButton(
-                      onPressed: () {
-                        user.send('CMD_SetDCSolenoid@Main($index,0)');
-                        user.setSolenoidState(index, false);
-                        solenoidButtons[index] = getSolenoidButtons(index, false);
-                      },
-                      child: const Text('Set Solenoid OFF',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          )),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Row(
-                      children: <Widget>[
-                        const Text('Enable PWM: ', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
-                        Checkbox(
-                          value: isChecked,
-                          onChanged: (bool newValue) {
-                            setState(() {
-                              isChecked = newValue;
-                            });
-                          },
-                        ),
-                        isChecked
-                            ? Column(
-                                children: <Widget>[
-                                  SizedBox(
-                                    width: 350,
-                                    child: Row(
-                                      children: <Widget>[
-                                        Slider(
-                                          value: pwm,
-                                          onChanged: (newValue) {
-                                            setState(() {
-                                              pwm = newValue;
-                                            });
-                                          },
-                                          min: 0,
-                                          max: 100,
-                                          divisions: 100,
-                                        ),
-                                        Text('PWM: ${pwm.round()}%', style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
-                                      ],
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 350,
-                                    child: Row(
-                                      children: <Widget>[
-                                        Slider(
-                                          value: inittime,
-                                          onChanged: (newValue) {
-                                            setState(() {
-                                              inittime = newValue;
-                                            });
-                                          },
-                                          min: 0,
-                                          max: 2000,
-                                          divisions: 100,
-                                        ),
-                                        Text('Init Time: ${inittime.round()} ms', style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              )
-                            : Column(
-                                children: <Widget>[
-                                  Slider(
-                                    value: pwm,
-                                    onChanged: null,
-                                    min: 0,
-                                    max: 100,
-                                    divisions: 100,
-                                  ),
-                                  Slider(
-                                    value: inittime,
-                                    onChanged: null,
-                                    min: 0,
-                                    max: 100,
-                                    divisions: 100,
-                                  ),
-                                ],
-                              )
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ],
+          appBar: AppBar(
+            title: Text(' Solenoid ${index + 1}'),
           ),
-        ),
-      );
+          body: SingleChildScrollView(
+              padding: const EdgeInsets.all(10.0),
+              scrollDirection: Axis.vertical,
+              child: SizedBox(
+                  width: 350.0,
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Hero(
+                          tag: 'hero $index',
+                          child: user.getSolenoidState(index)
+                              ? const Icon(Icons.sync_alt,
+                                  color: Colors.red, size: 100)
+                              : const Icon(Icons.sync_alt,
+                                  color: Colors.green, size: 100),
+                        ),
+                        const SizedBox(height: 10),
+                        ElevatedButton(
+                          onPressed: () {
+                            if (isPwmChecked) {
+                              user.send(
+                                  'CMD_SetDCSolenoidPWM@Main($index,1,${pwm.toInt()},${initTime.toInt()})');
+                            } else {
+                              user.send('CMD_SetDCSolenoid@Main($index,1)');
+                            }
+                            user.setSolenoidState(index, true);
+                            solenoidButtons[index] =
+                                getSolenoidButtons(index, true);
+                          },
+                          child: const Text('Set Solenoid ON'),
+                        ),
+                        const SizedBox(height: 10),
+                        ElevatedButton(
+                          onPressed: () {
+                            user.send('CMD_SetDCSolenoid@Main($index,0)');
+                            user.setSolenoidState(index, false);
+                            solenoidButtons[index] =
+                                getSolenoidButtons(index, false);
+                          },
+                          child: const Text('Set Solenoid OFF'),
+                        ),
+                        const SizedBox(height: 10),
+                        CheckboxListTile(
+                            title: const Text('Enable PWM:'),
+                            value: isPwmChecked,
+                            onChanged: (bool newValue) {
+                              setState(() => isPwmChecked = newValue);
+                            }),
+                        Text('Duty cycle: ${pwm.round()}%'),
+                        Slider(
+                          label: '${pwm.round()}%',
+                          value: pwm,
+                          onChanged: !isPwmChecked
+                              ? null
+                              : (newValue) {
+                                  setState(() {
+                                    pwm = newValue;
+                                  });
+                                },
+                          min: 0,
+                          max: 100,
+                          divisions: 100,
+                        ),
+                        Text('Init Time: ${initTime.round()} ms'),
+                        Slider(
+                          label: '${initTime.round()} ms',
+                          value: initTime,
+                          onChanged: !isPwmChecked
+                              ? null
+                              : (newValue) {
+                                  setState(() {
+                                    initTime = newValue;
+                                  });
+                                },
+                          min: 0,
+                          max: 2000,
+                          divisions: 100,
+                        ),
+                      ]))));
     });
   }
 }

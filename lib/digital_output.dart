@@ -10,13 +10,19 @@ Widget getOutputButton(int i, bool active) {
       width: 80,
       child: Row(
         children: <Widget>[
-          Hero(tag: 'hero $i', child: active ? const Icon(Icons.check_box, color: Colors.red) : const Icon(Icons.check_box_outline_blank, color: Colors.green)),
+          Hero(
+              tag: 'hero $i',
+              child: active
+                  ? const Icon(Icons.check_box, color: Colors.red)
+                  : const Icon(Icons.check_box_outline_blank,
+                      color: Colors.green)),
           Text('Out ${i + 1}'),
         ],
       ),
     ),
     onPressed: () {
-      Navigator.pushNamed(_scaffoldKey.currentContext, '/OutputPage', arguments: i);
+      Navigator.pushNamed(_scaffoldKey.currentContext, '/OutputPage',
+          arguments: i);
     },
   );
 }
@@ -29,7 +35,8 @@ class Output extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var wsc = Provider.of<WebSocketClass>(context, listen: false);
-    outputButtons = List.generate(WebSocketClass.outputStateSize, (i) => getOutputButton(i, wsc.getOutputState(i)));
+    outputButtons = List.generate(WebSocketClass.outputStateSize,
+        (i) => getOutputButton(i, wsc.getOutputState(i)));
 
     return Consumer<WebSocketClass>(builder: (_, user, __) {
       return Scaffold(
@@ -69,9 +76,11 @@ class OutputPage extends StatelessWidget {
               children: <Widget>[
                 Hero(
                     tag: 'hero $index',
-                    child: user.getOutputState(index) ?
-                          const Icon(Icons.check_box, color: Colors.red, size: 100)
-                        : const Icon(Icons.check_box_outline_blank, color: Colors.green, size: 100)),
+                    child: user.getOutputState(index)
+                        ? const Icon(Icons.check_box,
+                            color: Colors.red, size: 100)
+                        : const Icon(Icons.check_box_outline_blank,
+                            color: Colors.green, size: 100)),
                 const Padding(
                   padding: EdgeInsets.fromLTRB(5, 5, 0, 0),
                   child: Text('Out '),
@@ -88,7 +97,8 @@ class OutputPage extends StatelessWidget {
                           onPressed: () {
                             user.send('CMD_SetDigitalOutput@Main($index,1)');
                             user.setOutputState(index, true);
-                            outputButtons[index] = getOutputButton(index, user.getOutputState(index));
+                            outputButtons[index] = getOutputButton(
+                                index, user.getOutputState(index));
                           }),
                     )),
                 Padding(
@@ -99,7 +109,8 @@ class OutputPage extends StatelessWidget {
                           onPressed: () {
                             user.send('CMD_SetDigitalOutput@Main($index,0)');
                             user.setOutputState(index, false);
-                            outputButtons[index] = getOutputButton(index, user.getOutputState(index));
+                            outputButtons[index] = getOutputButton(
+                                index, user.getOutputState(index));
                           },
                           child: const Text(
                             "OFF",

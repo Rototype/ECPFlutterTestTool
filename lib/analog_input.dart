@@ -8,7 +8,8 @@ final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 Widget getInputButton(int i, int value) {
   return TextButton(
       onPressed: () {
-        Navigator.pushNamed(_scaffoldKey.currentContext, '/inputAnalogPage', arguments: i);
+        Navigator.pushNamed(_scaffoldKey.currentContext, '/inputAnalogPage',
+            arguments: i);
       },
       child: SizedBox(
           width: 80,
@@ -52,7 +53,8 @@ class AnalogicInputsState extends State<AnalogicInputs> {
   @override
   Widget build(BuildContext context) {
     return Consumer<WebSocketClass>(builder: (_, user, __) {
-      inputButtons = List.generate(WebSocketClass.inputStateSize, (i) => getInputButton(i, _wsc.inputState[i]));
+      inputButtons = List.generate(WebSocketClass.inputStateSize,
+          (i) => getInputButton(i, _wsc.inputState[i]));
       return Scaffold(
           key: _scaffoldKey,
           appBar: AppBar(
@@ -93,7 +95,9 @@ class AnalogInputPage extends StatelessWidget {
                     )),
                 Padding(
                   padding: const EdgeInsets.all(20.0),
-                  child: Text('Read Value: ${user.inputState[index]}', style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+                  child: Text('Read Value: ${user.inputState[index]}',
+                      style: const TextStyle(
+                          fontSize: 15, fontWeight: FontWeight.bold)),
                 )
               ],
             ),

@@ -12,11 +12,11 @@ Widget getPhotocellButton(int i, BigInt result) {
       width: 80,
       child: Row(
         children: <Widget>[
-          result & BigInt.from(pow(2, i)) == BigInt.from(0)
+          result & BigInt.from(pow(2, i)) != BigInt.from(0)
               ? Hero(
                   tag: 'hero $i',
                   child: const Icon(
-                    Icons.lightbulb_outline,
+                    Icons.lightbulb,
                     color: Colors.greenAccent,
                   ))
               : Hero(
@@ -30,7 +30,8 @@ Widget getPhotocellButton(int i, BigInt result) {
       ),
     ),
     onPressed: () {
-      Navigator.pushNamed(_scaffoldKey.currentContext, '/PhotocellPage', arguments: i);
+      Navigator.pushNamed(_scaffoldKey.currentContext, '/PhotocellPage',
+          arguments: i);
     },
   ));
 }
@@ -63,7 +64,8 @@ class PhotocellsState extends State<Photocells> {
   @override
   Widget build(BuildContext context) {
     return Consumer<WebSocketClass>(builder: (_, user, __) {
-      photocellButtons = List.generate(WebSocketClass.photocellStateSize, (i) => getPhotocellButton(i, _wsc.result));
+      photocellButtons = List.generate(WebSocketClass.photocellStateSize,
+          (i) => getPhotocellButton(i, _wsc.result));
       return Scaffold(
           key: _scaffoldKey,
           appBar: AppBar(
@@ -87,7 +89,7 @@ class PhotocellPage extends StatefulWidget {
 }
 
 class _PhotocellPageState extends State<PhotocellPage> {
-  double value = 0;
+  double value = 500;
 
   @override
   Widget build(BuildContext context) {
@@ -102,11 +104,11 @@ class _PhotocellPageState extends State<PhotocellPage> {
             children: <Widget>[
               Column(
                 children: <Widget>[
-                  user.result & BigInt.from(pow(2, index)) == BigInt.from(0)
+                  user.result & BigInt.from(pow(2, index)) != BigInt.from(0)
                       ? Hero(
                           tag: 'hero $index',
                           child: const Icon(
-                            Icons.lightbulb_outline,
+                            Icons.lightbulb,
                             color: Colors.greenAccent,
                             size: 100,
                           ))
@@ -117,34 +119,27 @@ class _PhotocellPageState extends State<PhotocellPage> {
                             color: Colors.red,
                             size: 100,
                           )),
-                  Column(
-                    children: <Widget>[
-                      ElevatedButton(
-                        onPressed: () {
-                          debugPrint('$index');
-                          user.send('CMD_SetAnalogOutput@Main($index,$value)');
-                        },
-                        child: const Text('Set Diode PWM', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
-                      ),
-                      Row(
-                        children: <Widget>[
-                          Text('Value: $value', style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
-                          Slider(
-                            value: value,
-                            onChanged: (newValue) {
-                              setState(() => value = newValue);
-                            },
-                            label: '${value.round()}',
-                            min: 0,
-                            max: 1000,
-                            divisions: 100,
-                          ),
-                        ],
-                      )
-                    ],
+                  ElevatedButton(
+                    onPressed: () {
+                      debugPrint('$index');
+                      user.send('CMD_SetAnalogOutput@Main($index,$value)');
+                    },
+                    child: const Text('Set Diode PWM'),
+                  ),
+                  const SizedBox(height: 10),
+                  Text('Value: ${value.round()}‰'),
+                  Slider(
+                    label: '${value.round()}‰',
+                    value: value,
+                    onChanged: (newValue) {
+                      setState(() => value = newValue);
+                    },
+                    min: 0,
+                    max: 1000,
+                    divisions: 100,
                   ),
                 ],
-              )
+              ),
             ],
           ));
     });

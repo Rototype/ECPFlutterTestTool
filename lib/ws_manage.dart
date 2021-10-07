@@ -8,17 +8,21 @@ import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
+import 'image.dart';
+
 enum Status { socketConnected, socketNotConnected, socketCrash }
 
 class WebSocketClass with ChangeNotifier {
-  SharedPreferences _prefs;
-  final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
+  final SharedPreferences _prefs;
+  final List<ImageBmp> bmpList;
+  final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey =
+      GlobalKey<ScaffoldMessengerState>();
 
-  WebSocketClass(SharedPreferences _p) {
-    _prefs = _p;
-  }
+  WebSocketClass(this._prefs, this.bmpList);
 
-  String get wsUrl => _prefs.getString('ws_url') ?? 'ws://localhost:5001'; // loopback as default
+  String get wsUrl =>
+      _prefs.getString('ws_url') ??
+      'ws://localhost:5001'; // loopback as default
   set wsUrl(String _url) {
     _prefs.setString('ws_url', _url);
     notifyListeners();
@@ -69,7 +73,7 @@ class WebSocketClass with ChangeNotifier {
     _timerPeriod.cancel();
   }
 
-  final endRegExp = RegExp(r'END_(\w+)@Main(#|\((\w+)\)|\[(.+)\])');
+  final endRegExp = RegExp(r'(EVT|END)_(\w+)@Main(#|\((\w+)\)|\[(.+)\])');
 
   int missedPing = 0;
 
@@ -122,6 +126,7 @@ class WebSocketClass with ChangeNotifier {
   void cleardcMotorState() {
     _dcMotorState = List.generate(dcMotorStateSize, (_) => false);
   }
+
   /////////////////////////////////////////////////////////////////
   static const int stepperMotorStateSize = 20;
   var _stepperMotorState = List.generate(stepperMotorStateSize, (_) => false);
@@ -137,6 +142,7 @@ class WebSocketClass with ChangeNotifier {
   void clearStepperMotorState() {
     _stepperMotorState = List.generate(stepperMotorStateSize, (_) => false);
   }
+
   /////////////////////////////////////////////////////////////////
   static const int inputStateSize = 5;
   var inputState = List.generate(inputStateSize, (_) => 0);
@@ -151,7 +157,7 @@ class WebSocketClass with ChangeNotifier {
     result = BigInt.from(0);
     lastDigitalInput = '';
   }
-  
+
 
   Uint8List image;
   int counter = 0;
@@ -187,50 +193,72 @@ class WebSocketClass with ChangeNotifier {
           // to test the image send & receive + polling with an echo server:
           // docker run -d -p 8080:8080 inanimate/echo-server
           // ---------------------------------------------------------------------------
-          /*
-          if (message.toString().startsWith("Request served")) {
-            return;
-          }
-          var s = DateTime.now().microsecondsSinceEpoch.toRadixString(16);
-          if ( message == 'CMD_ReadDigitalInput@Main#') {
-            message = 'END_ReadDigitalInput@Main(0x$s)';
-          } else if (message.toString().startsWith('CMD_')) {
-            message = 'END_' + message.toString().substring(4);
-          }
-          */
+
+          // if (message.toString().startsWith("Request served")) {
+          //   return;
+          // }
+          // var s = DateTime.now().microsecondsSinceEpoch.toRadixString(16);
+          // if (message == 'CMD_ReadDigitalInput@Main#') {
+          //   message = 'END_ReadDigitalInput@Main(0x$s)';
+          // } else if (message.toString().startsWith('CMD_InvertImage')) {
+          //   message = message.toString().replaceFirst('CMD', 'END');
+          // } else if (message.toString().startsWith('CMD_')) {
+          //   message = 'END_ReadAnalogInput@Main(0x$s)';
+          // }
+          // Timer tevt = Timer.periodic(const Duration(seconds: 15), (Timer t) => 
+          //   send('EVT_StopStepperMotor@Main(3)')
+          // );
+
+          // ---------------------------------------------------------------------------
+          // ---------------------------------------------------------------------------
 
           try {
             final match = endRegExp.firstMatch(message);
-
             switch (match[1]) {
-              case 'ReadAnalogInput':
-                missedPing--; // retrig the polling: keep alive the connection
-                inputState[indexReadAnalog] = int.parse(match[3]);
-                if (lastinputState[indexReadAnalog] != inputState[indexReadAnalog]) {
-                  lastinputState[indexReadAnalog] = inputState[indexReadAnalog];
-                  notifyListeners();
+              case 'END':
+                switch (match[2]) {
+                  case 'ReadAnalogInput':
+                    missedPing--; // retrig the polling: keep alive the connection
+                    inputState[indexReadAnalog] = int.parse(match[4]);
+                    if (lastinputState[indexReadAnalog] !=
+                        inputState[indexReadAnalog]) {
+                      lastinputState[indexReadAnalog] =
+                          inputState[indexReadAnalog];
+                      notifyListeners();
+                    }
+                    if (indexReadAnalog >= 4) {
+                      indexReadAnalog = 0;
+                    } else {
+                      indexReadAnalog++;
+                    }
+                    break;
+                  case 'ReadDigitalInput':
+                    missedPing--; // retrig the polling: keep alive the connection
+                    if (match[4] != lastDigitalInput) {
+                      result = BigInt.parse(match[4].split('x')[1], radix: 16);
+                      notifyListeners();
+                      lastDigitalInput = match[4];
+                    }
+                    break;
+                  case 'InvertImage':
+                    image = base64.decode(match[5]);
+                    notifyListeners();
+                    break;
+                  default:
+                    debugPrint("listened: " + message);
+                    break;
                 }
-                if (indexReadAnalog >= 4) {
-                  indexReadAnalog = 0;
-                } else {
-                  indexReadAnalog++;
+                break;
+              case 'EVT':
+                switch (match[2]) {
+                  case 'StopStepperMotor':
+                    var stepno = int.parse(match[4]);
+                    setStepperMotorState(stepno, false);
+                    break;
+                  default:
+                    debugPrint("listened: " + message);
+                    break;
                 }
-                break;
-              case 'ReadDigitalInput':
-                missedPing--; // retrig the polling: keep alive the connection
-                if (match[3] != lastDigitalInput) {
-                  result = BigInt.parse(match[3].split('x')[1], radix: 16);
-                  notifyListeners();
-                  lastDigitalInput = match[3];
-                }
-                break;
-              case 'InvertImage':
-                image = base64.decode(match[4]);
-                notifyListeners();
-                break;
-              default:
-                debugPrint("listened: " + message);
-                break;
             }
           } catch (e) {
             debugPrint(e.toString());
@@ -271,9 +299,10 @@ class WebSocketClass with ChangeNotifier {
       scaffoldMessengerKey.currentState.showSnackBar(SnackBar(
           behavior: SnackBarBehavior.floating,
           content: Row(
-              mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-                const Icon(Icons.error, color: Colors.red, size: 40), 
-                const SizedBox(width: 10), 
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                const Icon(Icons.error, color: Colors.red, size: 40),
+                const SizedBox(width: 10),
                 Expanded(
                   child: Text(message),
                 )
