@@ -67,7 +67,7 @@ class MyApp extends StatelessWidget {
           '/Settings': (_) => const Setting(),
           '/Network': (_) => const NwOptions(),
           '/Restart': (_) => RestartOptions(),
-          '/ParameterOption': (_) => const HwcOptions(),
+          '/ParameterOption': (_) => HwcOptions(),
           '/IpConfig': (_) => IpConfig(),
         },
       );

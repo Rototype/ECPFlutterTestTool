@@ -73,12 +73,11 @@ class WebSocketClass with ChangeNotifier {
     _timerPeriod.cancel();
   }
 
-  final endRegExp = RegExp(r'(EVT|END)_(\w+)@Main(#|\((\w+)\)|\[(.+)\])');
+  final endRegExp = RegExp(r'(EVT|END)_(\w+)@(\w+)(#|\((\w+)\)|\[(.+)\]|\{((.|\n)*?)})');
 
   int missedPing = 0;
 
-  var messageStringHWcontroller = <String>[];
-  var messageStringMain = <String>[];
+  String configText = '';
 
   /////////////////////////////////////////////////////////////////
   static const int outputStateSize = 10;
@@ -158,7 +157,6 @@ class WebSocketClass with ChangeNotifier {
     lastDigitalInput = '';
   }
 
-
   Uint8List image;
   int counter = 0;
   int indexReadAnalog = 0;
@@ -205,7 +203,7 @@ class WebSocketClass with ChangeNotifier {
           // } else if (message.toString().startsWith('CMD_')) {
           //   message = 'END_ReadAnalogInput@Main(0x$s)';
           // }
-          // Timer tevt = Timer.periodic(const Duration(seconds: 15), (Timer t) => 
+          // Timer tevt = Timer.periodic(const Duration(seconds: 15), (Timer t) =>
           //   send('EVT_StopStepperMotor@Main(3)')
           // );
 
@@ -219,7 +217,7 @@ class WebSocketClass with ChangeNotifier {
                 switch (match[2]) {
                   case 'ReadAnalogInput':
                     missedPing--; // retrig the polling: keep alive the connection
-                    inputState[indexReadAnalog] = int.parse(match[4]);
+                    inputState[indexReadAnalog] = int.parse(match[5]);
                     if (lastinputState[indexReadAnalog] !=
                         inputState[indexReadAnalog]) {
                       lastinputState[indexReadAnalog] =
@@ -234,14 +232,18 @@ class WebSocketClass with ChangeNotifier {
                     break;
                   case 'ReadDigitalInput':
                     missedPing--; // retrig the polling: keep alive the connection
-                    if (match[4] != lastDigitalInput) {
-                      result = BigInt.parse(match[4].split('x')[1], radix: 16);
+                    if (match[5] != lastDigitalInput) {
+                      result = BigInt.parse(match[5].split('x')[1], radix: 16);
                       notifyListeners();
-                      lastDigitalInput = match[4];
+                      lastDigitalInput = match[5];
                     }
                     break;
                   case 'InvertImage':
-                    image = base64.decode(match[5]);
+                    image = base64.decode(match[6]);
+                    notifyListeners();
+                    break;
+                  case 'ReadConfiguration':
+                    configText = match[7];
                     notifyListeners();
                     break;
                   default:
@@ -252,7 +254,7 @@ class WebSocketClass with ChangeNotifier {
               case 'EVT':
                 switch (match[2]) {
                   case 'StopStepperMotor':
-                    var stepno = int.parse(match[4]);
+                    var stepno = int.parse(match[5]);
                     setStepperMotorState(stepno, false);
                     break;
                   default:

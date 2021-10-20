@@ -111,581 +111,6 @@ class _NwOptionsState extends State<NwOptions> {
   }
 }
 
-//     Row(children: [
-//       TextFormFieldNum(min: 0, max: 255, initialNum: 0, labelTextNum: '',
-//         onSavedCallback: (int value) => (ip1 = value),
-//       ),
-//       const Text('.'),
-//       TextFormFieldNum(min: 0, max: 255, initialNum: 0, labelTextNum: '',
-//         onSavedCallback: (int value) => (ip1 = value),
-//       ),
-//       const Text('.'),
-//       TextFormFieldNum(min: 0, max: 255, initialNum: 0, labelTextNum: '',
-//         onSavedCallback: (int value) => (ip1 = value),
-//       ),
-//     ],
-// )
-//  ),
-// Row(
-//   children: <Widget>[
-//     const Padding(
-//       padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
-//       child: SizedBox(
-//         width: 150,
-//         child: Text(
-//           'IP Address: ',
-//           style: TextStyle(
-//               fontSize: 15, fontWeight: FontWeight.bold),
-//         ),
-//       ),
-//     ),
-//     Padding(
-//       padding: const EdgeInsets.fromLTRB(20, 20, 0, 20),
-//       child: SizedBox(
-//         width: 300,
-//         child: Row(
-//           children: <Widget>[
-//             SizedBox(
-//               width: 60,
-//               child: TextFormField(
-//                 keyboardType:
-//                     const TextInputType.numberWithOptions(
-//                         decimal: true),
-//                 inputFormatters: [
-//                   FilteringTextInputFormatter.allow(
-//                       RegExp('[0-9]'))
-//                 ],
-//                 // Only numbers can be entered
-//                 textAlign: TextAlign.center,
-//                 onChanged: (String value) {
-//                   if (value.length == 3) {
-//                     if (int.parse(value) > 255) {
-//                       controller11.text = "255";
-//                     }
-//                     FocusScope.of(context)
-//                         .requestFocus(textSecondFocusNode);
-//                   }
-//                 },
-//                 maxLength: 3,
-//                 controller: controller11,
-//                 decoration: InputDecoration(
-//                     filled: true,
-//                     fillColor: Colors.red[100],
-//                     counterText: "",
-//                     enabledBorder: const OutlineInputBorder(
-//                         borderSide: BorderSide(
-//                             width: 1, color: Colors.red)),
-//                     focusedBorder: const OutlineInputBorder(
-//                         borderSide: BorderSide(
-//                             width: 1, color: Colors.red))),
-//               ),
-//             ),
-//             const Padding(
-//               padding: EdgeInsets.all(8.0),
-//               child: Text('.'),
-//             ),
-//             SizedBox(
-//               width: 60,
-//               child: TextFormField(
-//                 inputFormatters: [
-//                   FilteringTextInputFormatter.allow(
-//                       RegExp('[0-9]'))
-//                 ],
-//                 keyboardType: TextInputType.number,
-//                 textAlign: TextAlign.center,
-//                 focusNode: textSecondFocusNode,
-//                 onChanged: (String value) {
-//                   if (value.length == 3) {
-//                     if (int.parse(value) > 255) {
-//                       controller12.text = "255";
-//                     }
-//                     FocusScope.of(context)
-//                         .requestFocus(textThirdFocusNode);
-//                   }
-//                 },
-//                 maxLength: 3,
-//                 controller: controller12,
-//                 decoration: InputDecoration(
-//                     filled: true,
-//                     fillColor: Colors.red[100],
-//                     counterText: "",
-//                     enabledBorder: const OutlineInputBorder(
-//                         borderSide: BorderSide(
-//                             width: 1, color: Colors.red)),
-//                     focusedBorder: const OutlineInputBorder(
-//                         borderSide: BorderSide(
-//                             width: 1, color: Colors.red))),
-//               ),
-//             ),
-//             const Padding(
-//               padding: EdgeInsets.all(8.0),
-//               child: Text('.'),
-//             ),
-//             SizedBox(
-//               width: 60,
-//               child: TextFormField(
-//                 keyboardType: TextInputType.number,
-//                 textAlign: TextAlign.center,
-//                 focusNode: textThirdFocusNode,
-//                 onChanged: (String value) {
-//                   if (value.length == 3) {
-//                     if (int.parse(value) > 255) {
-//                       controller13.text = "255";
-//                     }
-//                     FocusScope.of(context)
-//                         .requestFocus(textFourthFocusNode);
-//                   }
-//                 },
-//                 maxLength: 3,
-//                 controller: controller13,
-//                 decoration: InputDecoration(
-//                     filled: true,
-//                     fillColor: Colors.red[100],
-//                     counterText: "",
-//                     enabledBorder: const OutlineInputBorder(
-//                         borderSide: BorderSide(
-//                             width: 1, color: Colors.red)),
-//                     focusedBorder: const OutlineInputBorder(
-//                         borderSide: BorderSide(
-//                             width: 1, color: Colors.red))),
-//               ),
-//             ),
-//             const Padding(
-//               padding: EdgeInsets.all(8.0),
-//               child: Text('.'),
-//             ),
-//             SizedBox(
-//               width: 60,
-//               child: TextFormField(
-//                 inputFormatters: [
-//                   FilteringTextInputFormatter.allow(
-//                       RegExp('[0-9]'))
-//                 ],
-//                 keyboardType: TextInputType.number,
-//                 textAlign: TextAlign.center,
-//                 onChanged: (String value) {
-//                   if (value.length == 3) {
-//                     if (int.parse(value) > 255) {
-//                       controller14.text = "255";
-//                     }
-//                     FocusScope.of(context)
-//                         .requestFocus(textFirstFocusNode2);
-//                   }
-//                 },
-//                 focusNode: textFourthFocusNode,
-//                 maxLength: 3,
-//                 controller: controller14,
-//                 decoration: InputDecoration(
-//                     filled: true,
-//                     fillColor: Colors.red[100],
-//                     counterText: "",
-//                     enabledBorder: const OutlineInputBorder(
-//                         borderSide: BorderSide(
-//                             width: 1, color: Colors.red)),
-//                     focusedBorder: const OutlineInputBorder(
-//                         borderSide: BorderSide(
-//                             width: 1, color: Colors.red))),
-//               ),
-//             ),
-//           ],
-//         ),
-//       ),
-//     ),
-//   ],
-// ),
-// Row(
-//   children: <Widget>[
-//     const Padding(
-//       padding: EdgeInsets.fromLTRB(15, 0, 0, 15),
-//       child: SizedBox(
-//         width: 150,
-//         child: Text(
-//           'Subnet Mask: ',
-//           style: TextStyle(
-//               fontSize: 15, fontWeight: FontWeight.bold),
-//         ),
-//       ),
-//     ),
-//     Padding(
-//       padding: const EdgeInsets.fromLTRB(20, 0, 0, 20),
-//       child: SizedBox(
-//         width: 300,
-//         child: Row(
-//           children: <Widget>[
-//             SizedBox(
-//               width: 60,
-//               child: TextFormField(
-//                 inputFormatters: [
-//                   FilteringTextInputFormatter.allow(
-//                       RegExp('[0-9]'))
-//                 ],
-//                 keyboardType: TextInputType.number,
-//                 textAlign: TextAlign.center,
-//                 onChanged: (String value) {
-//                   if (value.length == 3) {
-//                     if (int.parse(value) > 255) {
-//                       controller31.text = "255";
-//                     }
-//                     FocusScope.of(context)
-//                         .requestFocus(textSecondFocusNode3);
-//                   }
-//                 },
-//                 focusNode: textFirstFocusNode2,
-//                 maxLength: 3,
-//                 controller: controller31,
-//                 decoration: InputDecoration(
-//                     filled: true,
-//                     fillColor: Colors.red[100],
-//                     counterText: "",
-//                     enabledBorder: const OutlineInputBorder(
-//                         borderSide: BorderSide(
-//                             width: 1, color: Colors.red)),
-//                     focusedBorder: const OutlineInputBorder(
-//                         borderSide: BorderSide(
-//                             width: 1, color: Colors.red))),
-//               ),
-//             ),
-//             const Padding(
-//               padding: EdgeInsets.all(8.0),
-//               child: Text('.'),
-//             ),
-//             SizedBox(
-//               width: 60,
-//               child: TextFormField(
-//                 inputFormatters: [
-//                   FilteringTextInputFormatter.allow(
-//                       RegExp('[0-9]'))
-//                 ],
-//                 keyboardType: TextInputType.number,
-//                 textAlign: TextAlign.center,
-//                 focusNode: textSecondFocusNode3,
-//                 onChanged: (String value) {
-//                   if (value.length == 3) {
-//                     if (int.parse(value) > 255) {
-//                       controller32.text = "255";
-//                     }
-//                     FocusScope.of(context)
-//                         .requestFocus(textThirdFocusNode3);
-//                   }
-//                 },
-//                 maxLength: 3,
-//                 controller: controller32,
-//                 decoration: InputDecoration(
-//                     filled: true,
-//                     fillColor: Colors.red[100],
-//                     counterText: "",
-//                     enabledBorder: const OutlineInputBorder(
-//                         borderSide: BorderSide(
-//                             width: 1, color: Colors.red)),
-//                     focusedBorder: const OutlineInputBorder(
-//                         borderSide: BorderSide(
-//                             width: 1, color: Colors.red))),
-//               ),
-//             ),
-//             const Padding(
-//               padding: EdgeInsets.all(8.0),
-//               child: Text('.'),
-//             ),
-//             SizedBox(
-//               width: 60,
-//               child: TextFormField(
-//                 inputFormatters: [
-//                   FilteringTextInputFormatter.allow(
-//                       RegExp('[0-9]'))
-//                 ],
-//                 keyboardType: TextInputType.number,
-//                 textAlign: TextAlign.center,
-//                 focusNode: textThirdFocusNode3,
-//                 onChanged: (String value) {
-//                   if (value.length == 3) {
-//                     if (int.parse(value) > 255) {
-//                       controller33.text = "255";
-//                     }
-//                     FocusScope.of(context)
-//                         .requestFocus(textFourthFocusNode3);
-//                   }
-//                 },
-//                 maxLength: 3,
-//                 controller: controller33,
-//                 decoration: InputDecoration(
-//                     filled: true,
-//                     fillColor: Colors.red[100],
-//                     counterText: "",
-//                     enabledBorder: const OutlineInputBorder(
-//                         borderSide: BorderSide(
-//                             width: 1, color: Colors.red)),
-//                     focusedBorder: const OutlineInputBorder(
-//                         borderSide: BorderSide(
-//                             width: 1, color: Colors.red))),
-//               ),
-//             ),
-//             const Padding(
-//               padding: EdgeInsets.all(8.0),
-//               child: Text('.'),
-//             ),
-//             SizedBox(
-//               width: 60,
-//               child: TextField(
-//                 inputFormatters: [
-//                   FilteringTextInputFormatter.allow(
-//                       RegExp('[0-9]'))
-//                 ],
-//                 keyboardType:
-//                     const TextInputType.numberWithOptions(
-//                         decimal: true),
-//                 textAlign: TextAlign.center,
-//                 onChanged: (String value) {
-//                   if (value.length == 3) {
-//                     if (int.parse(value) > 255) {
-//                       controller34.text = "255";
-//                     }
-//                     FocusScope.of(context)
-//                         .requestFocus(textFirstFocusNode3);
-//                   }
-//                 },
-//                 focusNode: textFourthFocusNode3,
-//                 maxLength: 3,
-//                 controller: controller34,
-//                 decoration: InputDecoration(
-//                     filled: true,
-//                     fillColor: Colors.red[100],
-//                     counterText: "",
-//                     enabledBorder: const OutlineInputBorder(
-//                         borderSide: BorderSide(
-//                             width: 1, color: Colors.red)),
-//                     focusedBorder: const OutlineInputBorder(
-//                         borderSide: BorderSide(
-//                             width: 1, color: Colors.red))),
-//               ),
-//             ),
-//           ],
-//         ),
-//       ),
-//     ),
-//   ],
-// ),
-// Row(
-//   children: <Widget>[
-//     const Padding(
-//       padding: EdgeInsets.fromLTRB(15, 0, 0, 15),
-//       child: SizedBox(
-//         width: 150,
-//         child: Text(
-//           'Default Gateway: ',
-//           style: TextStyle(
-//               fontSize: 15, fontWeight: FontWeight.bold),
-//         ),
-//       ),
-//     ),
-//     Padding(
-//       padding: const EdgeInsets.fromLTRB(20, 0, 0, 20),
-//       child: SizedBox(
-//         width: 300,
-//         child: Row(
-//           children: <Widget>[
-//             SizedBox(
-//               width: 60,
-//               child: TextFormField(
-//                 keyboardType: TextInputType.number,
-//                 inputFormatters: [
-//                   FilteringTextInputFormatter.allow(
-//                       RegExp('[0-9]'))
-//                 ],
-//                 textAlign: TextAlign.center,
-//                 onChanged: (String value) {
-//                   if (value.length == 3) {
-//                     if (int.parse(value) > 255) {
-//                       controller21.text = "255";
-//                     }
-//                     FocusScope.of(context)
-//                         .requestFocus(textSecondFocusNode2);
-//                   }
-//                 },
-//                 focusNode: textFirstFocusNode3,
-//                 maxLength: 3,
-//                 controller: controller21,
-//                 decoration: InputDecoration(
-//                     filled: true,
-//                     fillColor: Colors.red[100],
-//                     counterText: "",
-//                     enabledBorder: const OutlineInputBorder(
-//                         borderSide: BorderSide(
-//                             width: 1, color: Colors.red)),
-//                     focusedBorder: const OutlineInputBorder(
-//                         borderSide: BorderSide(
-//                             width: 1, color: Colors.red))),
-//               ),
-//             ),
-//             const Padding(
-//               padding: EdgeInsets.all(8.0),
-//               child: Text('.'),
-//             ),
-//             SizedBox(
-//               width: 60,
-//               child: TextFormField(
-//                 keyboardType: TextInputType.number,
-//                 inputFormatters: [
-//                   FilteringTextInputFormatter.allow(
-//                       RegExp('[0-9]'))
-//                 ],
-//                 textAlign: TextAlign.center,
-//                 focusNode: textSecondFocusNode2,
-//                 onChanged: (String value) {
-//                   if (value.length == 3) {
-//                     if (int.parse(value) > 255) {
-//                       controller22.text = "255";
-//                     }
-//                     FocusScope.of(context)
-//                         .requestFocus(textThirdFocusNode2);
-//                   }
-//                 },
-//                 maxLength: 3,
-//                 controller: controller22,
-//                 decoration: InputDecoration(
-//                     filled: true,
-//                     fillColor: Colors.red[100],
-//                     counterText: "",
-//                     enabledBorder: const OutlineInputBorder(
-//                         borderSide: BorderSide(
-//                             width: 1, color: Colors.red)),
-//                     focusedBorder: const OutlineInputBorder(
-//                         borderSide: BorderSide(
-//                             width: 1, color: Colors.red))),
-//               ),
-//             ),
-//             const Padding(
-//               padding: EdgeInsets.all(8.0),
-//               child: Text('.'),
-//             ),
-//             SizedBox(
-//               width: 60,
-//               child: TextFormField(
-//                 keyboardType: TextInputType.number,
-//                 inputFormatters: [
-//                   FilteringTextInputFormatter.allow(
-//                       RegExp('[0-9]'))
-//                 ],
-//                 textAlign: TextAlign.center,
-//                 focusNode: textThirdFocusNode2,
-//                 onChanged: (String value) {
-//                   if (value.length == 3) {
-//                     if (int.parse(value) > 255) {
-//                       controller23.text = "255";
-//                     }
-//                     FocusScope.of(context)
-//                         .requestFocus(textFourthFocusNode2);
-//                   }
-//                 },
-//                 maxLength: 3,
-//                 controller: controller23,
-//                 decoration: InputDecoration(
-//                     filled: true,
-//                     fillColor: Colors.red[100],
-//                     counterText: "",
-//                     enabledBorder: const OutlineInputBorder(
-//                         borderSide: BorderSide(
-//                             width: 1, color: Colors.red)),
-//                     focusedBorder: const OutlineInputBorder(
-//                         borderSide: BorderSide(
-//                             width: 1, color: Colors.red))),
-//               ),
-//             ),
-//             const Padding(
-//               padding: EdgeInsets.all(8.0),
-//               child: Text('.'),
-//             ),
-//             SizedBox(
-//               width: 60,
-//               child: TextFormField(
-//                 keyboardType: TextInputType.number,
-//                 inputFormatters: [
-//                   FilteringTextInputFormatter.allow(
-//                       RegExp('[0-9]'))
-//                 ],
-//                 textAlign: TextAlign.center,
-//                 focusNode: textFourthFocusNode2,
-//                 maxLength: 3,
-//                 controller: controller24,
-//                 onChanged: (String value) {
-//                   if (value.length == 3) {
-//                     if (int.parse(value) > 255) {
-//                       controller24.text = "255";
-//                     }
-//                   }
-//                 },
-//                 decoration: InputDecoration(
-//                     filled: true,
-//                     fillColor: Colors.red[100],
-//                     counterText: "",
-//                     enabledBorder: const OutlineInputBorder(
-//                         borderSide: BorderSide(
-//                             width: 1, color: Colors.red)),
-//                     focusedBorder: const OutlineInputBorder(
-//                         borderSide: BorderSide(
-//                             width: 1, color: Colors.red))),
-//               ),
-//             ),
-//           ],
-//         ),
-//       ),
-//     ),
-//   ],
-// ),
-//     Row(
-//       children: <Widget>[
-//         const Padding(
-//             padding: EdgeInsets.all(20.0),
-//             child: Text(
-//               'DHCP: ',
-//               style: TextStyle(
-//                   fontSize: 15, fontWeight: FontWeight.bold),
-//             )),
-//         Checkbox(
-//           value: value,
-//           onChanged: (newValue) {
-//             setState(() {
-//               value = newValue;
-//             });
-//           },
-//         )
-//       ],
-//     ),
-//     Padding(
-//       padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
-//       child: Row(
-//         children: <Widget>[
-//           ElevatedButton(
-//               onPressed: () {
-//                 String ip = controller11.text +
-//                     "." +
-//                     controller12.text +
-//                     "." +
-//                     controller13.text +
-//                     "." +
-//                     controller14.text;
-//                 String dg = controller21.text +
-//                     "." +
-//                     controller22.text +
-//                     "." +
-//                     controller23.text +
-//                     "." +
-//                     controller24.text;
-//                 user.send('CMD_UpdateNetworkConfiguration@Main'
-//                     '{ "IpAddress" : "$ip", "DefaultGateway" : "$dg", "DHCP" : "$value" }');
-//                 debugPrint('CMD_UpdateNetworkConfiguration@Main'
-//                     '{ "IpAddress" : "$ip", "DefaultGateway" : "$dg", "DHCP" : "$value" }');
-//               },
-//               child: const Text(
-//                 'Update Network Settings',
-//                 style: TextStyle(
-//                     fontSize: 15, fontWeight: FontWeight.bold),
-//               ))
-//         ],
-//       ),
-//     ),
-//   ],
-// ),
-
 class RestartOptions extends StatelessWidget {
   final TextEditingController controller = TextEditingController();
   final TextEditingController controller2 = TextEditingController();
@@ -711,7 +136,7 @@ class RestartOptions extends StatelessWidget {
                   padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
                   child: ElevatedButton(
                     child: const Text(
-                      'Restart MC',
+                      'Restart Board',
                       style:
                           TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                     ),
@@ -754,14 +179,52 @@ class RestartOptions extends StatelessWidget {
 }
 
 class HwcOptions extends StatelessWidget {
-  const HwcOptions({Key key}) : super(key: key);
+  HwcOptions({Key key}) : super(key: key);
+  final textController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Parameter Option'),
-      ),
-    );
+    return Consumer<WebSocketClass>(builder: (_, user, __) {
+
+      textController.text = user.configText;
+
+      return Scaffold(
+          appBar: AppBar(
+            title: const Text('Parameter Option'),
+          ),
+          body: SingleChildScrollView(
+              padding: const EdgeInsets.all(10.0),
+              scrollDirection: Axis.vertical,
+              child: Column(
+                children: <Widget>[
+                  Row(children: <Widget>[
+                    ElevatedButton(
+                      child: const Text('Read'),
+                      onPressed: () {
+                        user.send('CMD_ReadConfiguration@HWController#');
+                      },
+                    ),
+                    const SizedBox(width: 10),
+                    ElevatedButton(
+                      child: const Text('Write'),
+                      onPressed: () {
+                        user.send('CMD_UpdateConfiguration@HWController{${textController.text}}');
+                      },
+                    )
+                  ]),
+                  const SizedBox(height: 10),
+                  TextFormField(
+                    controller: textController,
+                    maxLength: 1024,
+                    maxLines: 16,
+                    decoration: const InputDecoration(
+                      hintText:
+                          'Type the text that will be written as board configuration',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                ],
+              )));
+    });
   }
 }
