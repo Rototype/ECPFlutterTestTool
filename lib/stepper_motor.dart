@@ -341,10 +341,10 @@ class _MotorStPageState extends State<MotorStPage> {
           title = "Start-Stop";
           break;
         case 1:
-          title = "Speed";
+          title = "Const. Speed";
           break;
         case 2:
-          title = "Acceleration";
+          title = "Count steps";
           break;
         default:
           title = "Configuration";
@@ -457,11 +457,11 @@ class _MotorStPageState extends State<MotorStPage> {
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.trending_flat),
-              label: ('Constant Speed'),
+              label: ('Const. Speed'),
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.trending_up),
-              label: ('Constant Acc'),
+              label: ('Count Steps'),
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.tune),
