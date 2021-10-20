@@ -20,21 +20,21 @@ class Setting extends StatelessWidget {
               onPressed: () {
                 Navigator.pushNamed(context, '/Network');
               },
-              child: const Text('Network Options'),
-            ),
-            const SizedBox(height: 10),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pushNamed(context, '/Restart');
-              },
-              child: const Text('Restart Options'),
+              child: const Text('Network Settings'),
             ),
             const SizedBox(height: 10),
             ElevatedButton(
               onPressed: () {
                 Navigator.pushNamed(context, '/ParameterOption');
               },
-              child: const Text('Parameter Options'),
+              child: const Text('Configuration'),
+            ),
+            const SizedBox(height: 10),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/Firmware');
+              },
+              child: const Text('Firmware Update'),
             ),
           ],
         ),
@@ -60,7 +60,7 @@ class _NwOptionsState extends State<NwOptions> {
   Widget build(BuildContext context) {
     return Consumer<WebSocketClass>(builder: (_, user, __) {
       return Scaffold(
-          appBar: AppBar(title: const Text('Network Options')),
+          appBar: AppBar(title: const Text('Network Settings')),
           body: SingleChildScrollView(
             padding: const EdgeInsets.all(10.0),
             scrollDirection: Axis.vertical,
@@ -111,72 +111,6 @@ class _NwOptionsState extends State<NwOptions> {
   }
 }
 
-class RestartOptions extends StatelessWidget {
-  final TextEditingController controller = TextEditingController();
-  final TextEditingController controller2 = TextEditingController();
-
-  final bool value = false;
-
-  RestartOptions({Key key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Consumer<WebSocketClass>(builder: (_, user, __) {
-      return Scaffold(
-          appBar: AppBar(
-              title: const Text(
-            'Restart Options',
-            style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-          )),
-          body: Center(
-            child: ListView(
-              padding: const EdgeInsets.all(100),
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-                  child: ElevatedButton(
-                    child: const Text(
-                      'Restart Board',
-                      style:
-                          TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                    ),
-                    onPressed: () {
-                      user.send('CMD_Restart@HWController#');
-                    },
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-                  child: ElevatedButton(
-                    child: const Text(
-                      'Restart HWController',
-                      style:
-                          TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                    ),
-                    onPressed: () {
-                      user.send('CMD_Restart@HWController#');
-                    },
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-                  child: ElevatedButton(
-                    child: const Text(
-                      'Restart FPGA',
-                      style:
-                          TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                    ),
-                    onPressed: () {
-                      user.send('CMD_Restart@FPGA#');
-                    },
-                  ),
-                ),
-              ],
-            ),
-          ));
-    });
-  }
-}
 
 class HwcOptions extends StatelessWidget {
   HwcOptions({Key key}) : super(key: key);
@@ -190,7 +124,7 @@ class HwcOptions extends StatelessWidget {
 
       return Scaffold(
           appBar: AppBar(
-            title: const Text('Parameter Option'),
+            title: const Text('Configuration'),
           ),
           body: SingleChildScrollView(
               padding: const EdgeInsets.all(10.0),

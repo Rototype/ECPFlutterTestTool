@@ -1,42 +1,35 @@
+import 'dart:io' as dartio;
+
 import 'dart:convert';
 import 'dart:typed_data';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
-import 'package:universal_platform/universal_platform.dart';
-import 'package:file_selector/file_selector.dart';
 import 'package:flutter/material.dart';
 import 'ws_manage.dart';
 import 'package:provider/provider.dart';
-import 'package:image_picker/image_picker.dart';
+
 
 class ImageData {
   ImageData();
 
-  final picker = ImagePicker();
 
   Uint8List data;
   String message;
   String error;
 
   Future<void> pickFile() async {
-    if (UniversalPlatform.isLinux || UniversalPlatform.isWindows) {
-      final typeGroup =
-          XTypeGroup(label: 'images', extensions: [/*'jpg', 'png',*/ 'bmp']);
-      final pickedFile = await openFile(acceptedTypeGroups: [typeGroup]);
-      if (pickedFile != null) {
-        data = await pickedFile.readAsBytes();
-        message = pickedFile.path;
-      } else {
-        error = 'No image selected.';
-      }
+    FilePickerResult result = await FilePicker.platform.pickFiles( 
+      type: FileType.custom,
+      allowedExtensions: ['bmp'],
+    );
+    if (result != null) {
+      final file = dartio.File(result.files.single.path);
+      data = await file.readAsBytes();
+      message = result.files.single.path;
     } else {
-      final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-      if (pickedFile != null) {
-        data = await pickedFile.readAsBytes();
-        message = pickedFile.path;
-      } else {
-        error = 'No image selected.';
-      }
+      // User canceled the picker
+      error = 'No image selected.';
     }
   }
 }

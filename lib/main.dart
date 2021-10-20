@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:rotosocket/theme_changer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'firmware_update.dart';
 import 'settings.dart';
 import 'package:provider/provider.dart';
 
@@ -66,7 +67,7 @@ class MyApp extends StatelessWidget {
           '/Image': (_) => const ImagePickerPage(),
           '/Settings': (_) => const Setting(),
           '/Network': (_) => const NwOptions(),
-          '/Restart': (_) => RestartOptions(),
+          '/Firmware': (_) => FirmwareUpdate(),
           '/ParameterOption': (_) => HwcOptions(),
           '/IpConfig': (_) => IpConfig(),
         },
