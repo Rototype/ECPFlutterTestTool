@@ -43,9 +43,9 @@ class ImageBmp {
 Future<List<ImageBmp>> preloadAssets() async {
   List<String> assetNameList = [
     ('images/colorlarge.bmp'),
-    ('images/graylevel.bmp'),
     ('images/rotologo.bmp'),
     ('images/nysmall.bmp'),
+    ('images/woman.bmp'),
   ];
   var r = assetNameList
       .map((e) async =>

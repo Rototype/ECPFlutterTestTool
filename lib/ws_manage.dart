@@ -319,7 +319,7 @@ class WebSocketClass with ChangeNotifier {
   }
 
   void send(String data) {
-    debugPrint('tx:$data');
+    //debugPrint('tx:${data.substring(0, 64)}');
     try {
       _channel.sink.add(data);
     } catch (e) {
