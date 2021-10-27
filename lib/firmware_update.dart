@@ -48,7 +48,7 @@ class FirmwareUpdate extends StatelessWidget {
                 user.send('CMD_Restart@HWController#');
               },
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 20),
             ElevatedButton(
               child: const Text('Update FPGA'),
               onPressed: () async {
@@ -70,6 +70,23 @@ class FirmwareUpdate extends StatelessWidget {
               child: const Text('Restart FPGA'),
               onPressed: () {
                 user.send('CMD_Restart@FPGA#');
+              },
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              child: const Text('Update WebSocket service'),
+              onPressed: () async {
+                FilePickerResult result = await FilePicker.platform.pickFiles( 
+                  type: FileType.custom,
+                  allowedExtensions: ['bin'],
+                );
+                if (result != null) {
+                  final file = dartio.File(result.files.single.path);
+                  final fw = await file.readAsBytes();
+                  user.send("CMD_UpdateWebSocketFirmware@Main[${base64.encode(fw)}]");
+                } else {
+                  // User canceled the picker
+                }
               },
             ),
             const SizedBox(height: 10),
