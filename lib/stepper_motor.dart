@@ -38,7 +38,7 @@ class MotorST extends StatelessWidget {
 
     return Consumer<WebSocketClass>(builder: (_, user, __) {
       stepperMotorButtons = List.generate(WebSocketClass.stepperMotorStateSize,
-        (i) => getStepperMotorButtons(i, false));
+        (i) => getStepperMotorButtons(i, user.getStepperMotorState(i)));
       return Scaffold(
           key: _scaffoldKey,
           resizeToAvoidBottomInset: true,
