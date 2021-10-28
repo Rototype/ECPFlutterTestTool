@@ -2,9 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
@@ -158,6 +156,8 @@ class WebSocketClass with ChangeNotifier {
   }
 
   Uint8List image;
+  bool waitingImage = false;
+
   int counter = 0;
   int indexReadAnalog = 0;
   BigInt result = BigInt.from(0);
@@ -185,7 +185,7 @@ class WebSocketClass with ChangeNotifier {
         return false;
       } else {
         _channel.stream.listen((message) {
-          debugPrint('rx:$message');
+          //debugPrint('rx:$message');
 
           // ---------------------------------------------------------------------------
           // to test the image send & receive + polling with an echo server:
@@ -240,6 +240,7 @@ class WebSocketClass with ChangeNotifier {
                     break;
                   case 'InvertImage':
                     image = base64.decode(match[6]);
+                    waitingImage = false;
                     notifyListeners();
                     break;
                   case 'ReadConfiguration':

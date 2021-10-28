@@ -80,7 +80,7 @@ class _ImagePickerPageState extends State<ImagePickerPage> {
         ]));
       }
 
-      return user.image != null ?
+      return user.image != null || user.waitingImage ?
         Scaffold(
           appBar: AppBar(
             title: const Text('Imagine Processing'),
@@ -91,6 +91,7 @@ class _ImagePickerPageState extends State<ImagePickerPage> {
               child: const Icon(Icons.close),
               onPressed: () async {
                 try {
+                  user.waitingImage = false;
                   user.image = null;
                   setState(() {});
                 } catch (e) {
@@ -104,11 +105,11 @@ class _ImagePickerPageState extends State<ImagePickerPage> {
             child: Stack(
               alignment: Alignment.center, 
               children: <Widget>[
-                Image.memory(user.image),
+                user.waitingImage ? const CircularProgressIndicator() : Image.memory(user.image),
                 Positioned(
                   left: 10,
                   top: 10,
-                  child: Text('Image size is ${user.image.lengthInBytes} bytes'),
+                  child: user.waitingImage ? const Text('Loading..') : Text('Image size is ${user.image.lengthInBytes} bytes'),
                 )
               ]
             )
@@ -129,6 +130,8 @@ class _ImagePickerPageState extends State<ImagePickerPage> {
                     heroTag: null,
                     onPressed: () async {
                       try {
+                        user.waitingImage = true;
+                        setState(() {});
                         final blob = user.bmpList[selectedIndex].bmpblob;
                         user.send("CMD_InvertImage@Main[${base64.encode(blob)}]");
                       } catch (e) {
