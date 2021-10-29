@@ -66,11 +66,11 @@ class _ImagePickerPageState extends State<ImagePickerPage> {
   final ImageData imageData = ImageData();
 
   String getMemHumanSize(int bytes) {
-    var units =  ['bytes', 'KB', 'MB', 'GB']; 
+    var units =  [' bytes', ' KB', ' MB', ' GB']; 
     var pow = (bytes != 0 ? log(bytes) : 0) ~/ log(1024); 
     pow = min(pow, units.length - 1); 
     var size = bytes / (1 << (10 * pow)); 
-    return size.toStringAsFixed(3) + ' ' + units[pow]; 
+    return size.toStringAsFixed(pow) + units[pow]; 
   }
   
 
