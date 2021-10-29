@@ -1,6 +1,7 @@
 import 'dart:io' as dartio;
 
 import 'dart:convert';
+import 'dart:math';
 import 'dart:typed_data';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/services.dart';
@@ -64,6 +65,15 @@ class ImagePickerPage extends StatefulWidget {
 class _ImagePickerPageState extends State<ImagePickerPage> {
   final ImageData imageData = ImageData();
 
+  String getMemHumanSize(int bytes) {
+    var units =  ['bytes', 'KB', 'MB', 'GB']; 
+    var pow = (bytes != 0 ? log(bytes) : 0) ~/ log(1024); 
+    pow = min(pow, units.length - 1); 
+    var size = bytes / (1 << (10 * pow)); 
+    return size.toStringAsFixed(3) + ' ' + units[pow]; 
+  }
+  
+
   int selectedIndex = 0;
   @override
   Widget build(BuildContext context) {
@@ -75,7 +85,7 @@ class _ImagePickerPageState extends State<ImagePickerPage> {
           Positioned(
             left: 10,
             top: 10,
-            child: Text('Image size is ${e.bmpblob.lengthInBytes} bytes'),
+            child: Text('Image size is ${getMemHumanSize(e.bmpblob.lengthInBytes)}'),
           )
         ]));
       }
@@ -109,7 +119,7 @@ class _ImagePickerPageState extends State<ImagePickerPage> {
                 Positioned(
                   left: 10,
                   top: 10,
-                  child: user.waitingImage ? const Text('Loading..') : Text('Image size is ${user.image.lengthInBytes} bytes'),
+                  child: user.waitingImage ? const Text('Loading..') : Text('Image size is ${getMemHumanSize(user.image.lengthInBytes)}'),
                 )
               ]
             )
