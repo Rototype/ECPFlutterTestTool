@@ -25,9 +25,13 @@ class _ReconnectPageState extends State<ReconnectPage> {
           onPressed: () async {
             await user.wsconnect();
           },
-          child: const Text('Connect'),
+          child: const Text('⚡ Connect'),
           style: ElevatedButton.styleFrom(
-            textStyle: const TextStyle(fontWeight: FontWeight.bold),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
+          padding: const EdgeInsets.all(30),
+            textStyle: const TextStyle(
+              fontSize: 20.0,
+              fontWeight: FontWeight.bold),
           ),
         ),
       ]),
