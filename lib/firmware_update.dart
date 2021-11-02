@@ -1,10 +1,12 @@
 import 'dart:convert';
 import 'dart:io' as dartio;
+import 'dart:typed_data';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rotosocket/ws_manage.dart';
+import 'package:universal_platform/universal_platform.dart';
 
 class FirmwareUpdate extends StatelessWidget {
   final TextEditingController controller = TextEditingController();
@@ -32,9 +34,14 @@ class FirmwareUpdate extends StatelessWidget {
                   allowedExtensions: ['bin'],
                 );
                 if (result != null) {
-                  final file = dartio.File(result.files.single.path);
-                  final fw = await file.readAsBytes();
-                  user.send("CMD_UpdateFirmware@HWController[${base64.encode(fw)}]");
+                  Uint8List data;
+                  if (UniversalPlatform.isWeb) {
+                    data = result.files.first.bytes;
+                  } else {
+                    final file = dartio.File(result.files.single.path);
+                    data = await file.readAsBytes();
+                  }
+                  user.send("CMD_UpdateFirmware@HWController[${base64.encode(data)}]");
                 } else {
                   // User canceled the picker
                 }
@@ -56,9 +63,14 @@ class FirmwareUpdate extends StatelessWidget {
                   allowedExtensions: ['bin'],
                 );
                 if (result != null) {
-                  final file = dartio.File(result.files.single.path);
-                  final fw = await file.readAsBytes();
-                  user.send("CMD_UpdateFirmware@FPGA[${base64.encode(fw)}]");
+                  Uint8List data;
+                  if (UniversalPlatform.isWeb) {
+                    data = result.files.first.bytes;
+                  } else {
+                    final file = dartio.File(result.files.single.path);
+                    data = await file.readAsBytes();
+                  }
+                  user.send("CMD_UpdateFirmware@FPGA[${base64.encode(data)}]");
                 } else {
                   // User canceled the picker
                 }
@@ -80,9 +92,14 @@ class FirmwareUpdate extends StatelessWidget {
                   allowedExtensions: ['bin'],
                 );
                 if (result != null) {
-                  final file = dartio.File(result.files.single.path);
-                  final fw = await file.readAsBytes();
-                  user.send("CMD_UpdateWebSocketFirmware@Main[${base64.encode(fw)}]");
+                  Uint8List data;
+                  if (UniversalPlatform.isWeb) {
+                    data = result.files.first.bytes;
+                  } else {
+                    final file = dartio.File(result.files.single.path);
+                    data = await file.readAsBytes();
+                  }
+                  user.send("CMD_UpdateWebSocketFirmware@Main[${base64.encode(data)}]");
                 } else {
                   // User canceled the picker
                 }

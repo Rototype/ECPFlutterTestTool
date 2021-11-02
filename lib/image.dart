@@ -16,7 +16,6 @@ class ImageData {
   ImageData.fromBytes(this.data);
   
   Uint8List data;
-  String fullPath;
   String error;
 
   Future<void> pickFile() async {
@@ -26,25 +25,28 @@ class ImageData {
       allowedExtensions: ['bmp'],
     );
     if (result != null) {
-      final file = dartio.File(result.files.single.path);
-      data = await file.readAsBytes();
-      fullPath = result.files.single.path;
+      if (UniversalPlatform.isWeb) {
+        data = result.files.first.bytes;
+      } else {
+        final file = dartio.File(result.files.single.path);
+        data = await file.readAsBytes();
+      }
     } else {
       // User canceled the picker
       error = 'No image selected.';
     }
   }
+    // desktop only !!
     Future<void> pushFile() async {
     String result = await FilePicker.platform.saveFile(
       fileName: 'image.bmp',
       dialogTitle: 'Save bitmap file',
-      //type: FileType.custom,
-      //allowedExtensions: ['bmp'],
+      type: FileType.custom,
+      allowedExtensions: ['bmp'],
     );
     if (result != null) {
       final file = dartio.File(result);
       await file.writeAsBytes(data);
-      fullPath = result;
     } else {
       // User canceled the picker
       error = 'No image selected.';
