@@ -13,21 +13,38 @@ import 'package:provider/provider.dart';
 
 class ImageData {
   ImageData();
-
-
+  ImageData.fromBytes(this.data);
+  
   Uint8List data;
-  String message;
+  String fullPath;
   String error;
 
   Future<void> pickFile() async {
     FilePickerResult result = await FilePicker.platform.pickFiles( 
+      dialogTitle: 'Load bitmap file',
       type: FileType.custom,
       allowedExtensions: ['bmp'],
     );
     if (result != null) {
       final file = dartio.File(result.files.single.path);
       data = await file.readAsBytes();
-      message = result.files.single.path;
+      fullPath = result.files.single.path;
+    } else {
+      // User canceled the picker
+      error = 'No image selected.';
+    }
+  }
+  Future<void> pushFile() async {
+    String result = await FilePicker.platform.saveFile(
+      fileName: 'image.bmp',
+      dialogTitle: 'Save bitmap file',
+      //type: FileType.custom,
+      //allowedExtensions: ['bmp'],
+    );
+    if (result != null) {
+      final file = dartio.File(result);
+      await file.writeAsBytes(data);
+      fullPath = result;
     } else {
       // User canceled the picker
       error = 'No image selected.';
@@ -96,18 +113,37 @@ class _ImagePickerPageState extends State<ImagePickerPage> {
             title: const Text('Imagine Processing'),
           ),
           floatingActionButton:
-            FloatingActionButton(
-              tooltip: 'Dismiss',
-              child: const Icon(Icons.close),
-              onPressed: () async {
-                try {
-                  user.waitingImage = false;
-                  user.image = null;
-                  setState(() {});
-                } catch (e) {
-                  debugPrint(e.toString());
-                }
-              }),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.end, 
+              children: [
+                FloatingActionButton(
+                  tooltip: 'Save',
+                  child: const Icon(Icons.save),
+                  onPressed: () async {
+                    try {
+                      final ImageData saveData = ImageData.fromBytes(user.image);
+                      saveData.pushFile();
+                      if (saveData.data != null) {
+                        setState(() {});
+                      }
+                    } catch (e) {
+                      debugPrint(e.toString());
+                    }
+                  }),
+                const SizedBox(height: 10),
+                FloatingActionButton(
+                  tooltip: 'Dismiss',
+                  child: const Icon(Icons.close),
+                  onPressed: () async {
+                    try {
+                      user.waitingImage = false;
+                      user.image = null;
+                      setState(() {});
+                    } catch (e) {
+                      debugPrint(e.toString());
+                    }
+                  }),
+              ]),
           body: Container(
             width: double.infinity,
             height: double.infinity,
