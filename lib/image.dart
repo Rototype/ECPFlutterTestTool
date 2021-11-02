@@ -1,5 +1,5 @@
 import 'dart:io' as dartio;
-
+import 'package:universal_platform/universal_platform.dart';
 import 'dart:convert';
 import 'dart:math';
 import 'dart:typed_data';
@@ -34,7 +34,7 @@ class ImageData {
       error = 'No image selected.';
     }
   }
-  Future<void> pushFile() async {
+    Future<void> pushFile() async {
     String result = await FilePicker.platform.saveFile(
       fileName: 'image.bmp',
       dialogTitle: 'Save bitmap file',
@@ -89,7 +89,6 @@ class _ImagePickerPageState extends State<ImagePickerPage> {
     var size = bytes / (1 << (10 * pow)); 
     return size.toStringAsFixed(pow) + units[pow]; 
   }
-  
 
   int selectedIndex = 0;
   @override
@@ -116,7 +115,7 @@ class _ImagePickerPageState extends State<ImagePickerPage> {
             Column(
               mainAxisAlignment: MainAxisAlignment.end, 
               children: [
-                FloatingActionButton(
+                UniversalPlatform.isDesktop ? FloatingActionButton(
                   tooltip: 'Save',
                   child: const Icon(Icons.save),
                   onPressed: () async {
@@ -129,7 +128,7 @@ class _ImagePickerPageState extends State<ImagePickerPage> {
                     } catch (e) {
                       debugPrint(e.toString());
                     }
-                  }),
+                  }) : const SizedBox(height: 1), // save works only on desktop
                 const SizedBox(height: 10),
                 FloatingActionButton(
                   tooltip: 'Dismiss',
@@ -142,7 +141,7 @@ class _ImagePickerPageState extends State<ImagePickerPage> {
                     } catch (e) {
                       debugPrint(e.toString());
                     }
-                  }),
+                  })
               ]),
           body: Container(
             width: double.infinity,
