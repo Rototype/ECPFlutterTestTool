@@ -100,8 +100,9 @@ class _NwOptionsState extends State<NwOptions> {
                         onPressed: () {
                           if (_formKey.currentState.validate()) {
                             _formKey.currentState.save();
+                            String dhcp = dhcpEnabled? 'enable' : 'disable'; // similar to shell script: if [ "$DHCP_MODE0" = "enable" ];then
                             user.send(
-                                'CMD_UpdateNetworkConfiguration@Main{ "IpAddress" : "$ip", "SubnetMask" : "$mask", "DefaultGateway" : "$gateway", "DHCP" : "$dhcpEnabled" }');
+                                'CMD_UpdateNetworkConfiguration@Main{ "IpAddress" : "$ip", "SubnetMask" : "$mask", "DefaultGateway" : "$gateway", "DHCP" : "$dhcp" }');
                           }
                         }),
                   ])),
